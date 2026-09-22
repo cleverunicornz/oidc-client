@@ -42,6 +42,14 @@ fallback.
   or empty components: "control/"`. Validation continued with bounded exact
   search and direct reads; this additive observation does not change the
   Gap's State or Resolution.
+- Corrector observation for closure run
+  `20260922T183045Z-72a7dd2ce3a328bb5eb238e632d55ccf0cd74d6d` at correction-base
+  head `8844bda1a87ea2795d312977541dbea522b9e278` (2026-09-22): a
+  concept-focused semantic search for PLAN-000003, P-000001, and P-000005
+  returned `rejected unsafe input: tree path must not contain '.', '..', or
+  empty components: "control/"`. The corrector proceeded with the relayed
+  docket and bounded direct reads; this additive observation does not change
+  the Gap's State or Resolution.
 
 ## Impact
 
