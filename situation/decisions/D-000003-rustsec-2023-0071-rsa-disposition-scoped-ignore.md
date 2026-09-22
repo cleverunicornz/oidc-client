@@ -52,7 +52,10 @@ consumers using that wrapper exercise the advisory's named surface and are
 directed to this record. Revisit triggers: a fixed `rsa` release shipping
 the RustCrypto/RSA #680/#702 work (then bump and drop the ignore), or an
 advisory update that function-scopes the finding or names verification-side
-leak paths. No other advisory is ignored.
+leak paths. No other vulnerability is ignored; the two
+unmaintained-informational dev-path ignores that the gate bring-up demanded
+are recorded separately in
+situation/decisions/D-000005-unmaintained-dev-path-advisory-ignores.md.
 
 ## Why
 
@@ -75,10 +78,10 @@ private-signing wrapper — and self-arms its own re-examination triggers.
 
 ## Consequences
 
-`cargo deny check` passes with exactly one advisory ignore. Consumers who
-use `CoreRsaPrivateSigningKey` to sign client assertions inherit the
+`cargo deny check` passes with exactly one vulnerability ignore. Consumers
+who use `CoreRsaPrivateSigningKey` to sign client assertions inherit the
 advisory's named attack surface; this record and the `deny.toml` reason say
-so plainly. Every other advisory fails the gate.
+so plainly. Every other vulnerability fails the gate.
 
 ## Revisit when
 
@@ -93,4 +96,8 @@ disposition it governs. Corrected against evidence: the Phase A fact set
 states this crate's only rsa use is public-key verification; byte-level
 reading at the pin shows the public `CoreRsaPrivateSigningKey` wrapper
 (`src/core/jwk/mod.rs`) also routes private-key signing through the `rsa`
-crate — the correction is carried in Evidence and Consequences.
+crate — the correction is carried in Evidence and Consequences. Corrected
+2026-09-22 (pre-closing-checkpoint) by forward commit: the gate bring-up
+surfaced two unmaintained dev-path findings; "no other advisory is
+ignored" narrowed to "no other vulnerability is ignored" with the second
+decision recorded in situation/decisions/D-000005-unmaintained-dev-path-advisory-ignores.md.

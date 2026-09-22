@@ -2,7 +2,17 @@
 
 ## State
 
-proposed
+promoted — standing verification machinery whose shape the organization
+workflow policy fixes (root AGENTS.md organization block:
+pull_request types [opened, reopened, ready_for_review] + workflow_dispatch,
+no push trigger; fleet runner labels) and the lane decisions in
+situation/decisions/D-000004-import-fidelity-rules-for-the-openidconnect-4-0-1-import.md
+(pinned rust:1.98.0 container, clippy remediation policy) govern. Landed as
+.github/workflows/ci.yml; the gates continuously judge leg P6 of
+situation/oracles/O-000001-judge-full-oidc-rp-flow-parity-with-upstream.md
+on
+situation/promises/P-000001-full-oidc-rp-flows-work-identically-to-openidconnect-4-0-1.md.
+No dedicated Promise/Oracle pair was created for the pipeline itself.
 
 ## What
 

@@ -2,7 +2,14 @@
 
 ## State
 
-proposed
+promoted — situation/decisions/D-000004-import-fidelity-rules-for-the-openidconnect-4-0-1-import.md
+turned this possibility into the promise
+situation/promises/P-000001-full-oidc-rp-flows-work-identically-to-openidconnect-4-0-1.md,
+judged by
+situation/oracles/O-000001-judge-full-oidc-rp-flow-parity-with-upstream.md.
+First observation:
+situation/witnesses/P-000001/W-000001-import-head-offline-parity-leg-p6.md
+(leg P6 only; full parity qualification pending).
 
 ## What
 

@@ -2,7 +2,15 @@
 
 ## State
 
-proposed
+promoted — situation/decisions/D-000003-rustsec-2023-0071-rsa-disposition-scoped-ignore.md
+(with the gate bring-up addendum
+situation/decisions/D-000005-unmaintained-dev-path-advisory-ignores.md)
+adopted this possibility as standing configuration: the scoped advisory
+ignore in deny.toml, enforced by the CI deny job in
+.github/workflows/ci.yml. No dedicated Promise/Oracle pair was created —
+the outcome is configuration, not runtime behavior; its judgment evidence
+is the deny gate itself and the committed gate log
+situation/witnesses/evidence/W-000001/deny-check.log.
 
 ## What
 

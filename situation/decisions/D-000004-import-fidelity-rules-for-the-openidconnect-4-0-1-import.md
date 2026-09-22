@@ -109,9 +109,17 @@ into a "faithful" import.
 Any future diff against pin b639b5d39eac6903238867aeb2b29326502e6b26 must
 classify into rename / metadata / mechanical-lint / allow-addition or be a
 defect. `README.upstream.md` must stay byte-identical to the upstream
-`README.md` at the pin. The remediation path actually taken at the 1.98.0
-gate is appended to this record's Consequences once the gate run
-completes.
+`README.md` at the pin. Remediation path taken at the 1.98.0 gate
+(recorded at gate completion): 22 behavior-neutral mechanical fixes in
+dedicated commits — mismatched_lifetime_syntaxes ×11
+(src/client.rs ×10, tests/rp_certification_code.rs ×1), needless_lifetimes
+×4 (src/id_token/mod.rs ×2, src/user_info.rs ×2), deprecated
+`GenericArray::as_slice` ×3 (src/core/jwk/mod.rs), empty_line_after_doc_comments
+×1 (src/core/crypto.rs), doc_overindented_list_items ×2 (src/lib.rs),
+useless_conversion ×1 (src/jwt/mod.rs) — plus 2 justified allow-additions
+(clippy::to_string_trait_impl on `IdToken`, dead_code on the shared
+`PanicIfFail` helper in tests/rp_common.rs). Commits d51e1f4, 159e9a7, and
+12d22ab on this branch. No behavior change; the full gate suite is green.
 
 ## Revisit when
 
