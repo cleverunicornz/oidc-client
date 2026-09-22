@@ -18,7 +18,8 @@ upstream baseline within this promise's scope.
 The imported 4.0.1 OIDC RP surface and the listed non-ES256 algorithms.
 ES256 is separately described by P-000002. This scope does not include a
 crate-provided discovery cache, provider deployment behavior, publication, or
-any algorithm not listed above.
+any algorithm not listed above. It does not claim that the imported test bytes
+are unchanged from the pin.
 
 ## Oracle
 
@@ -32,8 +33,10 @@ State `implemented` is supported by the import commit
 `cargo test --all-features` with 70 passed and 0 failed tests, while the 21
 live-network certification tests compiled and remained ignored
 (`situation/witnesses/evidence/W-000001/gates-final.log`). Its witness is
-`INVALID` and remains attached to the historical O-000001 rule. The corrected
-scope is judged by O-000004 and has no PASS witness, so this promise is not
+`INVALID`, remains attached to the historical O-000001 rule, and establishes
+only that the suite passed at that head; it does not establish unchanged test
+bytes. D-000004 records classified non-rename test deltas. The corrected scope
+is judged by O-000004 and has no PASS witness, so this promise is not
 `assured`.
 
 ## Residual
