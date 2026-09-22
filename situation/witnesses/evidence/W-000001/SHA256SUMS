@@ -1,8 +1,8 @@
-# Evidence for W-000001 — gate run against commit 36f761d53149dc7d6ce329b7ffe68e3251cd24ef (working tree clean at run time)
+# Evidence for W-000001 — gate run against commit 24835e4b44caa8a0baae2ac5b865bbd6bdf355ba (working tree clean at run time)
 # Commands (executed inside container rust:1.98.0, CARGO_TARGET_DIR=/tmp/target):
 #   cargo fmt --all --check; cargo clippy --all-targets -- -D warnings; cargo test --all-features; cargo deny check
 # Note: git is not installed inside the pinned container, so the in-log 'gate run at commit:' line is empty; the head is recorded here host-side.
 
-6577b41b4048789fb0f348d44b9a1d3d157c1956389a67fdc56fa252422b788e  gates-final.log
+4a8e814d21a6a682064b905004e3661a13154687145c018087347802cfaaf3a8  gates-final.log
 56012302d731860fd9bc573615faab4b6589ce05e69629dac7b6a76dfe782a13  deny-check.log
 f2e8c4b974eb2260cec8aa5038ca886fcad83248d0827f04ad6f338771970526  image-digest.txt

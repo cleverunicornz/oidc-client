@@ -22,7 +22,7 @@ standing gate suite (fmt, clippy, test, deny) green at the same head.
 
 ## Head
 
-36f761d53149dc7d6ce329b7ffe68e3251cd24ef (working tree clean at run time;
+24835e4b44caa8a0baae2ac5b865bbd6bdf355ba (working tree clean at run time;
 git is not installed inside the pinned container, so the head is recorded
 here and in the evidence SHA256SUMS header rather than in the raw log)
 
@@ -122,5 +122,5 @@ situation/decisions/D-000004-import-fidelity-rules-for-the-openidconnect-4-0-1-i
 ## Provenance
 
 Recorded 2026-09-22 by the Phase B import lane from the gate run against
-head 36f761d53149dc7d6ce329b7ffe68e3251cd24ef in the pinned rust:1.98.0
+head 24835e4b44caa8a0baae2ac5b865bbd6bdf355ba in the pinned rust:1.98.0
 container; evidence committed the same day.
