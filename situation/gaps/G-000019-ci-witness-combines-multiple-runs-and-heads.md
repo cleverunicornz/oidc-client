@@ -41,6 +41,16 @@ head `4a05b4511348644c65352a5a0373c11370bd1fd3`:
   `7fe8265c8166e16ea4da77b5722a35503fa67665`, conclusion `success`, with
   successful capability, formatting, Clippy, test, and dependency-policy
   steps.
+- W-000004 also says the primary head `7fe8265` corroborates corrected
+  W-000003 by executing
+  `verification::tests::test_es256_id_token_verified_claims`. The test name
+  existed there, but commit
+  `00d45a7c06f3704915550ad96610a9f9d5e68279` later changed that fixture
+  from the crate-internal `verified_claims` method to the public
+  `CoreIdToken::claims` entry. The primary run therefore predates the
+  public-entry behavior W-000003 currently witnesses; run 35745613778 at
+  `38796c0752cc294bd58eafdac17e361d4f88ac7b` is the first listed fleet
+  execution after that correction.
 - `situation/witnesses/AGENTS.md` requires one observation from one real run,
   says a Witness observes one Promise under one Oracle at one head, and
   requires failed Witnesses to be kept.
