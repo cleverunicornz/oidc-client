@@ -36,11 +36,24 @@ Direct comparison on 2026-09-22 of situation/context.md against R-000001
 (git ls-remote, crates.io API, tag Cargo.toml; scout verification of the
 45 tracked files at pin b639b5d).
 
+- Backport closure observation, run
+  `20260922T105519Z-37afd430f1f61a2faa2fb8481bb6d8933837626c`, at opening
+  checkpoint `92946acf13d02a67caab38cb64444a902217fae4`: the current-phase
+  text says the repository has "no code yet", while the admitted opening
+  tree contains `Cargo.toml`, 30 Rust source files under `src/`, three
+  integration-test files under `tests/`, and the imported crate's
+  `README.upstream.md`. This is an additional phase/map drift; the closer
+  cannot edit `context.md`, which the checkpoint contract reserves to the
+  orchestrator.
+
 ## Impact
 
 Until corrected, context.md misstates the release year, omits the commit
 pin, and carries a wrong license characterization in the document other
 records treat as the phase map.
+
+The stale no-code statement also makes the phase and implementation map
+inaccurate for readers who begin at `context.md`.
 
 ## Resolution
 
