@@ -27,13 +27,14 @@ situation/oracles/O-000004-judge-imported-oidc-rp-baseline.md
 ## State evidence
 
 State `implemented` is supported by the import commit
-`eeb0e6d847d7665cc8b0c9e46b9716323ded3c6a` and the retained gate observation
-at `24835e4b44caa8a0baae2ac5b865bbd6bdf355ba`. That observation records
-`cargo test --all-features` passing 70 tests and compiled, ignored
-`situation/witnesses/evidence/W-000001/gates-final.log`; its witness is
+`eeb0e6d847d7665cc8b0c9e46b9716323ded3c6a`. The retained gate observation at
+`24835e4b44caa8a0baae2ac5b865bbd6bdf355ba` records
+`cargo test --all-features` with 70 passed and 0 failed tests, while the 21
+live-network certification tests compiled and remained ignored
+(`situation/witnesses/evidence/W-000001/gates-final.log`). Its witness is
 `INVALID` and remains attached to the historical O-000001 rule. The corrected
-scope is judged by O-000004 and has no PASS witness. The state is not
-`assured` because O-000004's real-provider parity legs remain unexecuted.
+scope is judged by O-000004 and has no PASS witness, so this promise is not
+`assured`.
 
 ## Residual
 
