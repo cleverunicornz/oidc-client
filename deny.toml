@@ -1,5 +1,5 @@
-# cargo-deny configuration — enforced by the CI `deny` job
-# (.github/workflows/ci.yml).
+# cargo-deny configuration — enforced by the "Dependency policy" step of the
+# single `ci` job in .github/workflows/ci.yml.
 
 [advisories]
 version = 2

@@ -2,7 +2,7 @@
 
 ## State
 
-open
+closed
 
 ## Gap
 
@@ -29,7 +29,10 @@ misunderstand the scope of the configured CI route.
 
 ## Resolution
 
-none
+closed — the `deny.toml` opening comment now names the actual configuration:
+the "Dependency policy" step of the single `ci` job in
+`.github/workflows/ci.yml`, which runs `cargo deny check`. No separate `deny`
+job exists or is implied.
 
 ## References
 
