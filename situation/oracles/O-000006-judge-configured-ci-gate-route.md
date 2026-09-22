@@ -2,7 +2,7 @@
 
 ## State
 
-designed
+implemented
 
 ## Judges
 
@@ -33,6 +33,23 @@ retained output from one configured workflow run.
   job.
 - F3: A retained configured run omits, cannot execute, or fails any named
   command.
+
+## Implementation
+
+The `.github/workflows/ci.yml` `ci` job executes the configured capability
+checks and gate commands. Its command results are recorded as individual
+workflow-run Witnesses under P-000005.
+
+## Implementation coverage
+
+| Leg | Decision | Coverage |
+|---|---|---|
+| P1 | The YAML routes, guard, and runner are compared with the declared boundary. | manual |
+| P2 | The YAML step order and named commands are compared with the declared boundary. | manual |
+| P3 | The `ci` job runs each named command and its exit status decides the configured run result. | `.github/workflows/ci.yml` `ci` job |
+| F1 | A route, guard, or runner difference is identified by YAML comparison. | manual |
+| F2 | A missing capability check or command is identified by YAML comparison. | manual |
+| F3 | Retained run metadata is checked for omitted, unexecuted, or failed commands. | manual |
 
 ## Provenance
 
