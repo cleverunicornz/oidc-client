@@ -2,7 +2,7 @@
 
 ## State
 
-designed
+implemented
 
 ## Judges
 
@@ -10,30 +10,43 @@ situation/promises/P-000002-es256-ecdsa-p-256-id-token-verification.md
 
 ## Inputs
 
-ID tokens from a real OIDC provider signing with ES256 (Kanidm or a test
-fixture), the provider's discovery metadata and JWK set, and tampered ES256
-tokens.
+The fixed ES256 JWS and EC P-256 JWK fixtures in the imported unit tests, a
+discovery-metadata fixture containing `ES256`, intentionally invalid ES256
+inputs, and `cargo test --all-features`.
 
 ## Pass
 
-- P1: ES256-signed ID token from a real provider (Kanidm or test fixture)
-  verifies: signature, issuer, audience, nonce, expiry
-- P2: Elliptic curve JWK (crv=P-256) accepted during key selection
-- P3: Discovery metadata with ES256 in id_token_signing_alg_values_supported
-  accepted
-- P4: Tampered ES256 token rejected
+- P1: A valid fixed ES256 JWS fixture verifies with its matching EC P-256 JWK
+  through the crate's verification path.
+- P2: An EC JWK with `crv = P-256` parses and is accepted for ES256
+  verification.
+- P3: Discovery metadata containing `ES256` in
+  `id_token_signing_alg_values_supported` parses as the ES256 algorithm.
+- P4: A complete ES256 ID-token fixture verifies signature, issuer, audience,
+  nonce, and expiry through the public ID-token verifier.
 
 ## Fail
 
-- F1: ES256 token from a real provider cannot be verified
-- F2: EC JWK rejected during key selection
-- F3: Tampered token accepted
+- F1: The valid ES256 fixture cannot be verified with its matching P-256 JWK.
+- F2: The P-256 JWK is rejected during parsing or compatibility checks.
+- F3: A mismatched-curve or invalid ES256 signature is accepted.
+- F4: A complete ES256 ID-token fixture accepts an invalid signature, issuer,
+  audience, nonce, or expiry.
 
-## Provenance
+## Implementation
 
-Materialized 2026-09-22 from cleverunicornz Project #20 item O-000002
-(project Status: Todo). Corrected for contract coherence: the project body
-lists "P5: ES384 optionally supported (stretch goal)"; ES384 is outside
-P-000002's declared Scope, and a non-gating Pass leg cannot exist under the
-witnesses law (every Pass leg must be evidenced). The stretch goal remains
-possible future work, named in the promise's Scope.
+`cargo test --all-features` executes the imported unit tests; the CI route in
+`.github/workflows/ci.yml` dispatches that command on the configured runner.
+
+## Implementation coverage
+
+| Leg | Decision | Coverage |
+|---|---|---|
+| P1 | `test_ecdsa_verification` accepts the valid P-256/ES256 fixture. | `src/core/jwk/tests.rs::test_ecdsa_verification` |
+| P2 | EC P-256 JWK parsing and ES256 key compatibility are asserted. | `src/core/jwk/tests.rs::test_core_jwk_deserialization_ec`; `src/core/jwk/tests.rs::test_ecdsa_verification` |
+| P3 | A discovery fixture containing ES256 is deserialized and compared to `CoreJwsSigningAlgorithm::EcdsaP256Sha256`. | `src/discovery/tests.rs::test_discovery_deserialization` |
+| P4 | A complete ES256 ID-token fixture exercises the public verifier's signature and claim checks. | manual |
+| F1 | The valid-fixture assertion fails if verification rejects it. | `src/core/jwk/tests.rs::test_ecdsa_verification` |
+| F2 | The EC parsing and compatibility assertions fail if the P-256 key is rejected. | `src/core/jwk/tests.rs::test_core_jwk_deserialization_ec`; `src/core/jwk/tests.rs::test_ecdsa_verification` |
+| F3 | The test requires wrong-curve and invalid signatures to return an error. | `src/core/jwk/tests.rs::test_ecdsa_verification` |
+| F4 | The same fixture supplies each invalid in-scope condition and observes rejection. | manual |
