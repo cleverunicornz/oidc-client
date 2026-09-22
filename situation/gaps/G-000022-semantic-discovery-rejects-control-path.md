@@ -34,6 +34,14 @@ fallback.
   contain an untracked `control/` scratch directory (`git status --short`
   reports `?? control/`), so the rejected path is workspace-local rather than
   committed repository content.
+- Validator observation for closure run
+  `20260922T183045Z-72a7dd2ce3a328bb5eb238e632d55ccf0cd74d6d` at fixed
+  reviewed head `463cdca78619fb6f41ebe2aaac056f5fdca87b9e` (2026-09-22):
+  both semantic-index status discovery and a concept-focused semantic search
+  again returned `rejected unsafe input: tree path must not contain '.', '..',
+  or empty components: "control/"`. Validation continued with bounded exact
+  search and direct reads; this additive observation does not change the
+  Gap's State or Resolution.
 
 ## Impact
 
