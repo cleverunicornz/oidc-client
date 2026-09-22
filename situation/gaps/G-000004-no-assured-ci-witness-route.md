@@ -29,6 +29,14 @@ This absence also bounds the CI portion of
 - `situation/candidates/C-000004-ci-pipeline-fmt-clippy-test-audit.md`
   remains in qualification pending the workflow's first real fleet run.
 
+- Validator observation for run
+  `20260922T105519Z-37afd430f1f61a2faa2fb8481bb6d8933837626c` at reviewed head
+  `5a8580f3394f853c995e7ccb1148fe86c040321d`: the annotation at
+  `.github/workflows/ci.yml` line 43 says "70 offline unit + doc tests", while
+  the retained `gates-final.log` records 70 unit tests plus 7 passing and 2
+  ignored doctests. The executed command is unaffected, but the configured
+  route's count annotation is stale.
+
 ## Impact
 
 The workflow is evidence of an intended gate route, not assurance that a gate

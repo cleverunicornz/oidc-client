@@ -46,6 +46,22 @@ Direct comparison on 2026-09-22 of situation/context.md against R-000001
   license, and ES256 wording no longer repeat the stale Project #20 claims.
   The unresolved portion is now the checkpoint-owned `context.md` text.
 
+- Validator observation for run
+  `20260922T105519Z-37afd430f1f61a2faa2fb8481bb6d8933837626c` at reviewed head
+  `5a8580f3394f853c995e7ccb1148fe86c040321d`: the installed protocol reserves
+  only `situation/context.md`'s `## Closure state` section to checkpoint
+  commits (`situation/AGENTS.md`, "Closure state"; root `AGENTS.md`, lines
+  56–60). The identity, phase, implementation map, origin evidence, upstream
+  coordinate, and dependency sections are ordinary canonical context and may
+  be corrected without touching the orchestrator-owned closure-state lines.
+  The current context also retains two ES256 claims omitted from the four-item
+  list above: lines 23–28 say openidconnect dropped ECDSA in the 2.x→4.x
+  rewrite and that no Rust OIDC library supports ES256, while the admitted
+  source and `README.upstream.md` show the 4.0.1 donor's P-256/P-384
+  verification paths. It also does not record the explicit `OWNED`
+  classification required by `situation/AGENTS.md` under "Repository
+  ownership."
+
 ## Impact
 
 Until corrected, `context.md` misstates the release year, omits the commit
