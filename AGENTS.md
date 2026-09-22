@@ -248,14 +248,14 @@ Repository-specific orientation belongs in the repository block that follows.
 ## oidc-client
 
 - Identity: A public, standalone, Rust OIDC relying-party client library — a maintained continuation of the `openidconnect` crate with ES256 verification support, published on crates.io and consumed by Poda Chat.
-- Ownership: `OWNED` (not a GitHub fork; standalone repository carrying forward MIT OR Apache-2.0 licensed code with attribution).
+- Ownership: `OWNED` (not a GitHub fork; standalone repository carrying forward MIT-licensed code with attribution).
 - Phase and implementation map: `situation/context.md`.
 - Critical invariants:
-  - Upstream attribution preserved (MIT OR Apache-2.0, original authors credited).
+  - Upstream attribution preserved (MIT; David Ramos (ramosbugs) and contributors credited).
   - Published on crates.io as a versioned, maintained crate.
   - ES256 verification is a first-class supported algorithm.
   - Poda Chat consumes this crate via Cargo.toml, not vendored code.
 - Verification: situation records track implementation and assurance state.
 - Tool priority: organization defaults.
-- Upstream coordinate: `https://github.com/ramosbugs/openidconnect-rs` (code taken at v4.0.1, commit reference in situation/).
+- Upstream coordinate: `https://github.com/ramosbugs/openidconnect-rs` (code taken at tag `4.0.1` = commit `b639b5d39eac6903238867aeb2b29326502e6b26`; see `situation/references/R-000001-upstream-pin.md`).
 </bedrock-repository>
