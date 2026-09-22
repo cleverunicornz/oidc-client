@@ -39,12 +39,13 @@ reconciles the earlier hypothesis against those facts. The state is not
 
 No retained witness yet exercises a complete ES256 ID-token validation through
 a real provider or a full ID-token fixture, so issuer, audience, nonce, and
-expiry validation with an ES256 signature remain unassured. ES384 and ES512
-are outside this promise.
+expiry validation with an ES256 signature remain unassured (G-000006). ES384
+and ES512 are outside this promise.
 
 ## References
 
 - situation/decisions/D-000006-recognize-carried-es256-verification.md
 - situation/gaps/G-000001-no-maintained-rust-oidc-rp-library-supports-es256.md
+- situation/gaps/G-000006-no-full-es256-id-token-fixture.md
 - situation/witnesses/evidence/W-000001/gates-final.log
 - situation/witnesses/P-000002/W-000002-import-head-es256-unit-observation.md
