@@ -49,3 +49,9 @@ healthy). The OIDC layer on top is the abandoned part.
 `deny.toml` in Poda Chat carries `RUSTSEC-2023-0071` (rsa Marvin timing
 side-channel) ignored because openidconnect depends on the unpatched `rsa`
 crate. This crate should resolve or properly scope that disposition.
+
+## Closure state
+
+- Current run: `20260922T105519Z-37afd430f1f61a2faa2fb8481bb6d8933837626c` (open)
+- Last completed closure: none
+- Transcript: none
