@@ -29,7 +29,7 @@ RS256 under Kanidm's legacy-crypto setting.
   and `src/core/crypto.rs` verifies P-256 signatures with `p256`; the
   imported donor therefore contradicts the earlier claim that openidconnect
   dropped ES256 in the 2.x→4.x rewrite.
-- `situation/references/R-000001-upstream-pin.md` identifies that donor as
+- `situation/references/D-000004/R-000001-upstream-pin.md` identifies that donor as
   openidconnect 4.0.1 and records its unmaintained status in the repository
   context.
 

@@ -76,7 +76,7 @@ altering the checkpoint-owned `## Closure state` lines.
 
 ## References
 
-- situation/references/R-000001-upstream-pin.md — the verified pin facts
+- situation/references/D-000004/R-000001-upstream-pin.md — the verified pin facts
   the corrections carry into context.md.
 
 ## Provenance

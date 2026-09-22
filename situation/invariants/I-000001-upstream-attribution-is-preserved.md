@@ -14,4 +14,4 @@ README and NOTICE; source license headers are not removed.
 ## Basis
 
 - situation/decisions/D-000004-import-fidelity-rules-for-the-openidconnect-4-0-1-import.md
-- situation/references/R-000001-upstream-pin.md
+- situation/references/D-000004/R-000001-upstream-pin.md

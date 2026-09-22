@@ -21,7 +21,7 @@ dependency line onto this crate without guessing compatibility.
 
 ## Evidence
 
-- situation/references/R-000001-upstream-pin.md — the upstream pin: the
+- situation/references/D-000004/R-000001-upstream-pin.md — the upstream pin: the
   4.0.1 tag declares `version = "4.0.1"`, and the crates.io name
   `oidc-client` was unregistered as of 2026-09-22.
 - situation/candidates/C-000001-import-openidconnect-v4-0-1-code-with-attribution.md
@@ -71,4 +71,4 @@ with the upstream version history on crates.io appear.
 
 Recorded 2026-09-22 by the Phase B import lane, ahead of the version
 declaration it governs; upstream version fact verified at the pin the same
-day (situation/references/R-000001-upstream-pin.md).
+day (situation/references/D-000004/R-000001-upstream-pin.md).

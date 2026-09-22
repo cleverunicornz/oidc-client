@@ -19,7 +19,7 @@ a legacy flag; the upstream openidconnect project is recorded as unmaintained.
 
 - situation/gaps/G-000001-no-maintained-rust-oidc-rp-library-supports-es256.md
   — the ecosystem gap that forced the choice
-- situation/references/R-000001-upstream-pin.md — the upstream pin this
+- situation/references/D-000004/R-000001-upstream-pin.md — the upstream pin this
   decision carries forward
 - Origin scoping evidence gathered in Poda Chat Banks 1–6
   (situation/context.md)

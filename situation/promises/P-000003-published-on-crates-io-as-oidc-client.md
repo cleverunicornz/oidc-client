@@ -35,5 +35,5 @@ remain green after its recorded observation.
 
 ## References
 
-- situation/references/R-000001-upstream-pin.md
+- situation/references/D-000004/R-000001-upstream-pin.md
 - situation/gaps/G-000004-no-assured-ci-witness-route.md

@@ -8,7 +8,9 @@ license, dependency pins, and import shape.
 
 ## Owner
 
-Cited by D-000001, P-000003, C-000001, C-000005, I-000001, and G-000002.
+`situation/decisions/D-000004-import-fidelity-rules-for-the-openidconnect-4-0-1-import.md`
+— the import-fidelity decision that establishes the donor pin and import
+surface for which these retained facts provide supporting depth.
 
 ## Facts
 

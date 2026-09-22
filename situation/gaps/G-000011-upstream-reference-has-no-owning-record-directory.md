@@ -1,22 +1,21 @@
-# G-000011 — Upstream Reference has no owning-record directory
+# G-000011 — Upstream reference ownership and caller migration
 
 ## State
 
-open
+closed
 
 ## Gap
 
-R-000001 remains a flat file at the root of `situation/references/` and names a
-set of citing records rather than one owning record. The installed References
-contract requires retained depth to be organized beneath the record that owns
-it and says every Reference is a child of that record.
+Before correction, R-000001 was a flat file at the root of
+`situation/references/` and named a set of citing records rather than one
+owning record. The References contract requires retained depth to be a child
+of the one record that links it.
 
 ## Relevance
 
-R-000001 is the central provenance dependency for the changed import Promise,
-Candidate, Decision, Invariant, README orientation, and context-correction Gap.
-Its ownership and stable coordinate are therefore part of the affected
-lineage, not an unrelated register cleanup.
+R-000001 is the central provenance dependency for the changed import lineage.
+Its owner and stable coordinate had to be corrected together with every direct
+caller so the resulting graph remained traversable.
 
 ## Evidence
 
@@ -26,25 +25,24 @@ lineage, not an unrelated register cleanup.
 - `situation/references/AGENTS.md` under "Structure" requires paths such as
   `references/P-000001/` or `references/D-000014/` and states that a Reference
   is a child of the record that links it.
-- The only retained depth file is
-  `situation/references/R-000001-upstream-pin.md`, directly beside the namespace
-  contract.
-- Its `## Owner` section says it is cited by D-000001, P-000003, C-000001,
-  C-000005, I-000001, and G-000002, while additional current links from D-000002,
-  D-000003, D-000004, G-000001, and P-000001 show that this is neither a unique
-  owner nor a complete citing-record inventory.
+- At correction base, the only retained depth file was
+  `situation/references/R-000001-upstream-pin.md`; it was directly beside the
+  namespace contract and its `## Owner` section named an incomplete citing-record
+  inventory instead of one owner.
 
 ## Impact
 
-The provenance content is present and usable, but its authority cannot be
-resolved through the owning-record structure required by the protocol. A move
-without a clean update of every caller would also leave broken lineage links.
+The provenance content was usable, but its authority could not be resolved
+through the owning-record structure required by the protocol. A relocation
+required every direct caller to move in the same change.
 
 ## Resolution
 
-none
+closed — R-000001 now lives at
+`situation/references/D-000004/R-000001-upstream-pin.md` as retained depth
+owned by D-000004, and every direct caller was migrated in the same commit.
 
 ## References
 
 - `situation/references/AGENTS.md`
-- `situation/references/R-000001-upstream-pin.md`
+- `situation/references/D-000004/R-000001-upstream-pin.md`

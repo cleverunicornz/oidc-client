@@ -22,7 +22,7 @@ lint drift that needs a predeclared remediation policy.
 
 ## Evidence
 
-- situation/references/R-000001-upstream-pin.md — pin commit
+- situation/references/D-000004/R-000001-upstream-pin.md — pin commit
   b639b5d39eac6903238867aeb2b29326502e6b26 (tag 4.0.1) and the 41-file
   import-surface facts (src 30, tests 3, examples 3, plus `Cargo.toml`,
   `Cargo-1.65.lock`, `LICENSE`, `README.md`, `UPGRADE.md`; excludes

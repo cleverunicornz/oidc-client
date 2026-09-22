@@ -13,7 +13,8 @@ predeclared continuity deltas.
 ## Origin
 
 cleverunicornz Project #20 materialized on 2026-09-22, verified against the
-pin retained in `situation/references/R-000001-upstream-pin.md`.
+pin retained in
+`situation/references/D-000004/R-000001-upstream-pin.md`.
 
 ## Why consider it
 
