@@ -2,7 +2,7 @@
 
 ## State
 
-open
+closed
 
 ## Gap
 
@@ -55,18 +55,23 @@ so no committed test pins the spec-correct serialization of this variant.
 
 ## Resolution
 
-none — this closure does not assign a behavior change for the inherited typo.
-Any later correction must deliberately emit `invalid_request_object`, add a
-consumer-observable round-trip regression test, and reconcile the fidelity
-decision; it is not scheduled through the now-rejected ES256 implementation
-candidate.
+closed — corrected deliberately under
+situation/decisions/D-000010-correct-invalid-request-object-serialization.md:
+the outbound mapping now emits the spec string `invalid_request_object`, and a
+consumer-observable round-trip regression test
+(`src/core/tests.rs::test_auth_error_type_round_trip`) pins both directions —
+serialization output and parsing of that output (and of the spec string) back
+to the variant. The change is a named divergence from the import pin; future
+upstream syncs must re-apply or consciously re-adjudicate it (D-000010).
 
 ## References
 
 - situation/references/D-000004/R-000001-upstream-pin.md — the upstream pin
   carrying the defect verbatim.
 - situation/decisions/D-000004-import-fidelity-rules-for-the-openidconnect-4-0-1-import.md —
-  the fidelity policy that keeps the fix out of the import PR.
+  the fidelity policy that kept the fix out of the import PR.
+- situation/decisions/D-000010-correct-invalid-request-object-serialization.md —
+  the predeclared decision governing the correction.
 
 ## Provenance
 
