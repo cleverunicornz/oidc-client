@@ -46,6 +46,11 @@ Direct comparison on 2026-09-22 of situation/context.md against R-000001
   cannot edit `context.md`, which the checkpoint contract reserves to the
   orchestrator.
 
+- This closure corrected the root `AGENTS.md` repository block in commit
+  `fbaa119`; its ownership, license, and ES256 wording no longer repeats the
+  stale Project #20 claims. The unresolved portion is now the
+  checkpoint-owned `context.md` text.
+
 ## Impact
 
 Until corrected, context.md misstates the release year, omits the commit
