@@ -56,9 +56,10 @@ healthy). The OIDC layer on top is the abandoned part.
 
 ## RUSTSEC context
 
-`deny.toml` in Poda Chat carries `RUSTSEC-2023-0071` (rsa Marvin timing
-side-channel) ignored because openidconnect depends on the unpatched `rsa`
-crate. This crate should resolve or properly scope that disposition.
+`deny.toml` records a scoped `RUSTSEC-2023-0071` disposition together with
+the two dev-path informational dispositions; D-000003, D-000005, and P-000004
+state its boundary. No retained configured-fleet workflow observation yet
+assures the policy route (G-000004).
 
 ## Closure state
 
