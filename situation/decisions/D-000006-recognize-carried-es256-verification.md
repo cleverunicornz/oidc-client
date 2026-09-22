@@ -13,9 +13,9 @@ accepted
 Candidate C-000002 proposed adding ES256 verification to an imported
 openidconnect 4.0.1 codebase. The admitted opening tree instead contains the
 ES256 verification path already: it deserializes EC P-256 JWKs, dispatches
-ES256 to `p256`, and tests valid and invalid ES256 signatures. Treating that
-existing path as unimplemented would create duplicate work and retain a false
-repository claim.
+ES256 to `p256`, and unit-tests P-256 signature verification through that
+dispatch. Treating that existing path as unimplemented would create duplicate
+work and retain a false repository claim.
 
 ## Evidence
 
@@ -24,8 +24,8 @@ repository claim.
   `crypto::verify_ec_signature`.
 - `src/core/crypto.rs` constructs a `p256::ecdsa::VerifyingKey` from the EC
   JWK coordinates and verifies the JWS signature.
-- `src/core/jwk/tests.rs` parses a P-256 EC JWK and tests successful ES256
-  verification, a mismatched curve, and an invalid signature.
+- `src/core/jwk/tests.rs` parses a P-256 EC JWK and tests valid and invalid
+  P-256 signature verification through the ES256 enum dispatch.
 - `situation/witnesses/evidence/W-000001/gates-final.log` records that
   `test_core_jwk_deserialization_ec` and `test_ecdsa_verification` passed at
   head `24835e4b44caa8a0baae2ac5b865bbd6bdf355ba`.
@@ -47,8 +47,8 @@ assurance would overstate evidence.
 ## Rejected alternatives
 
 - Reimplement ES256 around the existing path: rejected because the path already
-  accepts a P-256 JWK, verifies a valid ES256 signature, and rejects invalid
-  inputs.
+  accepts a P-256 JWK, dispatches ES256 to `p256`, and rejects invalid
+  P-256 signature inputs.
 - Leave C-000002 proposed: rejected because it misstates a settled source fact
   as future work.
 - Mark P-000002 assured from the existing gate log: rejected because no
