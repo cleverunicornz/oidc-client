@@ -36,9 +36,11 @@ executes it.
   — the zero-behavior-delta policy that kept the fix out of the import PR and
   classifies every future pin diff; this correction is a deliberate,
   decision-backed delta of a kind that policy does not enumerate.
-- P-000006, O-000007, and W-000005 retain the resulting
-  consumer-facing contract, its executable rule, and the passing scoped
-  observation at `6bc21cdbcf933bcaf52a9f7f7ef33e3dda851bb3`.
+- `situation/promises/P-000006-invalid-request-object-serialization-round-trip.md`,
+  `situation/oracles/O-000007-judge-invalid-request-object-serialization-round-trip.md`,
+  and `situation/witnesses/P-000006/W-000005-invalid-request-object-serialization-round-trip.md`
+  retain the resulting consumer-facing contract, its executable rule, and the
+  passing scoped observation at `6bc21cdbcf933bcaf52a9f7f7ef33e3dda851bb3`.
 
 ## Decision
 
