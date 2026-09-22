@@ -19,9 +19,12 @@ Use the fleet runner labels.
 
 ## Dependencies
 
-C-000001
+situation/candidates/C-000001-import-openidconnect-v4-0-1-code-with-attribution.md
 
 ## Provenance
 
 Materialized 2026-09-22 from cleverunicornz Project #20 item C-000004
-(project Status: Todo).
+(project Status: Todo). Corrected against repository law: the project text
+says CI runs "on every push and PR"; per the root AGENTS.md workflow
+policy, branches carry no push triggers — CI runs when a pull request
+opens and on its final head by dispatch.

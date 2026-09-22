@@ -6,7 +6,7 @@ designed
 
 ## Judges
 
-P-000002
+situation/promises/P-000002-es256-ecdsa-p-256-id-token-verification.md
 
 ## Inputs
 
@@ -22,7 +22,6 @@ tokens.
 - P3: Discovery metadata with ES256 in id_token_signing_alg_values_supported
   accepted
 - P4: Tampered ES256 token rejected
-- P5: ES384 optionally supported (stretch goal)
 
 ## Fail
 
@@ -33,4 +32,8 @@ tokens.
 ## Provenance
 
 Materialized 2026-09-22 from cleverunicornz Project #20 item O-000002
-(project Status: Todo).
+(project Status: Todo). Corrected for contract coherence: the project body
+lists "P5: ES384 optionally supported (stretch goal)"; ES384 is outside
+P-000002's declared Scope, and a non-gating Pass leg cannot exist under the
+witnesses law (every Pass leg must be evidenced). The stretch goal remains
+possible future work, named in the promise's Scope.

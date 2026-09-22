@@ -25,7 +25,7 @@ deny.toml with the reason: verification-only usage.
 
 ## Dependencies
 
-C-000001
+situation/candidates/C-000001-import-openidconnect-v4-0-1-code-with-attribution.md
 
 ## Provenance
 

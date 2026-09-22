@@ -13,13 +13,12 @@ supported-algorithms discovery metadata includes ES256.
 
 ## Scope
 
-ES256 (ECDSA P-256 with SHA-256) ID token verification. ES384 is an optional
-stretch goal judged by O-000002 leg P5; it is not part of this promise's
-assured behavior.
+ES256 (ECDSA P-256 with SHA-256) ID token verification. ES384 is an
+optional stretch goal outside this promise's assured behavior.
 
 ## Oracle
 
-O-000002
+situation/oracles/O-000002-judge-es256-verification.md
 
 ## State evidence
 

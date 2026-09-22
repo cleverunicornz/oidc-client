@@ -17,9 +17,10 @@ against the pinned evidence in R-000001:
    tag is MIT-only. RESOLVED BY EVIDENCE: the Phase A upstream-facts scout
    verified at pin b639b5d that the tag carries a single MIT LICENSE file,
    Cargo.toml license "MIT", and zero Apache references (R-000001). Only
-   the wording in the repository blocks and context.md remains to be
-   corrected; agents never edit the root blocks, so the block wording is
-   corrected through PR #1 by Main.
+   the wording in the Project #20 bodies and this repository's repository
+   block remains to be corrected; those corrections are routed through
+   PR #1 by Main per the Phase A steering (only the protocol and
+   organization blocks are agent-protected).
 
 ## Relevance
 

@@ -39,4 +39,6 @@ none — this gap closes when P-000002 is assured.
 ## Provenance
 
 Materialized 2026-09-22 from cleverunicornz Project #20 item G-000001
-(project Status: Todo).
+(project Status: Todo). The Evidence section draws on the bootstrap
+situation/context.md "Origin evidence" (in-repo at b197618) beyond the
+project item body.

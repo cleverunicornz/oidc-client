@@ -28,15 +28,15 @@ keys from the JWK are not handled.
 5. Add integration tests: a provider signing with ES256 (can use Kanidm or
    a test fixture)
 
-## Dependencies
-
-C-000001 (need the imported code first)
-
 ## Evidence
 
 Kanidm 1.11.0 defaults to ES256; the Poda Chat qualification rig
 (Private: cleverunicornz/poda-chat@main#situation/references/G-000006/native-auth-qualification.md)
 provides a real ES256-signing provider for testing.
+
+## Dependencies
+
+C-000001 (need the imported code first)
 
 ## Provenance
 

@@ -6,7 +6,7 @@ designed
 
 ## Judges
 
-P-000001
+situation/promises/P-000001-full-oidc-rp-flows-work-identically-to-openidconnect-4-0-1.md
 
 ## Inputs
 

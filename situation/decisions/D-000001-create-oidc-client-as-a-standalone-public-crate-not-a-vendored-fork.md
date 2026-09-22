@@ -59,3 +59,5 @@ Materialized 2026-09-22 from cleverunicornz Project #20 item D-000001
 (project Status: Todo). Corrected against evidence: the project text says
 "dual-licensed MIT OR Apache-2.0"; the Phase A upstream-facts scout
 verified at pin b639b5d that the tag is MIT-only (R-000001).
+The Context section restates G-000001 and the bootstrap
+situation/context.md origin evidence.

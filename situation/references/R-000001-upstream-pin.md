@@ -20,9 +20,11 @@ Cited by D-000001, P-000003, C-000001, C-000005, I-000001, and G-000002.
   `Cargo.toml` both declare `MIT`; the tag carries a single `LICENSE` file
   ("Copyright (c) 2018 David Ramos") and zero Apache-2.0 references across
   its 45 tracked files. The "MIT OR Apache-2.0" dual-license phrasing in
-  the Project #20 bodies and this repository's blocks is wrong against this
-  evidence; repository-block wording is corrected through PR #1 (agents
-  never edit the root blocks).
+  the Project #20 bodies and this repository's repository block is wrong
+  against this evidence; those wordings are corrected through PR #1 owned
+  by Main (the protocol and organization blocks are agent-protected; the
+  repository block is not, but its correction is routed to PR #1 for this
+  phase).
 - Dependency pins at 4.0.1 (verified in the tag's `Cargo.toml`):
   `oauth2 = "5.0.0"`, `rsa = "0.9.2"`, `p256 = "0.13.2"` (also
   `p384 = "0.13.0"`), `http = "1.0"`, `serde = "1.0"`.
@@ -65,4 +67,6 @@ Verified 2026-09-22 at pin `b639b5d` by the Phase A upstream-facts scout:
 ## Provenance
 
 Materialized 2026-09-22 by the Phase A records lane; pin, release, name,
-and license facts verified the same day as recorded.
+and license facts verified the same day as recorded. Import-shape and
+dev-dependency facts verified by the Phase A upstream-facts scout at the
+pin.

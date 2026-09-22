@@ -17,7 +17,7 @@ algorithm behavior are P-000001 and P-000002.
 
 ## Oracle
 
-O-000003
+situation/oracles/O-000003-judge-crates-io-publication.md
 
 ## State evidence
 

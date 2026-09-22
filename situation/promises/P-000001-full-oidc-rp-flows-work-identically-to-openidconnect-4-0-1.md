@@ -21,7 +21,7 @@ promise's.
 
 ## Oracle
 
-O-000001
+situation/oracles/O-000001-judge-full-oidc-rp-flow-parity-with-upstream.md
 
 ## State evidence
 

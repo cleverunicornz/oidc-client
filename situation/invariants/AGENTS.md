@@ -17,6 +17,7 @@ In this order:
 - `Invariant` — the rule, stated directly and checkably
 - `Basis` — the decision, promise, or obligation that grounds the rule
 - `Priority` — `standard` or `critical`
+- `References` — optional links
 
 ## Relationship to other records
 
