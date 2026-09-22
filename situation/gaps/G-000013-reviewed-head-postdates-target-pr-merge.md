@@ -2,7 +2,7 @@
 
 ## State
 
-open
+closed
 
 ## Gap
 
@@ -42,9 +42,19 @@ merged through the named review boundary.
 
 ## Resolution
 
-none
+closed — the post-merge reconciliation commits are delivered to trunk
+through a pull request of their own instead of being retroactively claimed
+on PR #1: branch `bank2/assurance` was cut from `origin/bank1-integration`
+at `ac85f14` (which contains the reviewed head
+`5a8580f3394f853c995e7ccb1148fe86c040321d` and the rest of run
+`20260922T105519Z-37afd430f1f61a2faa2fb8481bb6d8933837626c`) and opened as
+https://github.com/cleverunicornz/oidc-client/pull/2 into `main`. Merging
+that PR makes every closure commit trunk-reachable through a pull request,
+curing the conflation this gap records. PR #1 remains merged as it was.
 
 ## References
 
 - https://github.com/cleverunicornz/oidc-client/pull/1
+- https://github.com/cleverunicornz/oidc-client/pull/2 — the pull request
+  that carries the post-merge closure commits to trunk.
 - https://github.com/cleverunicornz/infrastructure/actions/runs/35718383340
