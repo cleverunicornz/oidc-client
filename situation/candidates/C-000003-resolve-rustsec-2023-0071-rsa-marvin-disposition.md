@@ -25,9 +25,9 @@ private-signing wrapper also prevents an overly broad verification-only claim.
 ## Qualification questions
 
 D-000003 and D-000005 resolved the affected-path and recorded-disposition
-questions. A configured fleet-run observation remains an assurance question for
-P-000004/O-000005, not a reason to leave the selected configuration
-unpromoted.
+questions. A configured fleet run of the dependency-policy step is an
+assurance question for P-000005/O-000006; P-000004/O-000005 separately judge
+the selected local configuration.
 
 ## Candidate approaches
 
