@@ -1,23 +1,22 @@
-# G-000009 — ES256 Oracle overstates wrong-curve test coverage
+# G-000009 — ES256 wrong-curve coverage claim removed
 
 ## State
 
-open
+closed
 
 ## Gap
 
-O-000002 credits `test_ecdsa_verification` with requiring wrong-curve and
-invalid P-256 signatures to return an error, but the test's two wrong-curve
-branches do not fail if verification unexpectedly succeeds. The invalid-signature
-checks do require an error, so only the wrong-curve portion of F3 is unsupported
-by the named executable decision.
+At the reviewed head, O-000002 credited `test_ecdsa_verification` with
+requiring wrong-curve and invalid P-256 signatures to return an error, but the
+test's wrong-curve branches did not fail on unexpected success. The
+invalid-signature checks did require an error, so only that behavior was
+decided by the named executable.
 
 ## Relevance
 
-O-000002 is marked implemented and its implementation-coverage table is the
-contract for which ES256 legs are executable. W-000002 describes the retained
-run as evidencing corresponding negative unit behavior, so the coverage and
-witness language must not imply a decision the test does not make.
+O-000002's implementation-coverage table needed to name only decisions the
+test actually makes. W-000002's retrospective wording likewise could not
+credit unsupported wrong-curve behavior.
 
 ## Evidence
 
@@ -38,14 +37,16 @@ witness language must not imply a decision the test does not make.
 
 ## Impact
 
-The implementation-coverage table and retrospective witness can overstate the
-negative ES256 behavior actually decided by the retained run. A later assurance
-judgment could incorrectly treat mismatched-curve rejection as executable
-coverage unless the leg or test evidence is made honest.
+At the reviewed head, the implementation-coverage table and retrospective
+witness overstated the negative ES256 behavior actually decided by the
+retained run. A later assurance judgment could have treated mismatched-curve
+rejection as executable coverage.
 
 ## Resolution
 
-none
+closed — `9dd7999` makes mismatched-curve behavior outside P-000002's scope,
+`4c32b62` limits O-000002 F3 to invalid-signature acceptance, and `7881bd7`
+corrects W-000002's retained-run statement.
 
 ## References
 
