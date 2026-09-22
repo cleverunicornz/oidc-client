@@ -32,34 +32,34 @@ G-000006.
 A consumer reading generated API documentation could conclude that the ES256
 path is unavailable, while an unqualified repository claim could incorrectly
 call it first-class. Neither interpretation accurately expresses the current
-implemented and assured state.
+implemented-but-unassured state.
+
+Corrector observation in closure run
+`20260922T160102Z-2225beb0f70ca521911ef82a7bad12ec04d91a52`: P-000002 later
+became assured for ES256, while P-000007 separately assures the named HMAC
+SHA-2 and ES384 verification paths.
 
 ## Resolution
 
 closed — the enum documentation was corrected per variant against the
-dispatch code: `HmacSha256`, `HmacSha384`, and `HmacSha512` are verified via
-the `hmac` arms (`src/core/jwk/mod.rs` lines 263–300), `EcdsaP256Sha256` and
-`EcdsaP384Sha384` are dispatched to `crypto::verify_ec_signature` (P-256 and
-P-384 arms of `src/core/crypto.rs`), so those five variants dropped the
-false "(currently unsupported)" label. `EcdsaP521Sha512` keeps the label:
-it has no verification arm and falls through to
-`SignatureVerificationError::UnsupportedAlg`, and no P-521 crate is a
-declared dependency. The wording states the implemented surface without
-asserting an assurance level, keeping the documentation in agreement with
-P-000002's evidence-bound claims (D-000007).
+dispatch code: `HmacSha256`, `HmacSha384`, and `HmacSha512` use the `hmac`
+arms; `EcdsaP256Sha256` and `EcdsaP384Sha384` dispatch to
+`crypto::verify_ec_signature` with their matching P-256 and P-384 arms.
+Those five variants dropped the false "(currently unsupported)" label.
+`EcdsaP521Sha512` retains the label: it has no verification arm and falls
+through to `SignatureVerificationError::UnsupportedAlg`, and no P-521 crate
+is a declared dependency. The documentation reports the implemented surface
+without asserting assurance: P-000002 separately assures ES256, and P-000007
+separately assures HMAC SHA-2 and ES384 verification.
 
 ## References
 
 - `situation/promises/P-000002-es256-ecdsa-p-256-id-token-verification.md`
 - `situation/decisions/D-000007-bound-es256-support-claims-to-evidence.md` —
   the claims-bounding decision this correction executes.
+- situation/promises/P-000007-hmac-sha2-and-es384-jws-verification.md
+- situation/oracles/O-000008-judge-hmac-sha2-and-es384-jws-verification.md
+- situation/witnesses/P-000007/W-000006-hmac-sha2-and-es384-jws-verification.md
 - `src/core/jwk/mod.rs` and `src/core/crypto.rs` — the dispatch code each
-  doc comment was verified against.
+  documentation comment was verified against.
 
-## Provenance
-
-Corrected in place on open PR #2 before any closing checkpoint (CodeRabbit
-thread PRRT_kwDOUlFWIM6kzMf2): the current-state wording
-"implemented-but-unassured" became "implemented and assured" once W-000003
-assured P-000002. The Gap's historical observations and resolution are
-unchanged.
