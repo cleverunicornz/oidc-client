@@ -45,7 +45,7 @@ audience, nonce, and expiry, and rejecting wrong issuer, wrong audience,
 wrong nonce, expired, tampered-signature, and wrong-key variants. Witness
 situation/witnesses/P-000002/W-000003-es256-id-token-fixture-public-verifier.md
 records the PASS run at head
-`52e84d5dff27ac026ac7670370e3dda918cbeaf7`; P-000002 moved to `assured`.
+`00d45a7c06f3704915550ad96610a9f9d5e68279`; P-000002 moved to `assured`.
 
 ## References
 

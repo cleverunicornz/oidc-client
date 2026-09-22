@@ -31,7 +31,7 @@ situation/oracles/O-000002-judge-es256-verification.md and the complete PASS
 witness
 situation/witnesses/P-000002/W-000003-es256-id-token-fixture-public-verifier.md,
 observed 2026-09-22 at head
-`52e84d5dff27ac026ac7670370e3dda918cbeaf7` on `bank2/assurance`: a
+`00d45a7c06f3704915550ad96610a9f9d5e68279` on `bank2/assurance`: a
 pinned-container `cargo test --all-features` run that passes every oracle
 leg, including the previously manual P4 leg through the public ID-token
 verifier. The implementation origin remains the donor import commit

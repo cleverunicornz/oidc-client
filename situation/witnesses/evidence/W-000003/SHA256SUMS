@@ -1,6 +1,7 @@
-# Evidence for W-000003 — gate run against commit 52e84d5dff27ac026ac7670370e3dda918cbeaf7 (bank2/assurance; working tree clean at run time)
-# Command (executed in the pinned container, CARGO_TARGET_DIR=/tmp/target):
-#   cargo test --all-features
+# Evidence for W-000003 — gate run against commit 00d45a7c06f3704915550ad96610a9f9d5e68279 (bank2/assurance; working tree clean at run time)
+# Corrected in place on the open PR #2 (before any closing checkpoint): the
+# fixture now enters through the public CoreIdToken::claims path, replacing
+# the earlier observation taken at 52e84d5dff27ac026ac7670370e3dda918cbeaf7.
 # Container: bank2-gates:1.98.0, derived FROM rust:1.98.0 (registry digest
 # sha256:620dbcd124499c59e2406d3741574b5c5838cf9eb9656f0c3a03948f79b02959,
 # the same base image recorded in W-000001's evidence) by adding the
@@ -8,4 +9,4 @@
 # Derived image id: sha256:866e7285936e1142b87047a48ff961040bfd2a2ed295d8ae43c6b26233944ed2
 # The log header records the same head and image facts.
 
-e55c6810c5ee807398369ecba0e6fcfc49777e0b06aa53c0ef85010df1408a20  gates-es256-fixture.log
+2d95bede4bdd2e0402540be283204ef717b9d90de85efe2b01094aadf0cf0a89  gates-es256-fixture.log
