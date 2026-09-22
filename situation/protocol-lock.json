@@ -22,5 +22,9 @@
     "situation/promises/AGENTS.md": "4afbe91dd7a57f57092658795386477e6276d1287c21daac3cee7f3c0ce77188",
     "situation/references/AGENTS.md": "41698ac88408a3b07eb141646ddd5f0acbfd4bd7fcdc49655e959a1f77b8a559",
     "situation/witnesses/AGENTS.md": "982ee98b719dd752599cf5a6585d18e604b849f598fa21f36cb2492b2e410cb5"
+  },
+  "organization": {
+    "version": "1.2.0",
+    "sha256": "52ece7c5be99bbcff4bc3dfad374b9b88aee5beb51eae3654d9ba65cdde6603e"
   }
 }
