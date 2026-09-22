@@ -2,7 +2,7 @@
 
 ## State
 
-open
+closed
 
 ## Gap
 
@@ -34,6 +34,12 @@ head `4a05b4511348644c65352a5a0373c11370bd1fd3`:
 - `situation/gaps/G-000004-no-assured-ci-witness-route.md` retains the earlier
   validator observation, but its State and Resolution now close the separate
   missing-workflow-witness concern.
+- Bookkeeping observation (PR #3 branch `bank3/bookkeeping`, 2026-09-22): the
+  comment was replaced with count-agnostic wording — line 43 now reads
+  "# The live-network certification tests stay #[ignore]d." The diff of
+  `.github/workflows/ci.yml` against base commit `4b6e0ad` on this branch
+  shows that one comment line as the file's only change; every command byte
+  is identical.
 
 ## Impact
 
@@ -43,7 +49,15 @@ route are unaffected.
 
 ## Resolution
 
-none
+closed — the annotation no longer states counts, so it cannot drift from
+retained run evidence: `.github/workflows/ci.yml` line 43 now reads
+"# The live-network certification tests stay #[ignore]d." The configured
+`cargo test --all-features` command and every other workflow byte are
+unchanged; the file's diff against base commit `4b6e0ad` on branch
+`bank3/bookkeeping` is that single comment line. P-000005's Residual
+sentence naming this comment as stale predates the fix — that record froze
+at closing checkpoint `f78f641` and this Gap is the authoritative
+disposition.
 
 ## References
 
