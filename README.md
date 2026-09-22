@@ -3,8 +3,8 @@
 `oidc-client` is a standalone Rust OpenID Connect relying-party library
 carrying forward the [`openidconnect`](https://github.com/ramosbugs/openidconnect-rs)
 4.0.1 baseline. It provides discovery, authorization-code requests with PKCE,
-ID-token validation, UserInfo, refresh-token requests, logout, and dynamic
-client registration.
+ID-token validation, UserInfo, refresh-token requests, and dynamic client
+registration.
 
 The baseline was imported from upstream commit
 [b639b5d39eac6903238867aeb2b29326502e6b26](https://github.com/ramosbugs/openidconnect-rs/tree/b639b5d39eac6903238867aeb2b29326502e6b26)
