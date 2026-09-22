@@ -1,4 +1,4 @@
-# G-000001 — No maintained Rust OIDC RP library supports ES256
+# G-000001 — No maintained published Rust OIDC RP crate is established for ES256
 
 ## State
 
