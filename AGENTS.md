@@ -257,7 +257,7 @@ Repository-specific orientation belongs in the repository block that follows.
 - Ownership: `OWNED`.
 - Phase and implementation map: `situation/context.md`.
 - Critical invariants: none.
-- Verification: Unassured — no assured witness route is presently recorded for repository gate claims; [G-000004](situation/gaps/G-000004-no-assured-ci-witness-route.md) retains the absence and [C-000004](situation/candidates/C-000004-ci-pipeline-fmt-clippy-test-audit.md) remains qualifying.
+- Verification: Assured — [P-000005](situation/promises/P-000005-configured-ci-gate-route.md) is assured by the retained fleet witness [W-000004](situation/witnesses/P-000005/W-000004-configured-ci-fleet-run.md) (manual-dispatch evidence); [G-000004](situation/gaps/G-000004-no-assured-ci-witness-route.md) records the closed absence and [C-000004](situation/candidates/C-000004-ci-pipeline-fmt-clippy-test-audit.md) is the promoted candidate behind the route (corrected on open PR #2, thread PRRT_kwDOUlFWIM6kzMgL).
 - Tool priority: organization defaults.
 - Donor boundary: `92946acf13d02a67caab38cb64444a902217fae4` (the BACKPORT opening checkpoint at which the trigger tree became historical donor material).
 </bedrock-repository>
