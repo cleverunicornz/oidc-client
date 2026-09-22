@@ -113,6 +113,10 @@ pub fn http_client(request: HttpRequest) -> Result<HttpResponse, HttpClientError
     })
 }
 
+// clippy 1.98 (`dead_code`) flags this shared helper in the rp_certification_dynamic binary,
+// which does not use it; rp_certification_code does. Removal would break the other suite —
+// kept verbatim for import fidelity (situation/decisions/D-000004-import-fidelity-rules-for-the-openidconnect-4-0-1-import.md).
+#[allow(dead_code)]
 pub trait PanicIfFail<T, F>
 where
     F: std::error::Error,
