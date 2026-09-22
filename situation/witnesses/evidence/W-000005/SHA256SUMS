@@ -1,0 +1,4 @@
+# Evidence for W-000005 — scoped test run against commit 6bc21cdbcf933bcaf52a9f7f7ef33e3dda851bb3 (bank2/assurance)
+# The retained log contains the relevant output of the declared O-000007 command.
+
+5cd77a196adbfdb9b63f8e46921c49e3bf811c3841fdc05680f790936f168869  scoped-serialization-round-trip.log

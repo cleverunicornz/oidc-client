@@ -2,7 +2,7 @@
 
 ## State
 
-open
+closed
 
 ## Gap
 
@@ -42,6 +42,10 @@ Interpretation, distinct from the observations above: because
 read back falls into the extension arm
 (src/core/mod.rs line 783, `CoreAuthErrorResponseType::Extension`),
 so a round-trip yields a different variant rather than an error.
+- Corrector observation in closure run
+  `20260922T160102Z-2225beb0f70ca521911ef82a7bad12ec04d91a52`: the
+  deliberate behavior correction now has the consumer-facing P-000006/O-000007
+  lineage and its PASS witness W-000005.
 
 ## Impact
 
@@ -55,20 +59,26 @@ so no committed test pins the spec-correct serialization of this variant.
 
 ## Resolution
 
-none yet — the fix is a deliberate behavior-change commit (emit
-`invalid_request_object` and add a serde round-trip regression test),
-scheduled for the ES256 pull request, the next planned PR
-(situation/plans/active/PLAN-000001-import-es256-publish-consume.md),
-rather than smuggled into the fidelity-audited import
-(situation/decisions/D-000004-import-fidelity-rules-for-the-openidconnect-4-0-1-import.md;
-CodeRabbit thread PRRT_kwDOUlFWIM6kr1f0).
+closed — corrected deliberately under
+situation/decisions/D-000010-correct-invalid-request-object-serialization.md:
+the outbound mapping now emits the spec string `invalid_request_object`.
+P-000006 records the consumer-observable serialization and parsing contract;
+O-000007 judges it, and W-000005 retains the PASS run at
+`6bc21cdbcf933bcaf52a9f7f7ef33e3dda851bb3`. The change remains a named
+divergence from the import pin; future upstream syncs must re-apply or
+consciously re-adjudicate it under D-000010.
 
 ## References
 
-- situation/references/R-000001-upstream-pin.md — the upstream pin
+- situation/references/D-000004/R-000001-upstream-pin.md — the upstream pin
   carrying the defect verbatim.
 - situation/decisions/D-000004-import-fidelity-rules-for-the-openidconnect-4-0-1-import.md —
   the fidelity policy that keeps the fix out of the import PR.
+- situation/decisions/D-000010-correct-invalid-request-object-serialization.md —
+  the predeclared decision governing the correction.
+- situation/promises/P-000006-invalid-request-object-serialization-round-trip.md
+- situation/oracles/O-000007-judge-invalid-request-object-serialization-round-trip.md
+- situation/witnesses/P-000006/W-000005-invalid-request-object-serialization-round-trip.md
 
 ## Provenance
 

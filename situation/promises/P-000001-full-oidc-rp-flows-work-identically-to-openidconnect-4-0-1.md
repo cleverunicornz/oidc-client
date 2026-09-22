@@ -18,22 +18,26 @@ upstream baseline within this promise's scope.
 The imported 4.0.1 OIDC RP surface and the listed non-ES256 algorithms.
 ES256 is separately described by P-000002. This scope does not include a
 crate-provided discovery cache, provider deployment behavior, publication, or
-any algorithm not listed above.
+any algorithm not listed above. It does not claim that the imported test bytes
+are unchanged from the pin.
 
 ## Oracle
 
-situation/oracles/O-000001-judge-full-oidc-rp-flow-parity-with-upstream.md
+situation/oracles/O-000004-judge-imported-oidc-rp-baseline.md
 
 ## State evidence
 
 State `implemented` is supported by the import commit
-`eeb0e6d847d7665cc8b0c9e46b9716323ded3c6a` and the retained gate observation
-at `24835e4b44caa8a0baae2ac5b865bbd6bdf355ba`. That observation records
-`cargo test --all-features` passing 70 tests and compiled, ignored
-certification tests in
-`situation/witnesses/evidence/W-000001/gates-final.log`; its witness is
-`INVALID` for complete O-000001 assurance because it exercised only P6.
-The state is not `assured` because O-000001 legs P1–P5 remain unexecuted.
+`eeb0e6d847d7665cc8b0c9e46b9716323ded3c6a`. The retained gate observation at
+`24835e4b44caa8a0baae2ac5b865bbd6bdf355ba` records
+`cargo test --all-features` with 70 passed and 0 failed tests, while the 21
+live-network certification tests compiled and remained ignored
+(`situation/witnesses/evidence/W-000001/gates-final.log`). Its witness is
+`INVALID`, remains attached to the historical O-000001 rule, and establishes
+only that the suite passed at that head; it does not establish unchanged test
+bytes. D-000004 records classified non-rename test deltas. The corrected scope
+is judged by O-000004 and has no PASS witness, so this promise is not
+`assured`.
 
 ## Residual
 

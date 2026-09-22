@@ -10,33 +10,40 @@ accepted
 
 ## Context
 
-No maintained Rust OIDC relying-party library supports ES256 (G-000001);
-Poda Chat consumes an ES256-defaulting IdP (Kanidm) and currently speaks
-RS256 only under a legacy flag. The upstream openidconnect crate has been
-effectively unmaintained since July 2025.
+The retained research had not identified a maintained, published Rust OIDC
+relying-party package for the ES256 need recorded in G-000001. Poda Chat
+consumes an ES256-defaulting IdP (Kanidm) and currently speaks RS256 only under
+a legacy flag; the upstream openidconnect project is recorded as unmaintained.
 
 ## Evidence
 
 - situation/gaps/G-000001-no-maintained-rust-oidc-rp-library-supports-es256.md
   — the ecosystem gap that forced the choice
-- situation/references/R-000001-upstream-pin.md — the upstream pin this
+- situation/references/D-000004/R-000001-upstream-pin.md — the upstream pin this
   decision carries forward
 - Origin scoping evidence gathered in Poda Chat Banks 1–6
   (situation/context.md)
+- situation/candidates/C-000005-publish-to-crates-io.md — the publication
+  Candidate selected by this Decision.
+- situation/promises/P-000003-published-on-crates-io-as-oidc-client.md and
+  situation/oracles/O-000003-judge-crates-io-publication.md — the Promise and
+  Oracle created by that promotion.
 
 ## Decision
 
 Create a new public repository (cleverunicornz/oidc-client) carrying forward
-the openidconnect 4.0.1 code with attribution, publish on crates.io as
-oidc-client, and consume from Poda Chat via Cargo.toml.
+the openidconnect 4.0.1 code with attribution, and publish on crates.io as
+oidc-client through C-000005, P-000003, and O-000003. A Poda Chat dependency
+migration is not selected here; C-000006 remains a downstream possibility.
 
 ## Why
 
-Public-first axiom. Vendoring creates maintenance complexity inside the
-Poda Chat monorepo. A public crate is cleaner to consume, benefits the Rust
-ecosystem (4M quarterly downloads with no maintained alternative), and
-could attract contributors. The crate is MIT-licensed (verified at the
-4.0.1 pin — R-000001), so carrying forward with attribution is permitted.
+Public-first axiom. Vendoring creates maintenance complexity inside the Poda
+Chat monorepo. A public crate is cleaner to consume, can benefit the Rust
+ecosystem, and could attract contributors.
+
+The crate is MIT-licensed (verified at the 4.0.1 pin — R-000001), so carrying
+forward with attribution is permitted.
 
 ## Rejected alternatives
 
@@ -49,9 +56,14 @@ could attract contributors. The crate is MIT-licensed (verified at the
 
 ## Consequences
 
-We own the maintenance of a public crate. This is a real commitment but also
-a contribution to the ecosystem. Poda Chat removes a dependency on an
-abandoned crate and gains ES256 support.
+We own the maintenance of a public crate. Poda Chat can replace its abandoned
+upstream dependency only after a published release and its own downstream
+qualification; that adoption is not evidence in this repository.
+
+## Revisit when
+
+A maintained public Rust OIDC RP package satisfies the recorded ES256 need, or
+the organization changes the intended ownership or distribution boundary.
 
 ## Provenance
 

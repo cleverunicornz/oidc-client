@@ -1,0 +1,79 @@
+# G-000010 — Candidate, Decision, and Promise boundaries reconciled
+
+## State
+
+closed
+
+## Gap
+
+At the reviewed head, several Candidates remained non-commitments even though
+linked current records presented the same behavior as selected or promised.
+The import Candidate's selecting Decision also omitted the Promise and Oracle
+that the Candidate said it created. The learning-loop paths were not internally
+consistent.
+
+## Relevance
+
+The BACKPORT reconciliation changed these Candidates and their related
+Promises, Decisions, Oracles, and Plans. Candidate state is the boundary
+between a possibility and accepted behavior; the records required a coherent,
+traversable correction.
+
+## Evidence
+
+- Validator observation for run
+  `20260922T105519Z-37afd430f1f61a2faa2fb8481bb6d8933837626c` at reviewed head
+  `5a8580f3394f853c995e7ccb1148fe86c040321d`.
+- C-000005 remains `proposed` and says it has not been promoted, while accepted
+  D-000001 explicitly chooses publication and P-000003/O-000003 already state
+  and judge that publication behavior.
+- C-000004 remains `qualifying` and calls the current CI route evidence rather
+  than a promotion, while P-000003/O-000003 already include operation of that
+  route in their contract.
+- C-000003 remains `qualifying`, while D-000003 calls it "the candidate this
+  decision resolves" and D-000003/D-000005 select the exact current advisory
+  dispositions embodied in `deny.toml`.
+- C-000001 says D-000004 promoted it into P-000001 and historical O-000001, but
+  D-000004 links C-000001 without linking P-000001 or O-000001 as the selecting
+  Decision contract requires.
+- D-000001's Decision also says Poda Chat will consume the crate, while
+  C-000006 retains that downstream action as a merely proposed possibility;
+  its Consequences section uses the narrower, non-committal wording that Poda
+  Chat "can" replace the dependency after its own qualification.
+
+- P-000003 remains `hypothesis`, whose protocol definition is "no feasibility
+  evidence", while its own State evidence calls R-000001's name-availability
+  observation feasibility evidence and the related C-000004/C-000005 records
+  describe active qualification questions.
+
+## Impact
+
+At the reviewed head, a reader could not determine which publication, CI,
+dependency-policy, and consumer behaviors had crossed the Decision boundary.
+Promotion lineage and active Plan completion could produce conflicting answers
+about what was committed and what remained only a Candidate.
+
+## Resolution
+
+closed — D-000004 now links C-000001 to P-000001/O-000001; D-000008 and
+D-000009 promote C-000003/C-000004 into their local Promise/Oracle pairs;
+D-000001 promotes C-000005 into P-000003/O-000003 and limits C-000006 to its
+downstream candidate boundary. PLAN-000001 retains imported behavior and
+PLAN-000002 owns the selected release commitments.
+
+## References
+
+- `situation/candidates/C-000001-import-openidconnect-v4-0-1-code-with-attribution.md`
+- `situation/candidates/C-000003-resolve-rustsec-2023-0071-rsa-marvin-disposition.md`
+- `situation/candidates/C-000004-ci-pipeline-fmt-clippy-test-audit.md`
+- `situation/candidates/C-000005-publish-to-crates-io.md`
+- `situation/candidates/C-000006-switch-poda-chat-to-consume-oidc-client.md`
+- `situation/decisions/D-000001-create-oidc-client-as-a-standalone-public-crate-not-a-vendored-fork.md`
+- `situation/decisions/D-000003-rustsec-2023-0071-rsa-disposition-scoped-ignore.md`
+- `situation/decisions/D-000004-import-fidelity-rules-for-the-openidconnect-4-0-1-import.md`
+- `situation/promises/P-000003-published-on-crates-io-as-oidc-client.md`
+- `situation/decisions/D-000008-promote-dependency-policy-contract.md`
+- `situation/decisions/D-000009-promote-configured-ci-gate-route.md`
+- `situation/promises/P-000004-dependency-policy-advisory-exceptions.md`
+- `situation/promises/P-000005-configured-ci-gate-route.md`
+- `situation/plans/active/PLAN-000002-publish-oidc-client.md`

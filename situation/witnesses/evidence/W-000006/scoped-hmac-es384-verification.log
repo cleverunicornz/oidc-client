@@ -1,0 +1,25 @@
+# Scoped Cargo test evidence for W-000006
+# head: 6bc21cdbcf933bcaf52a9f7f7ef33e3dda851bb3 (bank2/assurance)
+# observed: 2026-09-22
+# The following relevant test results were copied from the scoped command output.
+
+$ cargo test --all-features test_hmac_sha256_verification
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.13s
+     Running unittests src/lib.rs
+
+running 1 test
+test core::jwk::tests::test_hmac_sha256_verification ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 71 filtered out; finished in 0.00s
+
+$ cargo test --all-features test_ecdsa_verification
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.12s
+     Running unittests src/lib.rs
+
+running 1 test
+test core::jwk::tests::test_ecdsa_verification ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 71 filtered out; finished in 0.05s
+
+For each command, the three integration-test binaries ran no matching tests
+(19, 2, and 0 tests filtered respectively).

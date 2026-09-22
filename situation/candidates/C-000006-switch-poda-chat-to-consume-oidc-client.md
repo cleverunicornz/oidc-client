@@ -4,27 +4,36 @@
 
 proposed
 
-## What
+## Candidate
 
-Replace the openidconnect 4.0.1 dependency in Poda Chat with the published
-oidc-client crate. This is a Cargo.toml change plus any import-path
-renames.
+In Poda Chat, replace the openidconnect dependency with the published
+`oidc-client` package and migrate the Rust import path where needed.
 
-## Approach
+## Origin
 
-1. In poda-chat Cargo.toml: replace openidconnect = "4.0.1" with
-   oidc-client = "x.y.z"
-2. Update all use statements from openidconnect:: to oidc_client::
-3. Update deny.toml: remove the RUSTSEC-2023-0071 ignore if resolved
-4. Verify: cargo build, cargo clippy, full test suite, serial DB suite all
-   pass
-5. This change lands through the normal Poda Chat PR/Bedrock process
+The standalone-public-crate decision
+`situation/decisions/D-000001-create-oidc-client-as-a-standalone-public-crate-not-a-vendored-fork.md`
+identifies Poda Chat as a possible consumer after publication while leaving
+that downstream decision and its evidence to Poda Chat.
 
-## Dependencies
+## Why consider it
 
-C-000005 (the crate must be published first)
+The downstream application needs a normal Cargo dependency on the maintained
+continuation before it can benefit from its release and algorithm support.
 
-## Provenance
+## Qualification questions
 
-Materialized 2026-09-22 from cleverunicornz Project #20 item C-000006
-(project Status: Todo).
+- Is an appropriate `oidc-client` release published and resolvable?
+- Which Poda Chat import paths and dependency-policy entries change?
+- Does Poda Chat's own qualification evidence show no behavioral regression?
+
+## Candidate approaches
+
+- Migrate Poda Chat to a published crates.io release through its own pull
+  request and Bedrock closure.
+- Continue consuming upstream openidconnect until the release boundary is
+  ready.
+
+## Disposition
+
+none — this repository does not own the Poda Chat change or its evidence.

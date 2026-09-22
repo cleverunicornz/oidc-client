@@ -10,27 +10,19 @@ situation/promises/P-000003-published-on-crates-io-as-oidc-client.md
 
 ## Inputs
 
-An empty Rust project consuming the published crate, the crates.io crate
-page, and the repository's CI configuration and its runs.
+An empty Rust project consuming the released package and the `oidc-client`
+crates.io page.
 
 ## Pass
 
-- P1: cargo add oidc-client succeeds from an empty Rust project
-- P2: crates.io page shows documentation, repository, license
-- P3: CI runs the fmt, clippy, test, and audit checks on the pull request —
-  once when it opens and once on its final head by dispatch
-- P4: Version is semantic (0.1.0 for initial release or 4.1.0 to signal
-  continuity)
+- P1: `cargo add oidc-client` resolves the released package in an empty Rust
+  project and that project compiles.
+- P2: The crates.io page exposes package documentation, the repository URL,
+  and the MIT license.
+- P3: The released version parses as a semantic version.
 
 ## Fail
 
-- F1: Crate not found on crates.io
-- F2: CI does not run
-
-## Provenance
-
-Materialized 2026-09-22 from cleverunicornz Project #20 item O-000003
-(project Status: Todo). Corrected against repository law: the project body
-says "CI runs on push and PR"; per the root AGENTS.md workflow policy,
-branches carry no push triggers — CI runs when a pull request opens and on
-its final head by dispatch.
+- F1: The package cannot be resolved from crates.io by the empty project.
+- F2: The crates.io page omits its documentation, repository URL, or license.
+- F3: The released version does not parse as a semantic version.

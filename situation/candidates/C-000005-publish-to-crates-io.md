@@ -2,33 +2,53 @@
 
 ## State
 
-proposed
+promoted
 
-## What
+## Candidate
 
-Publish the crate to crates.io under the name oidc-client. This requires a
-crates.io account/token and the crate being fully ready (complete, tested,
-documented).
+Publish the crate under the `oidc-client` package name on crates.io once its
+release prerequisites and evidence are complete.
 
-## Approach
+## Origin
 
-1. Ensure Cargo.toml metadata is complete (name, version, description,
-   license, repository, keywords, categories)
-2. Write comprehensive rustdoc comments on the public API
-3. Add examples in examples/ directory
-4. Write a README.md with usage examples
-5. cargo publish (requires a crates.io token)
+The standalone-crate decision D-000001 and the name-availability observation
+in `situation/references/D-000004/R-000001-upstream-pin.md` establish the
+selected publication direction.
 
-## Dependencies
+## Why consider it
 
-C-000002, C-000003, C-000004 (publish a complete, clean crate)
+Publication makes the maintained continuation consumable as an ordinary Cargo
+dependency rather than a source import.
 
-## References
+## Qualification questions
 
-- situation/references/R-000001-upstream-pin.md — the target crate name is
-  verified available.
+- Is a release credential and publication authority available?
+- Do the package metadata and documentation satisfy the release boundary?
+- Is P-000003's own publication contract, with the selected release gates
+  P-000004 and P-000005, sufficiently evidenced for the release scope?
+
+These remain P-000003 implementation and assurance questions after selection.
+P-000001 and P-000002 remain separate behavior-assurance promises; they are
+not P-000003 publication prerequisites (PLAN-000002 groups only P-000003,
+P-000004, and P-000005).
+
+## Candidate approaches
+
+- Publish `oidc-client` after the applicable promises and CI route are
+  qualified.
+- Keep the package unpublished while resolving missing evidence.
+
+## Disposition
+
+Promoted by
+`situation/decisions/D-000001-create-oidc-client-as-a-standalone-public-crate-not-a-vendored-fork.md`
+into P-000003 and O-000003. P-000003 remains a hypothesis pending feasibility
+evidence and publication.
 
 ## Provenance
 
-Materialized 2026-09-22 from cleverunicornz Project #20 item C-000005
-(project Status: Todo).
+Corrected in place on open PR #2 before any closing checkpoint (CodeRabbit
+thread PRRT_kwDOUlFWIM6kzMgV): the completion question now assesses only
+P-000003, P-000004, and P-000005, per PLAN-000002's actual promised set, and
+the sentence separating the behavior-assurance promises (P-000001, P-000002)
+from P-000003's publication prerequisites was added.

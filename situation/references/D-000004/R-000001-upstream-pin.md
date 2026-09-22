@@ -8,7 +8,9 @@ license, dependency pins, and import shape.
 
 ## Owner
 
-Cited by D-000001, P-000003, C-000001, C-000005, I-000001, and G-000002.
+`situation/decisions/D-000004-import-fidelity-rules-for-the-openidconnect-4-0-1-import.md`
+— the import-fidelity decision that establishes the donor pin and import
+surface for which these retained facts provide supporting depth.
 
 ## Facts
 
@@ -19,12 +21,13 @@ Cited by D-000001, P-000003, C-000001, C-000005, I-000001, and G-000002.
 - License: MIT-only at the tag. The crates.io license field and the tag's
   `Cargo.toml` both declare `MIT`; the tag carries a single `LICENSE` file
   ("Copyright (c) 2018 David Ramos") and zero Apache-2.0 references across
-  its 45 tracked files. The "MIT OR Apache-2.0" dual-license phrasing in
-  the Project #20 bodies and this repository's repository block is wrong
-  against this evidence; those wordings are corrected through PR #1 owned
-  by Main (the protocol and organization blocks are agent-protected; the
-  repository block is not, but its correction is routed to PR #1 for this
-  phase).
+  its 45 tracked files.
+- The historic Project #20 bodies used the incorrect "MIT OR Apache-2.0"
+  phrasing. This repository's root repository block was corrected to the
+  MIT-only fact in
+  `fbaa1198070a45d80d55945f96551696a67da04e:AGENTS.md`; the historical
+  Project #20 text remains donor context rather than current repository
+  orientation.
 - Dependency pins at 4.0.1 (verified in the tag's `Cargo.toml`):
   `oauth2 = "5.0.0"`, `rsa = "0.9.2"`, `p256 = "0.13.2"` (also
   `p384 = "0.13.0"`), `http = "1.0"`, `serde = "1.0"`.

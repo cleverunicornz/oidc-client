@@ -22,13 +22,17 @@ lint drift that needs a predeclared remediation policy.
 
 ## Evidence
 
-- situation/references/R-000001-upstream-pin.md — pin commit
+- situation/references/D-000004/R-000001-upstream-pin.md — pin commit
   b639b5d39eac6903238867aeb2b29326502e6b26 (tag 4.0.1) and the 41-file
   import-surface facts (src 30, tests 3, examples 3, plus `Cargo.toml`,
   `Cargo-1.65.lock`, `LICENSE`, `README.md`, `UPGRADE.md`; excludes
   `.github/`, `.gitignore`, `.codecov.yml`).
 - situation/candidates/C-000001-import-openidconnect-v4-0-1-code-with-attribution.md
   — the import candidate whose approach these rules bind.
+- situation/promises/P-000001-full-oidc-rp-flows-work-identically-to-openidconnect-4-0-1.md
+  and situation/oracles/O-000001-judge-full-oidc-rp-flow-parity-with-upstream.md
+  — the Promise and historical Oracle created by this Candidate promotion.
+  O-000004 is the successor rule for P-000001's corrected scope.
 - situation/invariants/I-000001-upstream-attribution-is-preserved.md — the
   attribution invariant this decision implements.
 - Upstream rename surface verified at the pin: crate-name and repository
@@ -41,12 +45,16 @@ lint drift that needs a predeclared remediation policy.
 
 ## Decision
 
-1. Carried verbatim from the pin: `src/` (30 files), `tests/` (3 files),
-   `examples/` (3 files), `Cargo.toml` (except the metadata deltas below),
+Promote C-000001 into P-000001 with
+O-000001. O-000004 succeeds O-000001 for P-000001's corrected scope;
+W-000001 remains an observation of the historical rule.
+
+1. Baseline material is carried from the pin except for the explicitly
+   classified deltas below: `src/` (30 files), `tests/` (3 files), `examples/`
+   (3 files), `Cargo.toml` (except the metadata deltas below),
    `Cargo-1.65.lock` (as-is; an inert reference lock — cargo does not read
-   that filename), `LICENSE` (byte-identical), `UPGRADE.md` (verbatim),
-   and the upstream `README.md` preserved byte-identical as
-   `README.upstream.md`.
+   that filename), `LICENSE` (byte-identical), `UPGRADE.md` (verbatim), and
+   the upstream `README.md` preserved byte-identical as `README.upstream.md`.
 2. Metadata deltas (root `Cargo.toml` only): `name = "oidc-client"`,
    `version = "4.1.0"`
    (situation/decisions/D-000002-version-oidc-client-4-1-0-continuing-upstream-lineage.md),
@@ -86,8 +94,12 @@ lint drift that needs a predeclared remediation policy.
    mechanical fixing is semantic-risky, a targeted `#[allow]` with a
    justification comment. Behavior never changes. Every deviation from
    upstream bytes is classified as exactly one of: rename / metadata /
-   mechanical-lint / allow-addition; the exhaustive table lands in
-   witness situation/witnesses/P-000001/W-000001-import-head-offline-parity-leg-p6.md.
+   mechanical-lint / allow-addition. The known `tests/` deltas include the
+   `CoreIdTokenVerifier<'_>` mechanical-lint change in
+   `tests/rp_certification_code.rs` and the `#[allow(dead_code)]` plus
+   explanatory comment in `tests/rp_common.rs`. No exhaustive classification
+   table is retained in W-000001; its historical gate run is execution
+   evidence, not proof that test bytes were unchanged except for import renames.
 7. Authored files (new, not upstream deltas): `README.md`, `NOTICE.md`,
    `.github/workflows/ci.yml`, `deny.toml`.
 

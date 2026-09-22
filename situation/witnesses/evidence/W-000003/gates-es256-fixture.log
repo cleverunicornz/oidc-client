@@ -1,0 +1,138 @@
+# gate run: cargo test --all-features
+# head: 00d45a7c06f3704915550ad96610a9f9d5e68279 (bank2/assurance)
+# image: bank2-gates:1.98.0 (from rust:1.98.0; rustc 1.98.0 (88d9e12ae 2026-08-18), clippy 0.1.98, rustfmt 1.9.0-stable, cargo-deny 0.20.2)
+# date: 2026-09-22
+
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.10s
+     Running unittests src/lib.rs (/tmp/target/debug/deps/oidc_client-8853f00486a3a36c)
+
+running 72 tests
+test authorization::tests::test_authorize_url_minimal ... ok
+test authorization::tests::test_authorize_url_implicit_with_access_token ... ok
+test authorization::tests::test_authorize_url_hybrid ... ok
+test claims::tests::test_err_field_name ... ok
+test authorization::tests::test_authorize_url_redirect_url_override ... ok
+test claims::tests::test_duplicate_claims ... ok
+test claims::tests::test_null_optional_claims ... ok
+test core::jwk::tests::test_core_jwk_deserialization_ec ... ok
+test core::jwk::tests::test_core_jwk_deserialization_dupe_fields ... ok
+test core::jwk::tests::test_core_jwk_deserialization_no_optional ... ok
+test core::jwk::tests::test_core_jwk_deserialization_unrecognized ... ok
+test core::jwk::tests::test_core_jwk_deserialization_ed ... ok
+test core::jwk::tests::test_core_jwk_deserialization_rsa ... ok
+test core::jwk::tests::test_core_jwk_deserialization_symmetric ... ok
+test authorization::tests::test_authorize_url_full ... ok
+test core::jwk::tests::test_hash_bytes_eddsa ... ok
+test core::jwk::tests::test_hash_bytes_rsa ... ok
+test core::jwk::tests::test_jwks_same_kid_different_alg ... ok
+test core::jwk::tests::test_jwks_unsupported_alg ... ok
+test core::tests::test_auth_error_type_round_trip ... ok
+test core::tests::test_grant_type_serialize ... ok
+test core::tests::test_signature_alg_serde_plain ... ok
+test core::jwk::tests::test_hmac_signing ... ok
+test core::jwk::tests::test_hmac_sha256_verification ... ok
+test discovery::tests::test_discovery_deserialization ... ok
+test core::jwk::tests::test_jwks_unsupported_key ... ok
+test id_token::tests::test_accept_rfc3339_timestamp ... ok
+test id_token::tests::test_additional_claims ... ok
+test discovery::tests::test_unsupported_enum_values ... ok
+test discovery::tests::test_discovery_deserialization_other_fields ... ok
+test id_token::tests::test_audiences_claim ... ok
+test id_token::tests::test_catch_all_additional_claims ... ok
+test id_token::tests::test_audience ... ok
+test id_token::tests::test_issuer_claim ... ok
+test id_token::tests::test_id_token ... ok
+test id_token::tests::test_minimal_claims_serde ... ok
+test id_token::tests::test_oauth2_response ... ok
+test jwt::tests::test_jwt_algorithm_deserialization ... ok
+test jwt::tests::test_jwt_algorithm_serialization ... ok
+test id_token::tests::test_unknown_claims_serde ... ok
+test jwt::tests::test_json_web_token_type_normalization ... ok
+test jwt::tests::test_invalid_deserialization ... ok
+test logout::tests::test_end_session_endpoint_deserialization ... ok
+test logout::tests::test_logout_request_with_all_parameters ... ok
+test id_token::tests::test_complete_claims_serde ... ok
+test core::crypto::tests::test_leading_zeros_are_parsed_correctly ... ok
+test types::tests::test_string_bool_parse ... ok
+test registration::tests::test_metadata_serialization_minimal ... ok
+test types::tests::test_issuer_url_append ... ok
+test registration::tests::test_metadata_serialization ... ok
+test registration::tests::test_response_serialization ... ok
+test types::tests::test_url_serialize ... ok
+test user_info::tests::test_catch_all_additional_claims ... ok
+test user_info::tests::test_additional_claims ... ok
+test logout::tests::test_logout_request_with_no_parameters ... ok
+test jwt::tests::test_jwt_basic ... ok
+test core::jwk::tests::test_ed_signing ... ok
+test verification::tests::test_jose_header ... ok
+test jwt::tests::test_invalid_signature ... ok
+test core::jwk::tests::test_rsa_pss_verification ... ok
+test core::jwk::tests::test_eddsa_verification ... ok
+test verification::tests::test_user_info_verified_claims ... ok
+test core::jwk::tests::test_rsa_pkcs1_verification ... ok
+test verification::tests::test_new_id_token ... ok
+test verification::tests::test_es256_id_token_verified_claims ... ok
+test verification::tests::test_id_token_verified_claims ... ok
+test core::jwk::tests::test_ecdsa_verification ... ok
+test jwt::tests::test_new_jwt ... ok
+test verification::tests::test_jwt_verified_claims ... ok
+test verification::tests::test_new_user_info_claims ... ok
+test core::jwk::tests::test_rsa_pss_signing ... ok
+test core::jwk::tests::test_rsa_signing ... ok
+
+test result: ok. 72 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.15s
+
+     Running tests/rp_certification_code.rs (/tmp/target/debug/deps/rp_certification_code-1a0f04d46e9edfb7)
+
+running 19 tests
+test rp_id_token_aud ... ignored
+test rp_id_token_bad_sig_hs256 ... ignored
+test rp_id_token_bad_sig_rs256 ... ignored
+test rp_id_token_iat ... ignored
+test rp_id_token_issuer_mismatch ... ignored
+test rp_id_token_kid_absent_multiple_jwks ... ignored
+test rp_id_token_kid_absent_single_jwks ... ignored
+test rp_id_token_sig_hs256 ... ignored
+test rp_id_token_sig_none ... ignored
+test rp_id_token_sig_rs256 ... ignored
+test rp_id_token_sub ... ignored
+test rp_nonce_invalid ... ignored
+test rp_response_type_code ... ignored
+test rp_scope_userinfo_claims ... ignored
+test rp_token_endpoint_client_secret_basic ... ignored
+test rp_token_endpoint_client_secret_post ... ignored
+test rp_userinfo_bad_sub_claim ... ignored
+test rp_userinfo_bearer_header ... ignored
+test rp_userinfo_sig ... ignored
+
+test result: ok. 0 passed; 0 failed; 19 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/rp_certification_dynamic.rs (/tmp/target/debug/deps/rp_certification_dynamic-198c18aebd846511)
+
+running 2 tests
+test rp_discovery_openid_configuration ... ignored
+test rp_registration_dynamic ... ignored
+
+test result: ok. 0 passed; 0 failed; 2 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/rp_common.rs (/tmp/target/debug/deps/rp_common-c4d37cbd6c7c9d6e)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+   Doc-tests oidc_client
+
+running 9 tests
+test src/lib.rs - (line 87) ... ignored
+test src/lib.rs - (line 95) ... ignored
+test src/lib.rs - (line 372) - compile ... ok
+test src/lib.rs - (line 413) - compile ... ok
+test src/lib.rs - (line 280) - compile ... ok
+test src/lib.rs - (line 134) - compile ... ok
+test src/lib.rs - (line 505) - compile ... ok
+test src/jwt/mod.rs - jwt::NormalizedJsonWebTokenType (line 61) ... ok
+test src/client.rs - client::Client (line 33) ... ok
+
+test result: ok. 7 passed; 0 failed; 2 ignored; 0 measured; 0 filtered out; finished in 0.19s
+

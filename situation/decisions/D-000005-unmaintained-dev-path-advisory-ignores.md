@@ -79,6 +79,10 @@ disposition (situation/decisions/D-000003-rustsec-2023-0071-rsa-disposition-scop
 and these two unmaintained-informational dev-path findings. Any further
 advisory fails CI.
 
+D-000008 promotes C-000003 into P-000004 and O-000005, which state the
+resulting local dependency-policy contract without changing this Decision's
+scoped rationale.
+
 ## Revisit when
 
 The dev-dependencies are deliberately modernized past the upstream pins

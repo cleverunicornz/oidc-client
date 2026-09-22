@@ -29,7 +29,7 @@ it must be re-examined.
   https://github.com/RustCrypto/RSA/pull/680 and
   https://github.com/RustCrypto/RSA/pull/702. Both `rsa 0.9.10` (stable)
   and `0.10.0-rc.18` are affected, so no bump escapes the advisory.
-- situation/references/R-000001-upstream-pin.md — the pin declares
+- situation/references/D-000004/R-000001-upstream-pin.md — the pin declares
   `rsa = "0.9.2"`.
 - The crate's byte-level rsa surface at the pin: public-key signature
   verification in `src/core/crypto.rs` (`rsa::RsaPublicKey` construction
@@ -82,6 +82,10 @@ private-signing wrapper — and self-arms its own re-examination triggers.
 who use `CoreRsaPrivateSigningKey` to sign client assertions inherit the
 advisory's named attack surface; this record and the `deny.toml` reason say
 so plainly. Every other vulnerability fails the gate.
+
+D-000008 promotes C-000003 into P-000004 and O-000005, which state the
+resulting local dependency-policy contract without changing this Decision's
+scoped rationale.
 
 ## Revisit when
 

@@ -1,4 +1,4 @@
-# G-000001 — No maintained Rust OIDC RP library supports ES256
+# G-000001 — No maintained published Rust OIDC RP crate is established for ES256
 
 ## State
 
@@ -29,9 +29,13 @@ RS256 under Kanidm's legacy-crypto setting.
   and `src/core/crypto.rs` verifies P-256 signatures with `p256`; the
   imported donor therefore contradicts the earlier claim that openidconnect
   dropped ES256 in the 2.x→4.x rewrite.
-- `situation/references/R-000001-upstream-pin.md` identifies that donor as
+- `situation/references/D-000004/R-000001-upstream-pin.md` identifies that donor as
   openidconnect 4.0.1 and records its unmaintained status in the repository
   context.
+- Corrector observation in closure run
+  `20260922T160102Z-2225beb0f70ca521911ef82a7bad12ec04d91a52`: P-000002
+  later became assured by W-000003, but P-000003 does not yet assure a
+  maintained released package.
 
 ## Impact
 
@@ -42,13 +46,15 @@ take on verification work outside the package boundary.
 
 ## Resolution
 
-none — this gap can close only when the ES256 behavior is assured under
-P-000002 and a maintained released package is assured under P-000003.
+none — P-000002 later assured the ES256 behavior under W-000003, but P-000003
+does not yet assure a maintained released package; the current release-bound
+absence remains unresolved.
 
 ## References
 
 - `situation/promises/P-000002-es256-ecdsa-p-256-id-token-verification.md`
 - `situation/promises/P-000003-published-on-crates-io-as-oidc-client.md`
+- situation/witnesses/P-000002/W-000003-es256-id-token-fixture-public-verifier.md
 
 ## Provenance
 

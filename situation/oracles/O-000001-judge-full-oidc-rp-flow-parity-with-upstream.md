@@ -1,4 +1,4 @@
-# O-000001 — Judge imported OIDC RP baseline parity
+# O-000001 — Judge full OIDC RP flow parity with upstream
 
 ## State
 
@@ -10,27 +10,29 @@ situation/promises/P-000001-full-oidc-rp-flows-work-identically-to-openidconnect
 
 ## Inputs
 
-A real-OIDC-provider integration matrix covering the in-scope flows, run with
-the same inputs against this crate and openidconnect 4.0.1, plus this crate's
-unchanged imported offline test suite.
+An integration test matrix exercising every flow against a real OIDC
+provider, the same inputs run against the upstream openidconnect 4.0.1
+crate, and the upstream test suite.
 
 ## Pass
 
-- P1: Both crates fetch and parse equivalent discovery metadata, including
-  issuer, endpoints, JWKS URI, and the listed signing algorithms.
-- P2: Both crates complete authorization-code flow with PKCE S256 through
-  authorization request, callback, and token exchange.
-- P3: Both crates validate ID tokens using RS256, RS384, RS512, PS256, PS384,
-  PS512, and EdDSA.
-- P4: Both crates fetch and parse a UserInfo response.
-- P5: Both crates exchange a refresh token for a new access token.
-- P6: The imported upstream offline test suite passes unchanged except for
-  required crate-name import renames; this includes the dynamic-registration
-  behavior covered by that suite.
+- P1: Discovery document fetched and parsed (issuer, endpoints, JWKS URI,
+  supported algorithms)
+- P2: Authorization-code flow with PKCE S256 completes (auth URL, callback,
+  token exchange)
+- P3: ID token verified for RS256, RS384, RS512, PS256, PS384, PS512, EdDSA
+- P4: UserInfo endpoint fetched and parsed
+- P5: Refresh token exchanged for new access token
+- P6: All upstream test suite tests pass unchanged (excluding renamed
+  imports)
 
 ## Fail
 
-- F1: Any P1–P5 in-scope flow differs between this crate and openidconnect
-  4.0.1 for the same provider input.
-- F2: Any unchanged imported offline test fails, including a
-  dynamic-registration test.
+- F1: Any upstream-supported flow does not work
+- F2: Any upstream test that passed before now fails
+
+## References
+
+- Superseded for P-000001's corrected scope by
+  `situation/oracles/O-000004-judge-imported-oidc-rp-baseline.md`. W-000001
+  remains an observation of this historical rule.

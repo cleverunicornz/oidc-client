@@ -1,0 +1,4 @@
+# Evidence for W-000006 — scoped test run against commit 6bc21cdbcf933bcaf52a9f7f7ef33e3dda851bb3 (bank2/assurance)
+# The retained log contains the relevant output of the declared O-000008 commands.
+
+65fd2bfe2c9d0e4eee8df142b5fb6f5f30b14241fda2247f8d0c28dd99d40164  scoped-hmac-es384-verification.log
