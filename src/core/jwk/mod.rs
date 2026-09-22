@@ -423,21 +423,21 @@ impl PrivateSigningKey for CoreHmacKey {
                     .map_err(|e| SigningError::Other(format!("Could not create key: {}", e)))?;
                 mac.update(message);
                 let result = mac.finalize();
-                Ok(result.into_bytes().as_slice().to_vec())
+                Ok(result.into_bytes().to_vec())
             }
             CoreJwsSigningAlgorithm::HmacSha384 => {
                 let mut mac = hmac::Hmac::<sha2::Sha384>::new_from_slice(&self.secret)
                     .map_err(|e| SigningError::Other(format!("Could not create key: {}", e)))?;
                 mac.update(message);
                 let result = mac.finalize();
-                Ok(result.into_bytes().as_slice().to_vec())
+                Ok(result.into_bytes().to_vec())
             }
             CoreJwsSigningAlgorithm::HmacSha512 => {
                 let mut mac = hmac::Hmac::<sha2::Sha512>::new_from_slice(&self.secret)
                     .map_err(|e| SigningError::Other(format!("Could not create key: {}", e)))?;
                 mac.update(message);
                 let result = mac.finalize();
-                Ok(result.into_bytes().as_slice().to_vec())
+                Ok(result.into_bytes().to_vec())
             }
             ref other => Err(SigningError::UnsupportedAlg(
                 serde_plain::to_string(other).unwrap_or_else(|err| {
