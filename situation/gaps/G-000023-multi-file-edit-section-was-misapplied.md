@@ -2,7 +2,7 @@
 
 ## State
 
-open
+closed
 
 ## Gap
 
@@ -27,6 +27,12 @@ review detects it.
 - The malformed content was detected by an exact re-read before publication,
   removed, and the Promise update was reapplied as a single-file edit.
 - The harness defect was reported through the designated tool-report channel.
+- Bookkeeping observation (PR #3 branch `bank3/bookkeeping`, 2026-09-22): the
+  current bytes verify clean — W-000004 contains only its own Witness sections
+  (Promise, Oracle, Result, Head, Observed, Evidence, Oracle legs) with no
+  foreign section header or promise text, and P-000005 carries the intended
+  update: the `ci` job's fork-guard eligibility boundary in Scope and the
+  per-run witness boundaries in State evidence.
 
 ## Impact
 
@@ -36,7 +42,13 @@ observation was committed.
 
 ## Resolution
 
-none
+closed — detected-and-corrected. The misfiled section was never committed:
+an exact re-read caught it before publication, the malformed content was
+removed, and the Promise update was reapplied as a single-file edit. The
+current bytes of W-000004 and P-000005 verify clean, and the incident remains
+recorded in the Evidence above together with the tool-report channel
+notification. No record corruption from this observation exists in the
+repository's history.
 
 ## References
 
