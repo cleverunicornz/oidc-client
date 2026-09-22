@@ -22,6 +22,8 @@ None.
   G-000018, G-000019, G-000020, G-000021, G-000022, and G-000023 — close on
   branch `bank3/bookkeeping`. G-000001 and P-000003 close by publication and
   remain with PLAN-000002.
+- P-000001's live-flow parity residual remains C-000007's consumer-adoption
+  scope and is not touched by this plan.
 
 ## Completion
 
