@@ -10,8 +10,7 @@ No maintained, published Rust OIDC relying-party crate is established by the
 retained research as supporting ES256 (ECDSA P-256 with SHA-256) for ID-token
 verification. The `openidconnect` 4.0.1 donor does implement ES256
 verification, but its project is recorded as unmaintained; this repository's
-continuation is not yet published; its ES256 verification is assured by
-P-000002 and W-000003.
+continuation is not yet published or assured.
 
 ## Relevance
 
@@ -33,6 +32,10 @@ RS256 under Kanidm's legacy-crypto setting.
 - `situation/references/D-000004/R-000001-upstream-pin.md` identifies that donor as
   openidconnect 4.0.1 and records its unmaintained status in the repository
   context.
+- Corrector observation in closure run
+  `20260922T160102Z-2225beb0f70ca521911ef82a7bad12ec04d91a52`: P-000002
+  later became assured by W-000003, but P-000003 does not yet assure a
+  maintained released package.
 
 ## Impact
 
@@ -43,14 +46,15 @@ take on verification work outside the package boundary.
 
 ## Resolution
 
-none — this gap can close only when the ES256 behavior is assured under
-P-000002 and a maintained released package is assured under P-000003.
+none — P-000002 later assured the ES256 behavior under W-000003, but P-000003
+does not yet assure a maintained released package; the current release-bound
+absence remains unresolved.
 
 ## References
 
 - `situation/promises/P-000002-es256-ecdsa-p-256-id-token-verification.md`
 - `situation/promises/P-000003-published-on-crates-io-as-oidc-client.md`
-- `situation/witnesses/P-000002/W-000003-es256-id-token-fixture-public-verifier.md`
+- situation/witnesses/P-000002/W-000003-es256-id-token-fixture-public-verifier.md
 
 ## Provenance
 
@@ -59,7 +63,3 @@ Materialized 2026-09-22 from cleverunicornz Project #20 item G-000001
 situation/context.md "Origin evidence" (in-repo at b197618) beyond the
 project item body.
 
-Corrected in place on open PR #2 before any closing checkpoint (CodeRabbit
-thread PRRT_kwDOUlFWIM6kzMf2): the continuation's ES256 verification is now
-assured under P-000002 with witness W-000003; publication remains pending.
-Historical observations are unchanged.
