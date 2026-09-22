@@ -18,6 +18,9 @@ tree and pinned evidence:
    MIT-only with one `LICENSE` file.
 4. Its current-phase text said the repository had "no code yet", while the
    admitted tree contained the imported Rust crate.
+5. Its RUSTSEC context said this crate "should resolve or properly scope" the
+   Marvin disposition even though `deny.toml`, D-000003, and D-000005 already
+   established the scoped configuration.
 
 The same text omitted the required explicit `OWNED` classification and
 repeated refuted ES256 research: the admitted 4.0.1 donor contains the
@@ -63,16 +66,22 @@ Direct comparison on 2026-09-22 of situation/context.md against R-000001
   classification required by `situation/AGENTS.md` under "Repository
   ownership."
 
+- Corrector observation at head `f50a09e`: the RUSTSEC context still used
+  future-tense remediation wording despite the existing scoped disposition and
+  newly linked P-000004 dependency-policy contract.
+
 ## Impact
 
 Before correction, readers beginning at the canonical phase and implementation
 map received an inaccurate orientation about the implementation, donor
-provenance, license, ownership, and ES256 research boundary.
+provenance, license, ownership, ES256 research boundary, and dependency-policy
+state.
 
 ## Resolution
 
-closed — `28fa45a` corrects the ordinary context sections listed above without
-altering the checkpoint-owned `## Closure state` lines.
+closed — `28fa45a` corrected the initial ordinary context facts and `adcf57d`
+corrected the stale RUSTSEC state, without altering the checkpoint-owned
+`## Closure state` lines.
 
 ## References
 
