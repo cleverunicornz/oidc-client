@@ -55,13 +55,11 @@ so no committed test pins the spec-correct serialization of this variant.
 
 ## Resolution
 
-none yet — the fix is a deliberate behavior-change commit (emit
-`invalid_request_object` and add a serde round-trip regression test),
-scheduled for the ES256 pull request, the next planned PR
-(situation/plans/active/PLAN-000001-import-es256-publish-consume.md),
-rather than smuggled into the fidelity-audited import
-(situation/decisions/D-000004-import-fidelity-rules-for-the-openidconnect-4-0-1-import.md;
-CodeRabbit thread PRRT_kwDOUlFWIM6kr1f0).
+none — this closure does not assign a behavior change for the inherited typo.
+Any later correction must deliberately emit `invalid_request_object`, add a
+consumer-observable round-trip regression test, and reconcile the fidelity
+decision; it is not scheduled through the now-rejected ES256 implementation
+candidate.
 
 ## References
 
