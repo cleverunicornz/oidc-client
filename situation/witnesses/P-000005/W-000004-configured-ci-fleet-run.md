@@ -1,4 +1,4 @@
-# W-000004 — First configured fleet run of the `ci` job
+# W-000004 — Passing configured fleet run of the `ci` job
 
 ## Promise
 
