@@ -1491,11 +1491,13 @@ fn test_es256_id_token_verified_claims() {
     let token_valid = serde_json::to_value(&jwt_valid).unwrap();
     let token_valid = token_valid.as_str().unwrap();
     let (signing_input, signature) = token_valid.rsplit_once('.').unwrap();
-    let tampered_signature = if signature.starts_with('A') {
-        format!("B{}", &signature[1..])
+    let mut tampered_signature = signature.to_string();
+    let replacement = if tampered_signature.ends_with('A') {
+        'B'
     } else {
-        format!("A{}", &signature[1..])
+        'A'
     };
+    tampered_signature.replace_range(tampered_signature.len() - 1.., &replacement.to_string());
     let jwt_tampered = serde_json::from_value::<CoreIdTokenJwt>(serde_json::Value::String(
         format!("{}.{}", signing_input, tampered_signature),
     ))
