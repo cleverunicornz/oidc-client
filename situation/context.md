@@ -2,41 +2,51 @@
 
 ## Current phase
 
-`bootstrap` — repository created, project scoped, no code yet.
+`IMPLEMENTATION` — the imported Rust crate and its test surface are present.
+Its behavior records are being reconciled; no behavior is assured unless a
+named Promise records a passing Witness.
 
 ## Implementation map
 
-This repository produces one deliverable: a public, maintained Rust crate
-named `oidc-client` on crates.io, serving as a standalone continuation of the
-abandoned `openidconnect` crate with ES256 verification. Poda Chat consumes
-it as a normal Cargo dependency.
+This repository contains one standalone Rust OIDC relying-party crate named
+`oidc-client`, carrying the openidconnect 4.0.1 baseline. The crate is not yet
+published on crates.io. It includes implemented-but-unassured ES256 (ECDSA
+P-256) verification; Poda Chat adoption remains a separate downstream
+possibility rather than this repository's implementation state.
 
 ## Origin evidence
 
-All scoping evidence was gathered in the Poda Chat repository
+Initial scoping evidence was gathered in the Poda Chat repository
 (cleverunicornz/poda-chat, Banks 1–6, 2026-09-17 through 2026-09-22):
 
 - The `openidconnect` crate (v4.0.1, ramosbugs/openidconnect-rs) is the
-  only full-featured OIDC RP library in Rust (13.4M downloads, 4M/quarter)
-  but has been effectively unmaintained since July 2025 (zero 2026 commits,
-  no pipeline for the next version).
-- ECDSA verification was implemented in 2020 (issue #32, v1.1.0) then
-  dropped in the 2.x→4.x rewrite; no open issue requests its return.
-- The only alternative (`openid` / kilork/openid, v0.24.0) also does not
-  support ES256 (elliptic curve JWKs explicitly rejected at client.rs:276).
-- No Rust OIDC library supports ES256. The `jsonwebtoken` crate (12M+
-  downloads) DOES support ES256 but is not a full OIDC RP library.
+  full-featured OIDC RP donor carried here. It was effectively unmaintained by
+  July 2025 (zero 2026 commits and no pipeline for a next version).
+- The 4.0.1 donor contains EC P-256 and P-384 signature-verification paths and
+  parses ECDSA signing-algorithm metadata. The prior assertion that ECDSA was
+  dropped in the 2.x→4.x rewrite, and that no Rust OIDC library supports ES256,
+  is refuted by the admitted donor. Its public enum documentation still calls
+  ECDSA unsupported; P-000002 records the implementation and its unassured
+  evidence boundary.
+- No maintained Rust OIDC RP library was identified for Poda Chat's ES256
+  need. The `openid` alternative (kilork/openid, v0.24.0) also does not support
+  ES256 (elliptic-curve JWKs are explicitly rejected at client.rs:276).
 - Kanidm 1.11.0 (the selected IdP for Poda) defaults to ES256; RS256 is
   labeled "legacy" behind a `warning-enable-legacy-crypto` flag.
-- Poda Chat currently uses RS256 under this legacy flag because it is the
-  only algorithm both sides speak.
+- Poda Chat currently uses RS256 under this legacy flag.
 
 ## Upstream coordinate
 
-`https://github.com/ramosbugs/openidconnect-rs` — code taken at v4.0.1
-(released 2026-07-06). License: MIT OR Apache-2.0. This is NOT a GitHub
-fork; it is a standalone repository carrying forward the code with
-attribution.
+`https://github.com/ramosbugs/openidconnect-rs` — standalone donor material
+imported at tag `4.0.1`, commit
+`b639b5d39eac6903238867aeb2b29326502e6b26` (crates.io release
+2025-07-06T22:08:11Z). The tag is MIT-only. This repository is not a GitHub
+fork; it carries the donor forward with attribution.
+
+## Repository ownership
+
+`OWNED` — this repository's operational trunk is its own default branch. The
+upstream coordinate is donor provenance, not a fork authority.
 
 ## Dependency baseline
 
