@@ -2,43 +2,44 @@
 
 ## State
 
-proposed
+rejected
 
-## What
+## Candidate
 
-Add ES256 (ECDSA P-256 SHA-256) ID token verification to the JWS
-verification path. The upstream code already has the algorithm enum with
-ECDSA variants marked unsupported — wire them up.
+Add an ES256 (ECDSA P-256 with SHA-256) ID-token verification implementation
+to the imported crate through `p256`.
 
-## Approach
+## Origin
 
-The openidconnect crate uses the jsonwebtoken-style approach where JWS
-verification dispatches on the algorithm header. The ECDSA variants
-(EcdsaP256Sha256 = ES256, EcdsaP384Sha384 = ES384) already exist in the
-CoreJwsSigningAlgorithm enum. The gap is in the verification path where EC
-keys from the JWK are not handled.
+Materialized from cleverunicornz Project #20 on 2026-09-22. The candidate was
+rechecked against the admitted opening tree, specifically
+`src/core/jwk/mod.rs`, `src/core/crypto.rs`, and their tests.
 
-1. Add p256 (and optionally p384) as dependencies
-2. In the JWK-to-verifying-key conversion, handle the EllipticCurve key type
-   with crv=P-256: extract x and y coordinates, construct a p256::PublicKey
-3. In the JWS verification dispatch, add the ES256 case: use
-   p256::ecdsa::VerifyingKey to verify the signature
-4. Update discovery metadata parsing to accept ES256 in
-   id_token_signing_alg_values_supported
-5. Add integration tests: a provider signing with ES256 (can use Kanidm or
-   a test fixture)
+## Why consider it
 
-## Evidence
+The retained ecosystem research identified ES256 support as necessary for an
+ES256-defaulting OIDC provider, and the candidate initially described the
+expected implementation path after the upstream import.
 
-Kanidm 1.11.0 defaults to ES256; the Poda Chat qualification rig
-(Private: cleverunicornz/poda-chat@main#situation/references/G-000006/native-auth-qualification.md)
-provides a real ES256-signing provider for testing.
+## Qualification questions
 
-## Dependencies
+- Does the donor already deserialize EC P-256 JWKs and verify ES256
+  signatures?
+- Does existing retained execution evidence support an implementation state
+  without overstating assurance?
 
-C-000001 (need the imported code first)
+Both questions are settled by
+`situation/decisions/D-000006-recognize-carried-es256-verification.md`.
 
-## Provenance
+## Candidate approaches
 
-Materialized 2026-09-22 from cleverunicornz Project #20 item C-000002
-(project Status: Todo).
+- Add a new P-256 JWK-to-verifying-key conversion and ES256 dispatch.
+- Reuse the already carried path and record its actual state.
+
+## Disposition
+
+Rejected by
+`situation/decisions/D-000006-recognize-carried-es256-verification.md`:
+the proposed conversion, dispatch, and verification path already exist in the
+donor import. P-000002 remains the retrospective behavior record; this
+candidate does not promote it.
