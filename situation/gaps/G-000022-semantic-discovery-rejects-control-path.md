@@ -2,7 +2,7 @@
 
 ## State
 
-open
+closed
 
 ## Gap
 
@@ -28,6 +28,28 @@ fallback.
 - The workspace's initial `git status --short` reported `?? control/`.
 - The completed validator docket independently records the same unavailable
   semantic discovery condition and its use of bounded exact search.
+- Bookkeeping observation (PR #3 branch `bank3/bookkeeping`, 2026-09-22):
+  `git log --all -- control/` is empty at this branch — no commit in the
+  repository's history contains a `control/` path. The current worktree does
+  contain an untracked `control/` scratch directory (`git status --short`
+  reports `?? control/`), so the rejected path is workspace-local rather than
+  committed repository content.
+- Validator observation for closure run
+  `20260922T183045Z-72a7dd2ce3a328bb5eb238e632d55ccf0cd74d6d` at fixed
+  reviewed head `463cdca78619fb6f41ebe2aaac056f5fdca87b9e` (2026-09-22):
+  both semantic-index status discovery and a concept-focused semantic search
+  again returned `rejected unsafe input: tree path must not contain '.', '..',
+  or empty components: "control/"`. Validation continued with bounded exact
+  search and direct reads; this additive observation does not change the
+  Gap's State or Resolution.
+- Corrector observation for closure run
+  `20260922T183045Z-72a7dd2ce3a328bb5eb238e632d55ccf0cd74d6d` at correction-base
+  head `8844bda1a87ea2795d312977541dbea522b9e278` (2026-09-22): a
+  concept-focused semantic search for PLAN-000003, P-000001, and P-000005
+  returned `rejected unsafe input: tree path must not contain '.', '..', or
+  empty components: "control/"`. The corrector proceeded with the relayed
+  docket and bounded direct reads; this additive observation does not change
+  the Gap's State or Resolution.
 
 ## Impact
 
@@ -38,7 +60,15 @@ semantic ranking.
 
 ## Resolution
 
-none
+closed — environmental/tooling disposition. The rejected `control/` path was
+untracked worktree-local scratch (the workspace's initial
+`git status --short` reported `?? control/`), never repository content: the
+repository's history contains no `control/` path. The semantic index
+rejection described that workspace scratch, not committed bytes, and no
+repository record depends on the unavailable discovery capability — the
+correction work proceeded with exact search and direct reads. No repository
+change is required; the observation above is retained as the record of the
+tool failure.
 
 ## References
 

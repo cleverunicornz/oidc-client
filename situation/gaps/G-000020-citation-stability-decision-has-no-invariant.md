@@ -2,7 +2,7 @@
 
 ## State
 
-open
+closed
 
 ## Gap
 
@@ -36,6 +36,12 @@ head `4a05b4511348644c65352a5a0373c11370bd1fd3`:
   Invariant is written and links the Decision as its Basis.
 - `situation/invariants/AGENTS.md` defines an Invariant as the binding
   repository rule and provides the Basis link for a Decision-derived rule.
+- Bookkeeping observation (PR #3 branch `bank3/bookkeeping`, 2026-09-22):
+  situation/invariants/I-000003-record-content-governs-citation-propositions.md
+  exists with Priority `standard`, the citation rule, and D-000011 as its
+  Basis; D-000011 references it in its Decision and Consequences sections.
+  Those records froze with the links at closing checkpoint `f78f641`; this
+  lane added only the additive G-000012 reference.
 
 ## Impact
 
@@ -46,7 +52,13 @@ normative language as a second authority.
 
 ## Resolution
 
-none
+closed — situation/invariants/I-000003-record-content-governs-citation-propositions.md
+carries the slug-stability rule as a `standard` Invariant with D-000011 as
+its Basis: a citation supports a proposition through the cited record's
+title, State, and body, and the filename slug identifies the coordinate.
+D-000011 links the Invariant in its Decision and Consequences sections, and
+G-000012 links it additively in References, so the standing rule now lives
+in the binding-rule namespace.
 
 ## References
 
@@ -54,3 +66,5 @@ none
 - situation/gaps/G-000012-record-path-slugs-retain-rejected-claims.md
 - situation/decisions/AGENTS.md
 - situation/invariants/AGENTS.md
+- situation/invariants/I-000003-record-content-governs-citation-propositions.md —
+  the resulting binding rule.

@@ -2,7 +2,7 @@
 
 ## State
 
-open
+closed
 
 ## Gap
 
@@ -40,6 +40,16 @@ head `4a05b4511348644c65352a5a0373c11370bd1fd3`:
 - The later commits are record and closure-reconciliation changes; this
   observation does not assert that they alter the Rust behavior exercised by
   the run at `5dbfc4b46204ca7c36c39283103e4efbe88e1c56`.
+- Bookkeeping observation (PR #3 branch `bank3/bookkeeping`, 2026-09-22): an
+  exact search for "final head" over `situation/` at this branch matches only
+  this Gap's own observation text. P-000005's State evidence names the
+  primary witness at its exact head
+  `7fe8265c8166e16ea4da77b5722a35503fa67665` with no final-head label;
+  W-000004 declares that same exact head; D-000011 says the survey counts
+  were refreshed "at the then-current assurance-branch head `6c098f3`". The
+  relabeling landed in forward commits of run
+  `20260922T160102Z-2225beb0f70ca521911ef82a7bad12ec04d91a52` before its
+  closing checkpoint.
 
 ## Impact
 
@@ -51,7 +61,13 @@ unqualified label.
 
 ## Resolution
 
-none
+closed — the unqualified labels were replaced with temporally exact
+references: P-000005 names the primary PASS witness and its exact head
+`7fe8265c8166e16ea4da77b5722a35503fa67665`, W-000004 declares that exact
+head for its bounded run, and D-000011 pins its survey to the exact heads
+`f21b6d3` and `6c098f3` as "then-current" rather than final. The runs and
+the survey remain pinned to their exact commits, so the temporal boundary
+of every retained observation is readable from the record itself.
 
 ## References
 

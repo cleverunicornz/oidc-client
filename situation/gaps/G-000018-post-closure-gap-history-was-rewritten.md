@@ -2,7 +2,7 @@
 
 ## State
 
-open
+closed
 
 ## Gap
 
@@ -46,6 +46,13 @@ head `4a05b4511348644c65352a5a0373c11370bd1fd3`:
   statements and observations remain unchanged after a closing checkpoint;
   later observations may be appended under Evidence, Impact, or References,
   while separately assigned disposition work may update State and Resolution.
+- Bookkeeping observation (PR #3 branch `bank3/bookkeeping`, 2026-09-22): the
+  restoration was re-verified byte-wise on this branch against
+  `ac85f14355ff197d07b8a85b2dbcfb13155743db` for all five records above:
+  zero removed lines fall outside State or Resolution, and zero added lines
+  fall inside Gap or Relevance; every added line outside State and
+  Resolution is an attributed "Corrector observation" paragraph under
+  Evidence or Impact, or a newly added References entry.
 
 ## Impact
 
@@ -56,7 +63,18 @@ correct; the concern is loss of the earlier record while adding current facts.
 
 ## Resolution
 
-none
+closed — the earlier observation bytes were restored from the prior closing
+checkpoint `ac85f14355ff197d07b8a85b2dbcfb13155743db` in forward commits of
+the same run before its closing checkpoint `f78f641`: G-000001 history
+(`cae7448`, final bytes `8e71ac9`), G-000003 (`65afedb`, reference bytes
+`368c767`), G-000004 (`5650c6a`), G-000006 (`984d97e`, reference bytes
+`e6293b1`), and G-000007 (`40b1873`, reference bytes `1007a37`). The
+legitimate State and Resolution dispositions and the attributed additive
+observations were retained; the contradicting provenance claims named above
+left with the rewritten bytes. A byte-wise diff of each affected record
+between `ac85f14` and this branch confirms the gap contract now holds:
+removed bytes only inside State and Resolution, additions outside them only
+as attributed observations or new references.
 
 ## References
 
