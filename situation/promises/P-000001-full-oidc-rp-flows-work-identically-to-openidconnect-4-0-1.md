@@ -1,4 +1,4 @@
-# P-000001 — Full OIDC RP flows work identically to openidconnect 4.0.1
+# P-000001 — Imported OIDC RP surface retains the openidconnect 4.0.1 baseline
 
 ## State
 
@@ -6,18 +6,19 @@ implemented
 
 ## Promise
 
-This crate supports the complete OIDC relying-party surface of openidconnect
-4.0.1: discovery (with caching), authorization-code flow with PKCE S256, ID
-token verification (signature, issuer, audience, nonce, expiry, auth_time),
-UserInfo endpoint, refresh tokens, and dynamic client registration. Behavior
-is identical to the upstream for all existing algorithms (RS256/384/512,
-PS256/384/512, EdDSA).
+This crate carries the openidconnect 4.0.1 OIDC relying-party baseline:
+provider discovery and metadata parsing, authorization-code flow construction
+with PKCE S256, ID-token verification for RS256/384/512, PS256/384/512, and
+EdDSA, UserInfo requests, refresh-token requests, and dynamic client
+registration. The carried behavior is intended to remain identical to the
+upstream baseline within this promise's scope.
 
 ## Scope
 
-The OIDC relying-party flows carried over from openidconnect 4.0.1, existing
-algorithms only. ES256 verification is P-000002's behavior, not this
-promise's.
+The imported 4.0.1 OIDC RP surface and the listed non-ES256 algorithms.
+ES256 is separately described by P-000002. This scope does not include a
+crate-provided discovery cache, provider deployment behavior, publication, or
+any algorithm not listed above.
 
 ## Oracle
 
@@ -25,36 +26,24 @@ situation/oracles/O-000001-judge-full-oidc-rp-flow-parity-with-upstream.md
 
 ## State evidence
 
-State `implemented` per situation/promises/AGENTS.md — its criterion,
-code exists and assurance is not yet complete, is met. Cited cause: the
-imported crate exists and builds, the full offline gate suite is green at
-witness head 24835e4b44caa8a0baae2ac5b865bbd6bdf355ba (`cargo fmt --all
---check`, `cargo clippy --all-targets -- -D warnings`, `cargo test
---all-features` 70 passed / 0 failed with the 21 live-network
-certification tests compiled and `#[ignore]`d, `cargo deny check` —
-situation/witnesses/evidence/W-000001/gates-final.log), and oracle leg P6
-is PASS with committed evidence
-(situation/witnesses/P-000001/W-000001-import-head-offline-parity-leg-p6.md).
-Deliberately not `qualified` — that state covers feasibility-only
-evidence, and code existence is established — and not `assured`, because
-oracle legs P1–P5 are unexecuted.
+State `implemented` is supported by the import commit
+`eeb0e6d847d7665cc8b0c9e46b9716323ded3c6a` and the retained gate observation
+at `24835e4b44caa8a0baae2ac5b865bbd6bdf355ba`. That observation records
+`cargo test --all-features` passing 70 tests and compiled, ignored
+certification tests in
+`situation/witnesses/evidence/W-000001/gates-final.log`; its witness is
+`INVALID` for complete O-000001 assurance because it exercised only P6.
+The state is not `assured` because O-000001 legs P1–P5 remain unexecuted.
 
 ## Residual
 
-Oracle legs P1–P5 of
-situation/oracles/O-000001-judge-full-oidc-rp-flow-parity-with-upstream.md
-are unexecuted residual work — live-flow parity against a real OIDC
-provider, pending the ES256 lane's fixture matrix
-(situation/promises/P-000002-es256-ecdsa-p-256-id-token-verification.md):
-P1 discovery, P2 authorization-code flow with PKCE S256, P3 ID-token
-verification as a live flow, P4 UserInfo endpoint, P5 refresh-token
-exchange.
+Live-flow parity against a real OIDC provider remains unassured for discovery,
+authorization-code exchange, ID-token validation, UserInfo, and refresh
+exchange. Discovery caching is outside scope and retained as
+G-000005; ES256 is outside this promise and retained by P-000002.
 
-## Provenance
+## References
 
-Materialized 2026-09-22 from cleverunicornz Project #20 item P-000001
-(project Status: Todo).
-
-State transitioned `hypothesis` → `implemented` 2026-09-22 by forward
-commit, responding to CodeRabbit round-1 review thread
-PRRT_kwDOUlFWIM6kr1ft on PR #1; cause cited in State evidence.
+- situation/decisions/D-000004-import-fidelity-rules-for-the-openidconnect-4-0-1-import.md
+- situation/gaps/G-000005-no-crate-provided-discovery-cache.md
+- situation/witnesses/P-000001/W-000001-import-head-offline-parity-leg-p6.md
