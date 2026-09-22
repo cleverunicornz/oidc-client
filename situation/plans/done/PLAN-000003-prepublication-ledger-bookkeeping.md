@@ -27,13 +27,4 @@ None.
 
 ## Completion
 
-Completes when the grouped promises carry their bookkeeping outcomes:
-P-000001's record boundary holds the accepted documented-limitation Decision
-(D-000012) with G-000005 `accepted`, and P-000005's declared
-`.github/workflows/ci.yml` surface holds the count-agnostic annotation with
-G-000021 `closed`; the remaining bookkeeping gaps G-000017, G-000018,
-G-000019, G-000020, G-000022, and G-000023 are `closed` under
-situation/gaps/AGENTS.md; the branch's only non-situation delta from base
-commit `4b6e0ad` is that one comment line with byte-identical gate commands;
-and the four gate commands pass at the branch tip in the pinned
-`rust:1.98.0` container when the plan completes.
+Completes when P-000001 reaches `implemented` and P-000005 reaches `assured`.
