@@ -2,7 +2,7 @@
 
 ## State
 
-open
+closed
 
 ## Gap
 
@@ -54,6 +54,13 @@ head `4a05b4511348644c65352a5a0373c11370bd1fd3`:
 - `situation/witnesses/AGENTS.md` requires one observation from one real run,
   says a Witness observes one Promise under one Oracle at one head, and
   requires failed Witnesses to be kept.
+- Bookkeeping observation (PR #3 branch `bank3/bookkeeping`, 2026-09-22): the
+  restructuring was verified on this branch — W-000004 declares Result PASS,
+  Head `7fe8265c8166e16ea4da77b5722a35503fa67665`, and run 35743515109 only,
+  with an explicit statement that it is bounded to that run and does not
+  corroborate W-000003; the corroborating and failed observations each have
+  their own Witness record (W-000007 through W-000010) with one Head, one
+  Result, and evidenced Oracle legs apiece.
 
 ## Impact
 
@@ -64,7 +71,18 @@ or the failed observations while they remain embedded in W-000004.
 
 ## Resolution
 
-none
+closed — W-000004 was restructured to a single observation: one Head
+(`7fe8265c8166e16ea4da77b5722a35503fa67665`), one Result (PASS), and one run
+(35743515109), with an explicit boundary note that its head predates the
+public-entry fixture correction and therefore does not corroborate W-000003.
+The corroborating and failed observations moved to their own Witness records:
+W-000007 (run 35745613778 at `38796c0752cc294bd58eafdac17e361d4f88ac7b`,
+PASS), W-000008 (run 35746649645 at
+`5dbfc4b46204ca7c36c39283103e4efbe88e1c56`, PASS), W-000009 (run 35743127287
+at `c0d702eb0968f174871f5932ad7d022c3d9ab4be`, FAIL), and W-000010 (run
+35743042564 at `f0ee1c29fa32224b24487dc5322a8c6fc2b2535b`, FAIL). P-000005's
+State evidence names each record's boundary, and the failed Witnesses are
+kept per the Witness contract.
 
 ## References
 
@@ -73,3 +91,7 @@ none
 - situation/witnesses/P-000005/W-000004-configured-ci-fleet-run.md
 - situation/witnesses/AGENTS.md
 - situation/gaps/G-000004-no-assured-ci-witness-route.md
+- situation/witnesses/P-000005/W-000007-configured-ci-public-entry-fixture-run.md
+- situation/witnesses/P-000005/W-000008-later-passing-configured-ci-run.md
+- situation/witnesses/P-000005/W-000009-configured-ci-dispatch-clippy-failure.md
+- situation/witnesses/P-000005/W-000010-configured-ci-pull-request-clippy-failure.md
