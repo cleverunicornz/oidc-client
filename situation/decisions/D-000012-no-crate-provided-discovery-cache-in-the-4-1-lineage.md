@@ -22,7 +22,9 @@ provide one or the promise wording must stay narrow.
   opening checkpoint whose tree is historical donor material) returns no
   file; the same search over the current tree returns no source file.
 - `src/discovery/mod.rs` defines provider-metadata discovery and parsing;
-  `src/discovery/tests.rs` covers deserialization only.
+  `src/discovery/tests.rs` asserts deserialization, equality, and
+  re-serialization of parsed metadata; no source or test stores or reuses
+  discovered metadata.
 - `src/discovery/mod.rs` takes the HTTP layer as a generic
   `SyncHttpClient`/`AsyncHttpClient` parameter, so a consumer controls every
   discovery transport call and can cache at that boundary.
@@ -49,7 +51,7 @@ The 4.1.0 version contract is the upstream 4.0.1 behavior plus this
 repository's recorded additions (D-000002). The upstream baseline has no
 discovery cache, so a cache cannot be part of the drop-in compatibility story
 the version signals; shipping one would extend the public surface beyond the
-assured baseline under a version number that promises continuity. The
+recorded imported baseline under a version number that promises continuity. The
 persistence policy is also provider- and deployment-specific, which is
 consumer territory, not crate territory.
 
