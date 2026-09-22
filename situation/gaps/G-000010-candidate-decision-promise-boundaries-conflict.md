@@ -41,6 +41,11 @@ without treating the same behavior as both unselected and committed.
   its Consequences section uses the narrower, non-committal wording that Poda
   Chat "can" replace the dependency after its own qualification.
 
+- P-000003 remains `hypothesis`, whose protocol definition is "no feasibility
+  evidence", while its own State evidence calls R-000001's name-availability
+  observation feasibility evidence and the related C-000004/C-000005 records
+  describe active qualification questions.
+
 ## Impact
 
 A reader cannot determine which publication, CI, dependency-policy, and
