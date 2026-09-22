@@ -1431,15 +1431,17 @@ fn test_es256_id_token_verified_claims() {
     let valid_payload = "{\"iss\":\"https://example.com\",\"aud\":[\"my_client\"],\
 \"sub\":\"subject\",\"exp\":1544932149,\"iat\":1544928549,\"nonce\":\"the_nonce\"}";
 
-    let jwt_valid = serde_json::from_value::<CoreIdTokenJwt>(serde_json::Value::String(
-        sign_es256(&signing_key, valid_payload),
-    ))
-    .expect("failed to deserialize");
+    // Parse through the public consumer entry point (`IdToken: FromStr`) and
+    // verify via the public `CoreIdToken::claims`, exactly as a relying party
+    // would.
+    let id_token_valid: CoreIdToken = sign_es256(&signing_key, valid_payload)
+        .parse()
+        .expect("failed to deserialize");
 
     // Valid ES256 ID token: signature, issuer, audience, nonce, and expiry all
     // verify through the public verifier.
-    let claims = verifier
-        .verified_claims(&jwt_valid, &nonce)
+    let claims = id_token_valid
+        .claims(&verifier, &nonce)
         .expect("verification should succeed");
     assert_eq!(claims.issuer().as_str(), "https://example.com");
     assert!(claims.audiences().iter().any(|aud| **aud == *"my_client"));
@@ -1448,11 +1450,10 @@ fn test_es256_id_token_verified_claims() {
     // Wrong issuer claim.
     let wrong_issuer_payload = "{\"iss\":\"https://attacker.com\",\"aud\":[\"my_client\"],\
 \"sub\":\"subject\",\"exp\":1544932149,\"iat\":1544928549,\"nonce\":\"the_nonce\"}";
-    let jwt_wrong_issuer = serde_json::from_value::<CoreIdTokenJwt>(serde_json::Value::String(
-        sign_es256(&signing_key, wrong_issuer_payload),
-    ))
-    .expect("failed to deserialize");
-    match verifier.verified_claims(&jwt_wrong_issuer, &nonce) {
+    let id_token_wrong_issuer: CoreIdToken = sign_es256(&signing_key, wrong_issuer_payload)
+        .parse()
+        .expect("failed to deserialize");
+    match id_token_wrong_issuer.claims(&verifier, &nonce) {
         Err(ClaimsVerificationError::InvalidIssuer(_)) => {}
         other => panic!("unexpected result: {:?}", other),
     }
@@ -1460,17 +1461,16 @@ fn test_es256_id_token_verified_claims() {
     // Wrong audience claim.
     let wrong_audience_payload = "{\"iss\":\"https://example.com\",\"aud\":[\"other_client\"],\
 \"sub\":\"subject\",\"exp\":1544932149,\"iat\":1544928549,\"nonce\":\"the_nonce\"}";
-    let jwt_wrong_audience = serde_json::from_value::<CoreIdTokenJwt>(serde_json::Value::String(
-        sign_es256(&signing_key, wrong_audience_payload),
-    ))
-    .expect("failed to deserialize");
-    match verifier.verified_claims(&jwt_wrong_audience, &nonce) {
+    let id_token_wrong_audience: CoreIdToken = sign_es256(&signing_key, wrong_audience_payload)
+        .parse()
+        .expect("failed to deserialize");
+    match id_token_wrong_audience.claims(&verifier, &nonce) {
         Err(ClaimsVerificationError::InvalidAudience(_)) => {}
         other => panic!("unexpected result: {:?}", other),
     }
 
     // Wrong nonce expectation.
-    match verifier.verified_claims(&jwt_valid, &Nonce::new("different_nonce".to_string())) {
+    match id_token_valid.claims(&verifier, &Nonce::new("different_nonce".to_string())) {
         Err(ClaimsVerificationError::InvalidNonce(_)) => {}
         other => panic!("unexpected result: {:?}", other),
     }
@@ -1478,18 +1478,16 @@ fn test_es256_id_token_verified_claims() {
     // Expired token.
     let expired_payload = "{\"iss\":\"https://example.com\",\"aud\":[\"my_client\"],\
 \"sub\":\"subject\",\"exp\":1544928600,\"iat\":1544928549,\"nonce\":\"the_nonce\"}";
-    let jwt_expired = serde_json::from_value::<CoreIdTokenJwt>(serde_json::Value::String(
-        sign_es256(&signing_key, expired_payload),
-    ))
-    .expect("failed to deserialize");
-    match verifier.verified_claims(&jwt_expired, &nonce) {
+    let id_token_expired: CoreIdToken = sign_es256(&signing_key, expired_payload)
+        .parse()
+        .expect("failed to deserialize");
+    match id_token_expired.claims(&verifier, &nonce) {
         Err(ClaimsVerificationError::Expired(_)) => {}
         other => panic!("unexpected result: {:?}", other),
     }
 
     // Tampered signature.
-    let token_valid = serde_json::to_value(&jwt_valid).unwrap();
-    let token_valid = token_valid.as_str().unwrap();
+    let token_valid = sign_es256(&signing_key, valid_payload);
     let (signing_input, signature) = token_valid.rsplit_once('.').unwrap();
     let mut tampered_signature = signature.to_string();
     let replacement = if tampered_signature.ends_with('A') {
@@ -1498,21 +1496,19 @@ fn test_es256_id_token_verified_claims() {
         'A'
     };
     tampered_signature.replace_range(tampered_signature.len() - 1.., &replacement.to_string());
-    let jwt_tampered = serde_json::from_value::<CoreIdTokenJwt>(serde_json::Value::String(
-        format!("{}.{}", signing_input, tampered_signature),
-    ))
-    .expect("failed to deserialize");
-    match verifier.verified_claims(&jwt_tampered, &nonce) {
+    let id_token_tampered: CoreIdToken = format!("{}.{}", signing_input, tampered_signature)
+        .parse()
+        .expect("failed to deserialize");
+    match id_token_tampered.claims(&verifier, &nonce) {
         Err(ClaimsVerificationError::SignatureVerification(_)) => {}
         other => panic!("unexpected result: {:?}", other),
     }
 
     // Signature by the wrong key (key set contains only the matching key).
-    let jwt_wrong_key = serde_json::from_value::<CoreIdTokenJwt>(serde_json::Value::String(
-        sign_es256(&other_signing_key, valid_payload),
-    ))
-    .expect("failed to deserialize");
-    match verifier.verified_claims(&jwt_wrong_key, &nonce) {
+    let id_token_wrong_key: CoreIdToken = sign_es256(&other_signing_key, valid_payload)
+        .parse()
+        .expect("failed to deserialize");
+    match id_token_wrong_key.claims(&verifier, &nonce) {
         Err(ClaimsVerificationError::SignatureVerification(_)) => {}
         other => panic!("unexpected result: {:?}", other),
     }
