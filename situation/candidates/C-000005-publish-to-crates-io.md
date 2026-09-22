@@ -2,7 +2,7 @@
 
 ## State
 
-proposed
+promoted
 
 ## Candidate
 
@@ -12,7 +12,8 @@ release prerequisites and evidence are complete.
 ## Origin
 
 The standalone-crate decision D-000001 and the name-availability observation
-in R-000001 establish this as a possible next step.
+in `situation/references/D-000004/R-000001-upstream-pin.md` establish the
+selected publication direction.
 
 ## Why consider it
 
@@ -23,8 +24,10 @@ dependency rather than a source import.
 
 - Is a release credential and publication authority available?
 - Do the package metadata and documentation satisfy the release boundary?
-- Are P-000001, P-000002, and the CI route sufficiently evidenced for the
-  selected release scope?
+- Are P-000001, P-000002, and the selected release gates sufficiently
+  evidenced for the release scope?
+
+These remain P-000003 implementation and assurance questions after selection.
 
 ## Candidate approaches
 
@@ -34,5 +37,7 @@ dependency rather than a source import.
 
 ## Disposition
 
-none — P-000003/O-000003 describe the possible publication behavior, but this
-candidate has not been promoted or rejected.
+Promoted by
+`situation/decisions/D-000001-create-oidc-client-as-a-standalone-public-crate-not-a-vendored-fork.md`
+into P-000003 and O-000003. P-000003 remains a hypothesis pending feasibility
+evidence and publication.

@@ -1,23 +1,23 @@
-# G-000010 — Candidate, Decision, and Promise boundaries conflict
+# G-000010 — Candidate, Decision, and Promise boundaries reconciled
 
 ## State
 
-open
+closed
 
 ## Gap
 
-Several reconciled Candidates remain non-commitments even though linked current
-records present the same behavior as selected or promised, while the promoted
-import Candidate's selecting Decision does not link the Promise and Oracle that
-the Candidate says it created. The resulting learning-loop paths are not
-internally consistent.
+At the reviewed head, several Candidates remained non-commitments even though
+linked current records presented the same behavior as selected or promised.
+The import Candidate's selecting Decision also omitted the Promise and Oracle
+that the Candidate said it created. The learning-loop paths were not internally
+consistent.
 
 ## Relevance
 
 The BACKPORT reconciliation changed these Candidates and their related
-Promises, Decisions, Oracles, and Plan. Candidate state is the boundary between
-a possibility and accepted behavior; current records must be traversable
-without treating the same behavior as both unselected and committed.
+Promises, Decisions, Oracles, and Plans. Candidate state is the boundary
+between a possibility and accepted behavior; the records required a coherent,
+traversable correction.
 
 ## Evidence
 
@@ -48,14 +48,18 @@ without treating the same behavior as both unselected and committed.
 
 ## Impact
 
-A reader cannot determine which publication, CI, dependency-policy, and
-consumer behaviors have actually crossed the Decision boundary. Promotion
-lineage and active Plan completion can therefore produce conflicting answers
-about what is committed and what remains only a Candidate.
+At the reviewed head, a reader could not determine which publication, CI,
+dependency-policy, and consumer behaviors had crossed the Decision boundary.
+Promotion lineage and active Plan completion could produce conflicting answers
+about what was committed and what remained only a Candidate.
 
 ## Resolution
 
-none
+closed — D-000004 now links C-000001 to P-000001/O-000001; D-000008 and
+D-000009 promote C-000003/C-000004 into their local Promise/Oracle pairs;
+D-000001 promotes C-000005 into P-000003/O-000003 and limits C-000006 to its
+downstream candidate boundary. PLAN-000001 retains imported behavior and
+PLAN-000002 owns the selected release commitments.
 
 ## References
 
@@ -68,3 +72,8 @@ none
 - `situation/decisions/D-000003-rustsec-2023-0071-rsa-disposition-scoped-ignore.md`
 - `situation/decisions/D-000004-import-fidelity-rules-for-the-openidconnect-4-0-1-import.md`
 - `situation/promises/P-000003-published-on-crates-io-as-oidc-client.md`
+- `situation/decisions/D-000008-promote-dependency-policy-contract.md`
+- `situation/decisions/D-000009-promote-configured-ci-gate-route.md`
+- `situation/promises/P-000004-dependency-policy-advisory-exceptions.md`
+- `situation/promises/P-000005-configured-ci-gate-route.md`
+- `situation/plans/active/PLAN-000002-publish-oidc-client.md`

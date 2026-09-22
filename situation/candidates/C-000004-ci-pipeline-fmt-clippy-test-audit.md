@@ -2,7 +2,7 @@
 
 ## State
 
-qualifying
+promoted
 
 ## Candidate
 
@@ -24,13 +24,9 @@ before that evidence can support a gate claim.
 
 ## Qualification questions
 
-- Does the configured runner provide the pinned native capabilities?
-- Does the route execute all four required commands under the organization
-  trigger policy?
-- Can a retained workflow run evidence the route without treating its YAML
-  presence as assurance?
-
-The first real fleet-run Witness remains absent.
+D-000009 selects the configured single `ci` job. The first real fleet-run
+Witness remains an assurance question for P-000005/O-000006, not a reason to
+represent the already configured route as unselected.
 
 ## Candidate approaches
 
@@ -40,8 +36,7 @@ The first real fleet-run Witness remains absent.
 
 ## Disposition
 
-Qualification continues under
-`situation/plans/active/PLAN-000001-import-es256-publish-consume.md`.
-The current route is evidence, not a promotion: P-000003/O-000003 retain the
-publication-facing CI contract and G-000004 retains the missing assurance
-evidence.
+Promoted by
+`situation/decisions/D-000009-promote-configured-ci-gate-route.md` into
+P-000005 and O-000006. P-000003/O-000003 no longer borrow this route as a
+publication clause.

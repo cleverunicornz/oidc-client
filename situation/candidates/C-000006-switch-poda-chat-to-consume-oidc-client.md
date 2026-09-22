@@ -13,7 +13,8 @@ In Poda Chat, replace the openidconnect dependency with the published
 
 The standalone-public-crate decision
 `situation/decisions/D-000001-create-oidc-client-as-a-standalone-public-crate-not-a-vendored-fork.md`
-identifies Poda Chat as the intended consumer after publication.
+identifies Poda Chat as a possible consumer after publication while leaving
+that downstream decision and its evidence to Poda Chat.
 
 ## Why consider it
 

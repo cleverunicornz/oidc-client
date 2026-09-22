@@ -23,12 +23,18 @@ a legacy flag; the upstream openidconnect project is recorded as unmaintained.
   decision carries forward
 - Origin scoping evidence gathered in Poda Chat Banks 1–6
   (situation/context.md)
+- situation/candidates/C-000005-publish-to-crates-io.md — the publication
+  Candidate selected by this Decision.
+- situation/promises/P-000003-published-on-crates-io-as-oidc-client.md and
+  situation/oracles/O-000003-judge-crates-io-publication.md — the Promise and
+  Oracle created by that promotion.
 
 ## Decision
 
 Create a new public repository (cleverunicornz/oidc-client) carrying forward
-the openidconnect 4.0.1 code with attribution, publish on crates.io as
-oidc-client, and consume from Poda Chat via Cargo.toml.
+the openidconnect 4.0.1 code with attribution, and publish on crates.io as
+oidc-client through C-000005, P-000003, and O-000003. A Poda Chat dependency
+migration is not selected here; C-000006 remains a downstream possibility.
 
 ## Why
 

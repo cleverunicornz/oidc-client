@@ -2,7 +2,7 @@
 
 ## State
 
-qualifying
+promoted
 
 ## Candidate
 
@@ -24,13 +24,10 @@ private-signing wrapper also prevents an overly broad verification-only claim.
 
 ## Qualification questions
 
-- Is an unaffected or patched `rsa` release available?
-- Which affected paths are production-reachable versus dev-only?
-- Does the scoped configuration run on the configured CI route without
-  relaxing unrelated advisories?
-
-The first two questions inform D-000003 and D-000005. The CI-route question
-remains open pending a retained fleet-run Witness.
+D-000003 and D-000005 resolved the affected-path and recorded-disposition
+questions. A configured fleet-run observation remains an assurance question for
+P-000004/O-000005, not a reason to leave the selected configuration
+unpromoted.
 
 ## Candidate approaches
 
@@ -40,11 +37,7 @@ remains open pending a retained fleet-run Witness.
 
 ## Disposition
 
-Qualification continues under
-`situation/plans/active/PLAN-000001-import-es256-publish-consume.md`.
-`situation/decisions/D-000003-rustsec-2023-0071-rsa-disposition-scoped-ignore.md`
-and
-`situation/decisions/D-000005-unmaintained-dev-path-advisory-ignores.md`
-record the current configuration choices; no Candidate promotion occurs until
-the resulting operational gate behavior has its own justified Promise/Oracle
-lineage or the candidate is otherwise settled.
+Promoted by
+`situation/decisions/D-000008-promote-dependency-policy-contract.md` into
+P-000004 and O-000005. D-000003 and D-000005 retain the underlying scoped
+advisory decisions.

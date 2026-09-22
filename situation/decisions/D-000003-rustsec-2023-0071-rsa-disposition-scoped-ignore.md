@@ -83,6 +83,10 @@ who use `CoreRsaPrivateSigningKey` to sign client assertions inherit the
 advisory's named attack surface; this record and the `deny.toml` reason say
 so plainly. Every other vulnerability fails the gate.
 
+D-000008 promotes C-000003 into P-000004 and O-000005, which state the
+resulting local dependency-policy contract without changing this Decision's
+scoped rationale.
+
 ## Revisit when
 
 A fixed `rsa` release carrying the RustCrypto/RSA #680/#702 work ships
