@@ -613,13 +613,13 @@ impl JweKeyManagementAlgorithm for CoreJweKeyManagementAlgorithm {}
 #[derive(Clone, Debug, Deserialize, Eq, Hash, PartialEq, Serialize)]
 #[non_exhaustive]
 pub enum CoreJwsSigningAlgorithm {
-    /// HMAC using SHA-256 (currently unsupported).
+    /// HMAC using SHA-256.
     #[serde(rename = "HS256")]
     HmacSha256,
-    /// HMAC using SHA-384 (currently unsupported).
+    /// HMAC using SHA-384.
     #[serde(rename = "HS384")]
     HmacSha384,
-    /// HMAC using SHA-512 (currently unsupported).
+    /// HMAC using SHA-512.
     #[serde(rename = "HS512")]
     HmacSha512,
     /// RSA SSA PKCS#1 v1.5 using SHA-256.
@@ -631,10 +631,10 @@ pub enum CoreJwsSigningAlgorithm {
     /// RSA SSA PKCS#1 v1.5 using SHA-512.
     #[serde(rename = "RS512")]
     RsaSsaPkcs1V15Sha512,
-    /// ECDSA using P-256 and SHA-256 (currently unsupported).
+    /// ECDSA using P-256 and SHA-256.
     #[serde(rename = "ES256")]
     EcdsaP256Sha256,
-    /// ECDSA using P-384 and SHA-384 (currently unsupported).
+    /// ECDSA using P-384 and SHA-384.
     #[serde(rename = "ES384")]
     EcdsaP384Sha384,
     /// ECDSA using P-521 and SHA-512 (currently unsupported).

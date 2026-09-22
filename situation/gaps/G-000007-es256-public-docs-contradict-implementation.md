@@ -2,7 +2,7 @@
 
 ## State
 
-open
+closed
 
 ## Gap
 
@@ -36,9 +36,22 @@ implemented-but-unassured state.
 
 ## Resolution
 
-none
+closed — the enum documentation was corrected per variant against the
+dispatch code: `HmacSha256`, `HmacSha384`, and `HmacSha512` are verified via
+the `hmac` arms (`src/core/jwk/mod.rs` lines 263–300), `EcdsaP256Sha256` and
+`EcdsaP384Sha384` are dispatched to `crypto::verify_ec_signature` (P-256 and
+P-384 arms of `src/core/crypto.rs`), so those five variants dropped the
+false "(currently unsupported)" label. `EcdsaP521Sha512` keeps the label:
+it has no verification arm and falls through to
+`SignatureVerificationError::UnsupportedAlg`, and no P-521 crate is a
+declared dependency. The wording states the implemented surface without
+asserting an assurance level, keeping the documentation in agreement with
+P-000002's evidence-bound claims (D-000007).
 
 ## References
 
 - `situation/promises/P-000002-es256-ecdsa-p-256-id-token-verification.md`
-- `situation/decisions/D-000007-bound-es256-support-claims-to-evidence.md`
+- `situation/decisions/D-000007-bound-es256-support-claims-to-evidence.md` —
+  the claims-bounding decision this correction executes.
+- `src/core/jwk/mod.rs` and `src/core/crypto.rs` — the dispatch code each
+  doc comment was verified against.
