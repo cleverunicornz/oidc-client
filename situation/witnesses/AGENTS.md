@@ -14,14 +14,12 @@ Witnesses are grouped by the promise they observe.
 
 ## Required headings
 
-In this order:
-
 - `Promise` — the observed promise
 - `Oracle` — the oracle applied
 - `Result` — `PASS`, `FAIL`, `INVALID`, or `BLOCKED`
 - `Head` — the exact commit the observation ran against
 - `Observed` — the date of the observation
-- `Evidence` — URLs, digests, and committed artifact references
+- `Evidence` — URLs, digests, and artifact references
 - `Oracle legs` — one row per oracle Pass leg, naming the evidence that
   decided it
 
@@ -34,20 +32,17 @@ In this order:
 
 ## Rules
 
-- A witness is created only after its parent Promise and Oracle exist, and
-  observes one promise under one oracle at one head.
 - A witness is immutable from the first closing checkpoint that follows its
-  creation; after that, corrections are new witnesses. Until then, on the
-  open pull request, it may be corrected in place by a forward commit.
-- Evidence must be retained and retrievable in or through the repository: a
-  workflow run URL, an artifact digest, or a committed result file. A
-  witness never cites only a local scratch path.
-- Every Pass leg is independently evidenced; the artifact whose provenance
-  is being judged cannot serve as evidence for its own provenance. A PASS
-  witness that omits an oracle leg is INVALID, not partial PASS.
-- A failed witness explains how a promise's state changed; keep it. Mixed
-  outcomes stay mixed; failures stay failures.
+  creation or change; after that, corrections are new witnesses. Until then,
+  on the open pull request, it may be corrected in place by a forward commit.
+- Evidence must be retained and retrievable: a workflow run URL, an
+  artifact digest, or a committed result file.
+- A failed witness explains how a promise's state changed; keep it.
+- A witness observes one promise under one oracle at one head.
+- Every Pass leg is independently evidenced. The artifact whose provenance
+  is being judged cannot serve as evidence for its own provenance.
+- A PASS witness that omits an oracle leg is INVALID, not partial PASS.
 
 ## Reference discipline
 
-Reference discipline is defined in the root `AGENTS.md` protocol block.
+Reference discipline is defined in `situation/AGENTS.md`.

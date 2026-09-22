@@ -12,39 +12,67 @@ O-<six digits>-<kebab-case-name>.md
 
 ## Required headings
 
-In this order:
-
 - `State` — `designed` or `implemented`
 - `Judges` — link to the promise
 - `Inputs` — what evidence the oracle examines
-- `Pass` — the conditions that pass
-- `Fail` — the conditions that fail
+- `Pass` — the condition that passes
+- `Fail` — the condition that fails
 - `Implementation` — present only when state is `implemented`
-- `Implementation coverage` — present when state is `implemented`; one row
-  per Pass and Fail leg, naming the executable decision or marking it
-  `manual`
+- `Implementation coverage` — one row per Pass and Fail leg, naming the
+  executable decision or marking the leg `manual`
 
 ## States
 
-- `designed` — the judgment rule is stated; no executable check exists yet.
-- `implemented` — a test, workflow, or checker command exists and runs, and
-  the `Implementation` section links it. Requires at least one executable
-  leg; a wholly manual oracle remains `designed`.
+`designed` — the judgment rule is stated but no executable check exists.
+
+`implemented` — a test, workflow, or checker command exists and runs. The
+Implementation section links it. `implemented` does not mean every leg is
+automated; the coverage table states exactly which legs are executable and
+which remain manual.
+
+## Implementation coverage
+
+Every independently decidable Pass and Fail leg appears once:
+
+```markdown
+| Leg | Decision | Coverage |
+|---|---|---|
+| P1 | Every locked digest matches | `scripts/protocol-sync.sh` |
+| P2 | Release tag resolves to locked commit | manual |
+```
+
+An executable may not be credited with a leg it does not decide. A manual
+leg is valid, but witnesses must carry direct evidence for it.
 
 ## Rules
 
 - Pass and fail conditions must be decidable from the stated inputs.
-- The oracle judges the promise's stated contract inside its declared Scope.
-  It must not broaden the promise or judge outside-Scope behavior; incidental
-  concerns surface as Gaps. Outside-Scope behavior is not a failed leg.
+- The Oracle collectively decides every explicit clause of the Promise inside
+  its declared Scope. It must not broaden the Promise, judge behavior outside
+  Scope, or attempt to disprove infinite negative space. Outside-Scope behavior
+  is not a failed leg or a failure of that Promise; incidental concerns may
+  still be surfaced as Gaps.
+- The oracle judges the promise's stated contract — including requirements
+  adopted by reference — never the implementation's current behavior as the
+  contract's source; how the code happens to behave is an observation, and
+  the Pass and Fail conditions decide.
+- Scope bounds the positive behavioral claim even when the Promise is phrased
+  as a prohibition. Residual names only relevant unassured boundaries; it does
+  not enumerate everything the software could theoretically do.
+- Conclude assurance when the predeclared Oracle passes on adequate evidence
+  for every leg, with no concrete in-Scope contradiction left unresolved.
+  Further investigation should address a specific concern grounded in code,
+  observations, or applicable contracts that could change that judgment.
+  Surface other concerns under `situation/gaps/AGENTS.md`; recording a Gap
+  neither changes the Oracle's result nor silently narrows its Promise.
+- `implemented` requires at least one executable leg. A wholly manual
+  oracle remains `designed`.
+- One oracle may judge one promise. When a judgment rule serves multiple
+  promises, write one oracle per promise and link them in References.
 - The oracle does not record results; witnesses do that.
-- One oracle judges one promise. A judgment rule serving multiple promises
-  becomes one oracle per promise, linked in References.
-- An executable check may not be credited with a leg it does not decide; a
-  manual leg is valid, but witnesses must carry direct evidence for it.
 - Changing a pass or fail condition after witnesses exist requires a new
   oracle superseding the old one.
 
 ## Reference discipline
 
-Reference discipline is defined in the root `AGENTS.md` protocol block.
+Reference discipline is defined in `situation/AGENTS.md`.

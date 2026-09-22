@@ -1,9 +1,7 @@
 # Candidates
 
-A candidate records an evidence-derived possible response to a gap or a plan
-step. It is a possibility, not a commitment; it becomes behavior only
-through a decision that promotes it into a falsifiable promise with an
-oracle.
+A Candidate is an evidence-derived possible behavior or approach that may become
+a Promise. It is not committed behavior, repository law, or planned outcome.
 
 ## File naming
 
@@ -13,37 +11,60 @@ C-<six digits>-<kebab-case-name>.md
 
 ## Required headings
 
-In this order:
-
-- `State` — the lifecycle state
-- `What` — the possibility, stated directly
-- `Approach` — tasks or technical approach, when worked out
-- `Evidence` — deriving evidence from prior work, when carried
-- `Dependencies` — ordering with other candidates or records, when any exist
-- `References` — optional links
+- `State` — lifecycle state
+- `Candidate` — the possible behavior/approach
+- `Origin` — Gap, Witness, Oracle, Decision, user report, or other evidence
+- `Why consider it` — bounded repository relevance
+- `Qualification questions` — what must be resolved before promotion
+- `Candidate approaches` — alternatives within this candidate, when any
+- `Disposition` — resulting links, or explicitly none
 
 ## States
 
-```
-proposed     recorded possibility, not under qualification
-qualifying   a plan is actively qualifying it
-promoted     a Decision turned it into a Promise and Oracle; link all three
-rejected     a Decision declined it; link the Decision
-merged       folded into another candidate; link the survivor
-superseded   replaced by a more accurate candidate; link the replacement
+- `proposed` — evidence supports consideration
+- `qualifying` — a Plan is evaluating it
+- `promoted` — selected into Promise + Oracle by a Decision
+- `rejected` — Decision records why
+- `merged` — folded into another Candidate
+- `superseded` — replaced by a more accurate Candidate
+
+## Promotion transaction
+
+Promotion is one atomic commit:
+
+```text
+Candidate -> promoted
+Decision created
+Promise created
+Oracle created
+Plan updated
+linked Gap -> addressing, when applicable
 ```
 
-## Rules
+Promotion requires precise falsifiable behavior, Scope, Residual, Oracle inputs,
+Pass/Fail conditions, and the Decision selecting it. If these cannot be stated,
+the Candidate remains `qualifying`.
 
-- A candidate names the evidence that suggests it; a candidate without
-  evidence is speculation, not a candidate.
-- Promotion is a decision that creates the promise and oracle atomically and
-  links all of them; until then the candidate stays a possibility.
-- Candidates do not assign work; a plan does that. Recording a candidate
-  neither commits to it nor obligates qualification.
-- Rejected, merged, and superseded candidates are retained; they are
-  evidence.
+Before promotion a Candidate carries no reliance and no assurance
+obligations; after promotion the resulting Promise is the selected
+commitment. Implementation that exists is evidence, not selection: code in
+the repository does not promote a Candidate, and a promoted Promise is not
+redefined by what the implementation does. The Decision is the boundary.
+
+## Relationship rules
+
+- `promoted` links Decision, Promise, and Oracle.
+- `rejected` links Decision.
+- `merged` links destination Candidate.
+- `superseded` links replacement Candidate.
+- Every Candidate has an evidence-bearing Origin. Unbounded brainstorming does
+  not become repository knowledge.
+
+## Qualification plans
+
+Plans contain Candidates being qualified and Promises being implemented or
+assured. Qualification is ordinary Plan work over Candidates.
 
 ## Reference discipline
 
-Reference discipline is defined in the root `AGENTS.md` protocol block.
+Reference discipline is defined in `situation/AGENTS.md`.

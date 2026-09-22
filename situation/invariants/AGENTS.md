@@ -1,8 +1,7 @@
 # Invariants
 
-An invariant states a binding repository rule: behavior or policy every
-change must preserve. Invariants do not prove themselves; a rule that needs
-proving is a promise with an oracle.
+An invariant states a binding repository rule. It is the rule itself, not
+the reason the rule exists.
 
 ## File naming
 
@@ -12,30 +11,44 @@ I-<six digits>-<kebab-case-name>.md
 
 ## Required headings
 
-In this order:
+- `Priority` — `critical` or `standard`
+- `Invariant` — the rule, stated directly
+- `Basis` — optional links to supporting records
 
-- `Invariant` — the rule, stated directly and checkably
-- `Basis` — the decision, promise, or obligation that grounds the rule
-- `Priority` — `standard` or `critical`
-- `References` — optional links
+## Priority
 
-## Relationship to other records
+`critical` invariants must appear in the repository root `AGENTS.md`.
+Violation before retrieval could corrupt data, break authority boundaries,
+invalidate assured behavior, compromise security, or cause irreversible
+architecture drift.
 
-- A decision states the why; an invariant states the resulting rule. When a
-  decision produces a binding rule, the invariant links that decision as its
-  Basis.
-- Every assured promise is invariant behavior without a separate record;
-  this namespace carries rules that bind independently of any single
-  promise's assurance state.
+`standard` invariants are binding but discoverable from this folder or from
+the relevant promise before changing that surface.
+
+## Basis
+
+Some invariants are axioms adopted without adjudication; they omit Basis.
+Some invariants derive from a decision; the Basis section links the decision
+that explains why:
+
+```
+## Basis
+
+- [D-000014](situation/decisions/D-000014-postgres-authority.md)
+```
+
+The decision states the why. The invariant states the rule. An agent that
+needs the full rationale follows the link.
 
 ## Rules
 
-- One rule per file, stated so a reviewer can check a change against it.
-- An invariant without a Basis is a preference, not a rule; say which it is.
-- Changing an invariant requires a decision explaining the change; the prior
-  statement remains in git history. The root `AGENTS.md` repository block
-  summarizes critical rules; these records are the canonical detail.
+- State the rule positively and directly; do not enumerate negative space.
+- One invariant per file.
+- An invariant does not restate what an assured promise already covers
+  unless the rule must be resident in the root `AGENTS.md`.
+- Changing a critical invariant requires a decision unless it is an axiom
+  being restated.
 
 ## Reference discipline
 
-Reference discipline is defined in the root `AGENTS.md` protocol block.
+Reference discipline is defined in `situation/AGENTS.md`.

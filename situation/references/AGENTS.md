@@ -1,31 +1,20 @@
 # References
 
-References hold retained depth: pinned external facts, research, long-form
-material, rejected paths, and historical context that a record points to but
-that is too large or too precise to live inline.
+References hold retained depth: research, long-form material, rejected
+paths, historical context, and anything a record points to that is too large
+to live inline.
 
-## File naming
+## Structure
 
-```
-R-<six digits>-<kebab-case-name>.md
-```
-
-Depth owned by a single record may instead live in an owned subdirectory:
+References are organized by the record that owns them:
 
 ```
 references/P-000001/
+references/O-000003/
+references/D-000014/
 ```
 
-## Required headings
-
-In this order:
-
-- `Subject` — what the reference retains
-- `Owner` — the record or invariant that cites it
-- `Facts` — the retained material, with sources and retrieval dates
-- `Verification` — what has been verified, by what means and when, and what
-  remains unverified or pending
-- `References` — optional pointers to sources
+A reference is a child of the record that links it.
 
 ## Rules
 
@@ -33,14 +22,28 @@ In this order:
   are misplaced.
 - References are depth, not law. They never override a promise, oracle,
   decision, or invariant.
-- External public files use full URLs; external private files use declared
-  `Private: owner/repo@<ref>#<path>` coordinates. Inability to fetch a
-  declared-private reference never grounds inventing its contents.
-- Facts carry their retrieval date; claims not yet verified stay marked as
-  such. A pending verification is named together with the work that owns it.
-- Git is the canonical store for historical bytes; copy donor material here
-  only when active retrieval needs an in-tree reference.
+- Git is the canonical store for historical donor bytes. Copy donor material
+  here only when active human/agent retrieval needs an in-tree reference; any
+  copy must be owned by and linked from a record.
+- Any content type is acceptable: markdown, images, data, diagrams.
+
+## Procedures
+
+A repository procedure is a Reference owned by the Invariant that requires it
+or the Promise it satisfies. Guidance that fits in a few lines and applies to
+every session belongs in the root `AGENTS.md` blocks instead. Organization-wide rules, such as fork synchronization and contribution, live
+in the root organization block; tool procedures are named skills supplied
+outside the repository. A repository never restates either.
 
 ## Reference discipline
 
-Reference discipline is defined in the root `AGENTS.md` protocol block.
+Reference discipline is defined in `situation/AGENTS.md`.
+
+## Donor provenance
+
+Git is the donor receipt. BACKPORT's opening checkpoint identifies the exact
+trigger tree. Do not copy donor snapshots or create donor registries.
+
+On DELTA, `git diff <last closing checkpoint>..<trigger head>` is the complete
+review surface. An empty diff means there is no closure work; a nonempty diff
+bounds it. Historical donor bytes remain available through `git show`.

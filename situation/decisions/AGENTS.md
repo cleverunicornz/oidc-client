@@ -12,41 +12,47 @@ D-<six digits>-<kebab-case-name>.md
 
 ## Required headings
 
-In this order:
-
 - `Status` — `accepted`, `superseded`, or `reversed`
-- `Date` — when the decision was reached or materialized
+- `Date`
 - `Context` — the situation that forced a choice
-- `Evidence` — links to the records and facts that informed the choice
-  (witnesses, oracles, gaps, references)
+- `Evidence` — links to witnesses and oracles that informed the choice
 - `Decision` — what was chosen, stated directly
 - `Why` — the reason the choice collapsed this way
 - `Rejected alternatives` — what was not chosen and why
 - `Consequences` — what follows from the decision
-- `Revisit when` — optional; the condition under which this decision may be
-  reopened
+- `Revisit when` — the condition under which this decision may be reopened
 
 Superseded decisions additionally link `Supersedes` and `Superseded by`.
 
-## Relationship to other records
+## Relationship to invariants
 
-A decision states the why; an invariant states the resulting rule — when a
-decision produces a binding rule, write the invariant and link this
-decision as its Basis. When a promise is refuted or superseded, a decision
-records why and the promise links it in its state evidence. A candidate
-becomes behavior only through a decision that promotes it into a
-falsifiable promise with an oracle; that promotion links the candidate and
-every record it creates.
+A decision states the why. An invariant states the resulting rule. When a
+decision produces a binding rule, write the invariant and link this decision
+as its Basis. Decisions do not appear in the root `AGENTS.md` directly;
+invariants do.
+
+## Relationship to promises
+
+When a promise is refuted or superseded, a decision records why. The promise
+links the decision in its state evidence.
+
+During BACKPORT, a donor's selected provider, rejected alternative, or stated
+revisit condition is a collapsed choice and requires a Decision even when the
+corresponding Promise remains `hypothesis` for lack of feasibility evidence.
+
+A Candidate promotion/rejection Decision links the Candidate and every Promise
+and Oracle created by promotion. Promotion is incomplete unless all records and
+state changes land atomically.
 
 ## Rules
 
 - One decision per file, immutable from the first closing checkpoint that
-  follows its creation or change. Until then, on the open pull request, it
-  may be corrected in place by a forward commit.
+  follows its creation or change. Until then, on the open pull request, it may
+  be corrected in place by a forward commit.
 - Supersession replaces a decision with a new record; both remain.
 - A decision without evidence is a preference, not a decision; say which it
   is.
 
 ## Reference discipline
 
-Reference discipline is defined in the root `AGENTS.md` protocol block.
+Reference discipline is defined in `situation/AGENTS.md`.
