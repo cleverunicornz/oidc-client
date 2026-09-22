@@ -32,7 +32,7 @@ G-000006.
 A consumer reading generated API documentation could conclude that the ES256
 path is unavailable, while an unqualified repository claim could incorrectly
 call it first-class. Neither interpretation accurately expresses the current
-implemented-but-unassured state.
+implemented and assured state.
 
 ## Resolution
 
@@ -55,3 +55,11 @@ P-000002's evidence-bound claims (D-000007).
   the claims-bounding decision this correction executes.
 - `src/core/jwk/mod.rs` and `src/core/crypto.rs` — the dispatch code each
   doc comment was verified against.
+
+## Provenance
+
+Corrected in place on open PR #2 before any closing checkpoint (CodeRabbit
+thread PRRT_kwDOUlFWIM6kzMf2): the current-state wording
+"implemented-but-unassured" became "implemented and assured" once W-000003
+assured P-000002. The Gap's historical observations and resolution are
+unchanged.

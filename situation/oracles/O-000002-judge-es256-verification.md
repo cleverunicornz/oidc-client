@@ -47,8 +47,22 @@ valid and invalid claim values, and `cargo test --all-features`.
 | P1 | `test_ecdsa_verification` accepts the valid P-256 signature through the ES256 enum dispatch. | `src/core/jwk/tests.rs::test_ecdsa_verification` |
 | P2 | EC P-256 JWK parsing and ES256 key compatibility are asserted. | `src/core/jwk/tests.rs::test_core_jwk_deserialization_ec`; `src/core/jwk/tests.rs::test_ecdsa_verification` |
 | P3 | A discovery fixture containing ES256 is deserialized and compared to `CoreJwsSigningAlgorithm::EcdsaP256Sha256`. | `src/discovery/tests.rs::test_discovery_deserialization` |
-| P4 | A complete ES256 ID-token fixture exercises the public verifier's signature and claim checks. | manual |
+| P4 | A complete ES256 ID-token fixture exercises the public verifier's signature and claim checks. | `src/verification/tests.rs::test_es256_id_token_verified_claims` |
 | F1 | The valid-fixture assertion fails if ES256 dispatch rejects it. | `src/core/jwk/tests.rs::test_ecdsa_verification` |
 | F2 | The EC parsing and compatibility assertions fail if the P-256 key is rejected. | `src/core/jwk/tests.rs::test_core_jwk_deserialization_ec`; `src/core/jwk/tests.rs::test_ecdsa_verification` |
 | F3 | The invalid P-256 signature assertion fails if ES256 dispatch accepts it. | `src/core/jwk/tests.rs::test_ecdsa_verification` |
-| F4 | The same fixture supplies each invalid in-scope condition and observes rejection. | manual |
+| F4 | The same fixture supplies each invalid in-scope condition and observes rejection. | `src/verification/tests.rs::test_es256_id_token_verified_claims` |
+
+P4 and F4 were planned as manual legs when this oracle was designed; the
+complete public-verifier fixture introduced for W-000003 automated them
+(P-000002's state evidence records the previously manual P4 leg), closing
+the absence G-000006 retains.
+
+## Provenance
+
+Corrected in place on open PR #2 before any closing checkpoint (CodeRabbit
+thread PRRT_kwDOUlFWIM6kzMf2): the P4 and F4 implementation-coverage column
+changed from `manual` to
+`src/verification/tests.rs::test_es256_id_token_verified_claims`, which
+exists and runs under `cargo test --all-features` (verified at the review
+head). The legs' earlier manual plan is retained in the note above.

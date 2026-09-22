@@ -9,8 +9,8 @@ assured
 The configured GitHub Actions `ci` job runs required native-capability checks,
 then `cargo fmt --all --check`, `cargo clippy --all-targets -- -D warnings`,
 `cargo test --all-features`, and `cargo deny check` on
-`cvu-test-runner-x64` for its declared pull-request routes and manual
-dispatch.
+`cvu-test-runner-x64` for its declared pull-request routes (same-repository
+pull requests only) and manual dispatch.
 
 ## Scope
 
@@ -18,6 +18,11 @@ The single `ci` job in `.github/workflows/ci.yml`, its declared triggers,
 runner, capability checks, and four gate commands. This promise does not
 assure that a future runner retains those capabilities, or that a package
 has been published.
+
+The job's `if:` guard admits it only for same-repository pull requests
+(`github.event.pull_request.head.repo.full_name == github.repository`) on
+the declared routes `[opened, reopened, ready_for_review]`, or for manual
+`workflow_dispatch`; fork pull requests never run this job.
 
 ## Oracle
 
@@ -39,6 +44,8 @@ A corroborating green dispatch at the branch's final head
 (`5dbfc4b46204ca7c36c39283103e4efbe88e1c56`, run 35746649645) and an
 intermediate one at `38796c0` (run 35745613778, first fleet execution of the
 corrected public-entry fixture) are retained in the same witness.
+Every retained PASS run above is manual `workflow_dispatch` evidence for the
+configured route, not pull-request-event evidence.
 
 ## Residual
 
@@ -57,3 +64,12 @@ G-000004's evidence.
 - situation/gaps/G-000004-no-assured-ci-witness-route.md — closed by the
   retained witness above.
 - situation/witnesses/P-000005/W-000004-configured-ci-fleet-run.md
+
+## Provenance
+
+Corrected in place on open PR #2 before any closing checkpoint (CodeRabbit
+thread PRRT_kwDOUlFWIM6kzMgq): the `ci` job's fork-guard eligibility boundary
+from `.github/workflows/ci.yml` (`github.event.pull_request.head.repo.full_name
+== github.repository` on the declared routes, plus `workflow_dispatch`) is now
+recorded in Promise and Scope, and the retained runs are characterized as
+manual-dispatch evidence.
