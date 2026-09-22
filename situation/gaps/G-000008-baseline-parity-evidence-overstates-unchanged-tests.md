@@ -1,24 +1,22 @@
-# G-000008 — Baseline parity evidence overstates an unchanged test surface
+# G-000008 — Baseline parity evidence corrected for test deltas
 
 ## State
 
-open
+closed
 
 ## Gap
 
-O-000004 and W-000001 describe the imported upstream offline tests as unchanged
-except for crate-name import renames, but the witnessed test tree also contains
-classified mechanical-lint and allow-addition deltas. W-000001 additionally
-points to D-000004 as recording only the allowed rename changes, while D-000004
-records the additional test changes and says an exhaustive delta table lives in
-W-000001; the current witness contains no such table.
+At the reviewed head, O-000004 and W-000001 described the imported upstream
+offline tests as unchanged except for crate-name import renames, while the
+witnessed tree also contained classified mechanical-lint and allow-addition
+deltas. W-000001 additionally cited an absent exhaustive classification.
 
 ## Relevance
 
-P-000001's imported-baseline lineage relies on O-000004 for its current judgment
-rule and retains W-000001 as the historical O-000001 observation. The literal
-unchanged-test premise and its evidence must agree before either lineage can
-support a parity judgment.
+P-000001's imported-baseline lineage relies on O-000004 for its current
+judgment rule and retains W-000001 as the historical O-000001 observation.
+The test run itself was real, but the unchanged-suite premise needed correction
+without rewriting the historical Oracle.
 
 ## Evidence
 
@@ -44,15 +42,17 @@ support a parity judgment.
 
 ## Impact
 
-The current record set can credit a historical or future parity leg using a
-premise that its own fidelity Decision contradicts. The test run itself remains
-a real retained observation; the uncertainty is the narrower claim that the
-executed tests were unchanged except for imports and that the cited
-classification is present.
+At the reviewed head, the record set could credit a historical or future parity
+leg using a premise its fidelity Decision contradicted. The uncertainty was the
+narrower unchanged-test claim and absent classification, not whether the test
+run happened.
 
 ## Resolution
 
-none
+closed — `eb4e706` corrects D-000004's fidelity and promotion links,
+`973c03b` corrects P-000001's evidence boundary, `d5b09f0` makes O-000004 P6
+execution-only, and `d7b1257` preserves W-000001 as an honest historical
+O-000001 observation.
 
 ## References
 
