@@ -49,9 +49,14 @@ could attract contributors. The crate is MIT-licensed (verified at the
 
 ## Consequences
 
-We own the maintenance of a public crate. This is a real commitment but also
-a contribution to the ecosystem. Poda Chat removes a dependency on an
-abandoned crate and gains ES256 support.
+We own the maintenance of a public crate. Poda Chat can replace its abandoned
+upstream dependency only after a published release and its own downstream
+qualification; that adoption is not evidence in this repository.
+
+## Revisit when
+
+A maintained public Rust OIDC RP package satisfies the recorded ES256 need, or
+the organization changes the intended ownership or distribution boundary.
 
 ## Provenance
 
