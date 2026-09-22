@@ -30,9 +30,9 @@ Renaming the files would require an all-caller clean cutover.
   observation and its impact analysis.
 - Reference-count survey performed 2026-09-22 on this repository's tracked
   `*.md` files, first at PR-2 assurance-branch head f21b6d3 and refreshed at
-  the branch's final head 6c098f3 (source: `grep -rlF` over the working tree,
-  excluding the cited files themselves and including this Decision's own
-  three citations):
+  the then-current assurance-branch head 6c098f3 (source: `grep -rlF` over the
+  working tree, excluding the cited files themselves and including this
+  Decision's own three citations):
   `P-000001-full-oidc-rp-flows-work-identically-to-openidconnect-4-0-1.md`
   is cited by 12 files (decisions D-000003, D-000004, D-000011; gaps
   G-000005, G-000008, G-000012, G-000014; oracles O-000001, O-000004; plan
@@ -51,8 +51,8 @@ Renaming the files would require an all-caller clean cutover.
 
 Retain the existing record filenames unchanged and record this retention as
 an explicit stability choice. Record content — title, State, and body —
-governs meaning; the slug is a historical label of the record's creation,
-not an authority. No record may be cited for a proposition by slug alone.
+governs meaning; the slug is a historical label of the record's creation.
+I-000003 carries the resulting binding citation rule.
 
 ## Why
 
@@ -83,6 +83,8 @@ G-000012 moves to `accepted` with this Decision as its basis. Search or
 navigation by filename can still surface superseded wording; readers must
 consult the record's title, State, and body. The citations retained in
 closed records stay byte-stable.
+I-000003 carries the standard Invariant derived from this Decision, so the
+binding citation rule is discoverable outside this rationale record.
 
 ## Revisit when
 
@@ -94,6 +96,6 @@ records are restructured such that these paths lose their citation traffic.
 
 Survey corrected in place on open PR #2 before any closing checkpoint (this
 record was born in this PR; CodeRabbit thread PRRT_kwDOUlFWIM6kzMgg): counts
-refreshed from 10 / 1 / 1 at head f21b6d3 to 12 / 2 / 2 at final head
-6c098f3, now counting this Decision's own three citations; the
-lower-bound-of-twelve statement is retained.
+refreshed from 10 / 1 / 1 at head f21b6d3 to 12 / 2 / 2 at the then-current
+assurance-branch head 6c098f3, now counting this Decision's own three
+citations; the lower-bound-of-twelve statement is retained.
