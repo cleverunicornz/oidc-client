@@ -2,7 +2,7 @@
 
 ## State
 
-implemented
+assured
 
 ## Promise
 
@@ -26,29 +26,33 @@ situation/oracles/O-000002-judge-es256-verification.md
 
 ## State evidence
 
-State `implemented` is retrospective and is supported by the donor import
-commit `eeb0e6d847d7665cc8b0c9e46b9716323ded3c6a`: its source contains the
-ES256 dispatch in `src/core/jwk/mod.rs` and P-256 verifier in
-`src/core/crypto.rs`. The retained gate observation at
-`24835e4b44caa8a0baae2ac5b865bbd6bdf355ba` is captured as the retrospective,
-`INVALID` partial witness
-`situation/witnesses/P-000002/W-000002-import-head-es256-unit-observation.md`.
-`situation/decisions/D-000006-recognize-carried-es256-verification.md`
-reconciles the earlier hypothesis against those facts. The state is not
-`assured`: no complete PASS witness applies O-000002 to every leg.
+State `assured` cites Oracle
+situation/oracles/O-000002-judge-es256-verification.md and the complete PASS
+witness
+situation/witnesses/P-000002/W-000003-es256-id-token-fixture-public-verifier.md,
+observed 2026-09-22 at head
+`52e84d5dff27ac026ac7670370e3dda918cbeaf7` on `bank2/assurance`: a
+pinned-container `cargo test --all-features` run that passes every oracle
+leg, including the previously manual P4 leg through the public ID-token
+verifier. The implementation origin remains the donor import commit
+`eeb0e6d847d7665cc8b0c9e46b9716323ded3c6a` (ES256 dispatch in
+`src/core/jwk/mod.rs`, P-256 verifier in `src/core/crypto.rs`), reconciled by
+situation/decisions/D-000006-recognize-carried-es256-verification.md. The
+retained
+situation/witnesses/P-000002/W-000002-import-head-es256-unit-observation.md
+remains the historical, `INVALID` partial observation it was at
+`24835e4b44caa8a0baae2ac5b865bbd6bdf355ba`.
 
 ## Residual
 
-No retained witness yet exercises a complete ES256 ID-token validation through
-a real provider or a full ID-token fixture, so signature plus issuer,
-audience, nonce, and expiry validation remain unassured (G-000006). ES384 and
-ES512 are outside this promise. Mismatched-curve behavior is not an in-scope
-claim.
+ES384 and ES512 are outside this promise. Mismatched-curve behavior is not
+an in-scope claim. This promise does not promise a provider deployment or
+publication.
 
 ## References
 
 - situation/decisions/D-000006-recognize-carried-es256-verification.md
 - situation/gaps/G-000001-no-maintained-rust-oidc-rp-library-supports-es256.md
 - situation/gaps/G-000006-no-full-es256-id-token-fixture.md
-- situation/witnesses/evidence/W-000001/gates-final.log
+- situation/witnesses/P-000002/W-000003-es256-id-token-fixture-public-verifier.md
 - situation/witnesses/P-000002/W-000002-import-head-es256-unit-observation.md

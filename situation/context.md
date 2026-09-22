@@ -10,9 +10,11 @@ named Promise records a passing Witness.
 
 This repository contains one standalone Rust OIDC relying-party crate named
 `oidc-client`, carrying the openidconnect 4.0.1 baseline. The crate is not yet
-published on crates.io. It includes implemented-but-unassured ES256 (ECDSA
-P-256) verification; Poda Chat adoption remains a separate downstream
-possibility rather than this repository's implementation state.
+published on crates.io. It includes ES256 (ECDSA P-256) verification, assured
+under situation/oracles/O-000002-judge-es256-verification.md by witness
+situation/witnesses/P-000002/W-000003-es256-id-token-fixture-public-verifier.md;
+Poda Chat adoption remains a separate downstream possibility rather than this
+repository's implementation state.
 
 ## Origin evidence
 
@@ -25,9 +27,10 @@ Initial scoping evidence was gathered in the Poda Chat repository
 - The 4.0.1 donor contains EC P-256 and P-384 signature-verification paths and
   parses ECDSA signing-algorithm metadata. The prior assertion that ECDSA was
   dropped in the 2.x→4.x rewrite, and that no Rust OIDC library supports ES256,
-  is refuted by the admitted donor. Its public enum documentation still calls
-  ECDSA unsupported; P-000002 records the implementation and its unassured
-  evidence boundary.
+  is refuted by the admitted donor. The donor's public enum documentation
+  called ECDSA unsupported; the PR #2 assurance lane corrected the enum
+  documentation (closing G-000007) and P-000002 is now assured under
+  O-000002 by witness W-000003.
 - No maintained Rust OIDC RP library was identified for Poda Chat's ES256
   need. The `openid` alternative (kilork/openid, v0.24.0) also does not support
   ES256 (elliptic-curve JWKs are explicitly rejected at client.rs:276).

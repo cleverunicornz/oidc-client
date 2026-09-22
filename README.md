@@ -16,8 +16,13 @@ in [`situation/decisions/D-000004-import-fidelity-rules-for-the-openidconnect-4-
 
 The manifest declares version `4.1.0`, but the crate is not yet published on
 crates.io. The carried source implements ES256 (ECDSA P-256) signature
-verification with EC JWKs; that behavior is implemented but not yet assured by
-a complete ID-token witness. Canonical scope and evidence live in
+verification with EC JWKs. That behavior is assured end-to-end: a full
+ES256-signed ID-token fixture exercises signature, issuer, audience, nonce,
+and expiry validation through the public verifier, witnessed under
+[`situation/oracles/O-000002-judge-es256-verification.md`](situation/oracles/O-000002-judge-es256-verification.md)
+by
+[`situation/witnesses/P-000002/W-000003-es256-id-token-fixture-public-verifier.md`](situation/witnesses/P-000002/W-000003-es256-id-token-fixture-public-verifier.md).
+Canonical scope and evidence live in
 [`situation/promises/P-000001-full-oidc-rp-flows-work-identically-to-openidconnect-4-0-1.md`](situation/promises/P-000001-full-oidc-rp-flows-work-identically-to-openidconnect-4-0-1.md),
 [`situation/promises/P-000002-es256-ecdsa-p-256-id-token-verification.md`](situation/promises/P-000002-es256-ecdsa-p-256-id-token-verification.md),
 and [`situation/promises/P-000003-published-on-crates-io-as-oidc-client.md`](situation/promises/P-000003-published-on-crates-io-as-oidc-client.md).

@@ -36,10 +36,22 @@ algorithm-header path.
 
 ## Resolution
 
-none
+closed — a full ES256 ID-token fixture is retained:
+`src/verification/tests.rs::test_es256_id_token_verified_claims` drives a
+compact token whose protected header declares `ES256` through the public
+`CoreIdTokenVerifier` path (public client verifier with ES256 selected via
+the public `set_allowed_algs` builder), checking signature, issuer,
+audience, nonce, and expiry, and rejecting wrong issuer, wrong audience,
+wrong nonce, expired, tampered-signature, and wrong-key variants. Witness
+situation/witnesses/P-000002/W-000003-es256-id-token-fixture-public-verifier.md
+records the PASS run at head
+`52e84d5dff27ac026ac7670370e3dda918cbeaf7`; P-000002 moved to `assured`.
 
 ## References
 
 - `situation/promises/P-000002-es256-ecdsa-p-256-id-token-verification.md`
 - `situation/oracles/O-000002-judge-es256-verification.md`
-- `situation/witnesses/P-000002/W-000002-import-head-es256-unit-observation.md`
+- situation/witnesses/P-000002/W-000003-es256-id-token-fixture-public-verifier.md —
+  the complete PASS witness this gap required.
+- situation/witnesses/P-000002/W-000002-import-head-es256-unit-observation.md —
+  the retained historical partial observation.
