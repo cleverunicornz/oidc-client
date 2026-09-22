@@ -1,24 +1,24 @@
-# G-000015 — ES256 Promise and Oracle contracts diverge
+# G-000015 — ES256 Promise and Oracle contracts aligned
 
 ## State
 
-open
+closed
 
 ## Gap
 
-P-000002 explicitly promises ES256 signature verification, EC P-256 key
-acceptance, and discovery-metadata parsing, but O-000002 additionally judges
-issuer, audience, nonce, and expiry behavior and mismatched-curve rejection.
-The Promise's Residual calls the claim checks unassured without first making
-them an explicit Promise clause, and the Promise states the internal `p256`
-implementation choice as behavior.
+At the reviewed head, P-000002 explicitly promised ES256 signature
+verification, EC P-256 key acceptance, and discovery-metadata parsing, while
+O-000002 additionally judged issuer, audience, nonce, expiry, and
+mismatched-curve behavior. The Promise's Residual called claim checks
+unassured without making them an explicit clause, and the Promise stated the
+internal `p256` implementation choice as behavior.
 
 ## Relevance
 
-O-000002 must collectively decide every explicit in-Scope clause of P-000002
+O-000002 must collectively decide every explicit in-scope clause of P-000002
 without broadening it, while a Promise must state observable behavior rather
-than implementation detail. These records were substantively rewritten in the
-reviewed closure and define the ES256 assurance boundary.
+than implementation detail. These records defined the ES256 assurance boundary
+and required a coherent correction.
 
 ## Evidence
 
@@ -41,15 +41,18 @@ reviewed closure and define the ES256 assurance boundary.
 
 ## Impact
 
-A complete future Witness cannot be judged coherently: it would either have to
-satisfy claim-validation and wrong-curve obligations that the Promise does not
-state, or ignore Oracle legs that currently gate assurance. Conversely, the
-internal crate choice could be mistaken for consumer-observable promised
-behavior.
+At the reviewed head, a complete future Witness could not be judged coherently:
+it would either have to satisfy claim-validation and wrong-curve obligations
+that the Promise did not state, or ignore Oracle legs that currently gated
+assurance. The internal crate choice could also be mistaken for promised
+consumer behavior.
 
 ## Resolution
 
-none
+closed — `9dd7999` states public verifier claim validation in P-000002 and
+removes the internal implementation choice; `4c32b62` aligns O-000002 to that
+scope and excludes mismatched-curve behavior; `7881bd7` makes the retained
+W-000002 observation match the corrected rule.
 
 ## References
 
