@@ -1,21 +1,21 @@
-# G-000014 — README logout claim lacks local lineage
+# G-000014 — README logout claim removed for lack of local lineage
 
 ## State
 
-open
+closed
 
 ## Gap
 
-The rewritten human README presents logout as a current crate capability, but no
-local Promise explicitly claims logout and no Oracle judges it. P-000001's
-enumerated baseline behavior and O-000004's flow matrix omit logout.
+At the reviewed head, the rewritten human README presented logout as a current
+crate capability, but no local Promise explicitly claimed logout and no Oracle
+judged it. P-000001's enumerated baseline behavior and O-000004's flow matrix
+omitted logout.
 
 ## Relevance
 
-README.md changed in this BACKPORT and points readers to P-000001 as the
-canonical imported-baseline record. A current behavior introduced into the
-human orientation by the reviewed interval needs traversable local
-Promise/Oracle lineage or must be removed from the current capability list.
+README.md changed in this BACKPORT and pointed readers to P-000001 as the
+canonical imported-baseline record. The unsupported current capability claim
+needed traversable local Promise/Oracle lineage or removal from orientation.
 
 ## Evidence
 
@@ -34,15 +34,15 @@ Promise/Oracle lineage or must be removed from the current capability list.
 
 ## Impact
 
-The changed README makes a consumer-facing capability claim whose current
-contract and assurance boundary cannot be found through the record system. If
-"the imported 4.0.1 OIDC RP surface" is intended to include logout implicitly,
-then O-000004 is incomplete for that broad Scope; if the enumeration is the
-actual boundary, the README overstates it.
+At the reviewed head, the human orientation made a consumer-facing capability
+claim whose current contract and assurance boundary could not be found through
+the record system. Keeping it would either overstate the enumerated baseline
+or require an unassigned broadening of P-000001/O-000004.
 
 ## Resolution
 
-none
+closed — `7901344` removes logout from the current README capability list
+rather than inventing Promise/Oracle lineage for it.
 
 ## References
 
