@@ -73,7 +73,7 @@ consciously re-adjudicate it under D-000010.
 - situation/references/D-000004/R-000001-upstream-pin.md — the upstream pin
   carrying the defect verbatim.
 - situation/decisions/D-000004-import-fidelity-rules-for-the-openidconnect-4-0-1-import.md —
-  the fidelity policy that kept the fix out of the import PR.
+  the fidelity policy that keeps the fix out of the import PR.
 - situation/decisions/D-000010-correct-invalid-request-object-serialization.md —
   the predeclared decision governing the correction.
 - situation/promises/P-000006-invalid-request-object-serialization-round-trip.md
