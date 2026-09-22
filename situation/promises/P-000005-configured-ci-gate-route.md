@@ -36,8 +36,9 @@ executed the capability checks and all four named gate commands
 successfully on `cvu-test-runner-x64`. The configuration was added by
 commit `8160e19c82e76aadc967ce470d4a4285da5c1617`.
 A corroborating green dispatch at the branch's final head
-(`38796c0752cc294bd58eafdac17e361d4f88ac7b`, run 35745613778) is retained in
-the same witness.
+(`5dbfc4b46204ca7c36c39283103e4efbe88e1c56`, run 35746649645) and an
+intermediate one at `38796c0` (run 35745613778, first fleet execution of the
+corrected public-entry fixture) are retained in the same witness.
 
 ## Residual
 

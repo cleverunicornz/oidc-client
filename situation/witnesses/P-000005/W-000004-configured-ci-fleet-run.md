@@ -44,13 +44,15 @@ successfully.
   passing unit tests), corroborating W-000003 on fleet infrastructure.
 - Corroborating retained run at the final branch head (correction added on
   the open PR #2 after the validator's public-entry finding moved the
-  fixture):
-  https://github.com/cleverunicornz/oidc-client/actions/runs/35745613778 —
+  fixture): https://github.com/cleverunicornz/oidc-client/actions/runs/35746649645 —
   event `workflow_dispatch`, ref `bank2/assurance`, head
-  `38796c0752cc294bd58eafdac17e361d4f88ac7b` (branch head `38796c0`),
+  `5dbfc4b46204ca7c36c39283103e4efbe88e1c56` (final branch head),
   conclusion `success`, same job layout and steps (capability checks plus
-  the four named commands, 55s). The 72-test suite at that head includes the
-  corrected public-entry ES256 fixture.
+  the four named commands). Between the primary run and this one, a
+  dispatch at `38796c0` also succeeded:
+  https://github.com/cleverunicornz/oidc-client/actions/runs/35745613778
+  (conclusion `success`, 55s); its suite is the first fleet execution of
+  the corrected public-entry ES256 fixture.
 - An earlier dispatched run of this PR branch
   (https://github.com/cleverunicornz/oidc-client/actions/runs/35743127287)
   failed at Clippy (`clippy::manual_strip` in the new ES256 test) at head
