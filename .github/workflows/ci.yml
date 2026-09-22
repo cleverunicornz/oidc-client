@@ -1,0 +1,49 @@
+name: CI
+
+on:
+  pull_request:
+    types: [opened, reopened, ready_for_review]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+# A toolchain lookup must fail when the fleet lacks the pinned capability,
+# rather than allowing rustup to install a toolchain on the host.
+env:
+  RUSTUP_AUTO_INSTALL: '0'
+  CARGO_TERM_COLOR: never
+
+jobs:
+  ci:
+    if: >-
+      github.repository == 'cleverunicornz/oidc-client' &&
+      (github.event_name == 'workflow_dispatch' ||
+       github.event.pull_request.head.repo.full_name == github.repository)
+    runs-on: cvu-test-runner-x64
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - name: Required native capabilities
+        id: capabilities
+        run: |
+          rustc --version
+          cargo --version
+          cargo fmt --version
+          cargo clippy --version
+          cargo deny --version
+      - name: Formatting
+        if: ${{ !cancelled() && steps.capabilities.outcome == 'success' }}
+        run: cargo fmt --all --check
+      - name: Clippy
+        if: ${{ !cancelled() && steps.capabilities.outcome == 'success' }}
+        run: cargo clippy --all-targets -- -D warnings
+      # 70 offline unit + doc tests; the 21 live-network certification tests stay #[ignore]d.
+      - name: Tests
+        if: ${{ !cancelled() && steps.capabilities.outcome == 'success' }}
+        run: cargo test --all-features
+      - name: Dependency policy
+        if: ${{ !cancelled() && steps.capabilities.outcome == 'success' }}
+        run: cargo deny check
