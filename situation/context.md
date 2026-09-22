@@ -63,6 +63,6 @@ assures the policy route (G-000004).
 
 ## Closure state
 
-- Current run: `20260922T105519Z-37afd430f1f61a2faa2fb8481bb6d8933837626c` (open)
-- Last completed closure: none
-- Transcript: none
+- Current run: none
+- Last completed closure: run `20260922T105519Z-37afd430f1f61a2faa2fb8481bb6d8933837626c`, opened at `92946acf13d02a67caab38cb64444a902217fae4`
+- Transcript: `https://github.com/cleverunicornz/infrastructure/actions/runs/35718383340`
