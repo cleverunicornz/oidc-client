@@ -36,6 +36,9 @@ executes it.
   — the zero-behavior-delta policy that kept the fix out of the import PR and
   classifies every future pin diff; this correction is a deliberate,
   decision-backed delta of a kind that policy does not enumerate.
+- P-000006, O-000007, and W-000005 retain the resulting
+  consumer-facing contract, its executable rule, and the passing scoped
+  observation at `6bc21cdbcf933bcaf52a9f7f7ef33e3dda851bb3`.
 
 ## Decision
 
@@ -82,6 +85,9 @@ Round-tripping the variant through serialize/parse yields the same variant
 again. The committed suite grows one round-trip regression test. Diffing
 `src/core/mod.rs` against the pin now shows this deliberate divergence,
 recorded here and in G-000003's resolution.
+P-000006 now carries this consumer-visible behavior, O-000007 judges it, and
+W-000005 retains the passing observation. G-000003 links that completed
+lineage while preserving the inherited-defect observation.
 
 ## Revisit when
 
