@@ -10,10 +10,10 @@ accepted
 
 ## Context
 
-No maintained Rust OIDC relying-party library supports ES256 (G-000001);
-Poda Chat consumes an ES256-defaulting IdP (Kanidm) and currently speaks
-RS256 only under a legacy flag. The upstream openidconnect crate has been
-effectively unmaintained since July 2025.
+The retained research had not identified a maintained, published Rust OIDC
+relying-party package for the ES256 need recorded in G-000001. Poda Chat
+consumes an ES256-defaulting IdP (Kanidm) and currently speaks RS256 only under
+a legacy flag; the upstream openidconnect project is recorded as unmaintained.
 
 ## Evidence
 
@@ -32,11 +32,12 @@ oidc-client, and consume from Poda Chat via Cargo.toml.
 
 ## Why
 
-Public-first axiom. Vendoring creates maintenance complexity inside the
-Poda Chat monorepo. A public crate is cleaner to consume, benefits the Rust
-ecosystem (4M quarterly downloads with no maintained alternative), and
-could attract contributors. The crate is MIT-licensed (verified at the
-4.0.1 pin — R-000001), so carrying forward with attribution is permitted.
+Public-first axiom. Vendoring creates maintenance complexity inside the Poda
+Chat monorepo. A public crate is cleaner to consume, can benefit the Rust
+ecosystem, and could attract contributors.
+
+The crate is MIT-licensed (verified at the 4.0.1 pin — R-000001), so carrying
+forward with attribution is permitted.
 
 ## Rejected alternatives
 
