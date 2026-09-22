@@ -37,7 +37,7 @@ digested in `situation/witnesses/evidence/W-000001/SHA256SUMS`.
 
 | Leg | Evidence |
 |---|---|
-| P1 | PASS — `test_ecdsa_verification` passed in `gates-final.log`; it accepts the valid ES256 P-256 fixture. |
+| P1 | PASS — `test_ecdsa_verification` passed in `gates-final.log`; it accepts the valid P-256 fixture under direct ES256 enum dispatch. |
 | P2 | PASS — `test_core_jwk_deserialization_ec` and `test_ecdsa_verification` passed in `gates-final.log`. |
 | P3 | PASS — `test_discovery_deserialization` passed in `gates-final.log` with a fixture that contains ES256. |
 | P4 | NOT EXECUTED — no retained full ES256 ID-token fixture exercises issuer, audience, nonce, and expiry through the public verifier. |
