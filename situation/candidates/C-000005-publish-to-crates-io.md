@@ -24,10 +24,13 @@ dependency rather than a source import.
 
 - Is a release credential and publication authority available?
 - Do the package metadata and documentation satisfy the release boundary?
-- Are P-000001, P-000002, and the selected release gates sufficiently
-  evidenced for the release scope?
+- Is P-000003's own publication contract, with the selected release gates
+  P-000004 and P-000005, sufficiently evidenced for the release scope?
 
 These remain P-000003 implementation and assurance questions after selection.
+P-000001 and P-000002 remain separate behavior-assurance promises; they are
+not P-000003 publication prerequisites (PLAN-000002 groups only P-000003,
+P-000004, and P-000005).
 
 ## Candidate approaches
 
@@ -41,3 +44,11 @@ Promoted by
 `situation/decisions/D-000001-create-oidc-client-as-a-standalone-public-crate-not-a-vendored-fork.md`
 into P-000003 and O-000003. P-000003 remains a hypothesis pending feasibility
 evidence and publication.
+
+## Provenance
+
+Corrected in place on open PR #2 before any closing checkpoint (CodeRabbit
+thread PRRT_kwDOUlFWIM6kzMgV): the completion question now assesses only
+P-000003, P-000004, and P-000005, per PLAN-000002's actual promised set, and
+the sentence separating the behavior-assurance promises (P-000001, P-000002)
+from P-000003's publication prerequisites was added.
