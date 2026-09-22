@@ -55,8 +55,7 @@ separately assures HMAC SHA-2 and ES384 verification.
 ## References
 
 - `situation/promises/P-000002-es256-ecdsa-p-256-id-token-verification.md`
-- `situation/decisions/D-000007-bound-es256-support-claims-to-evidence.md` —
-  the claims-bounding decision this correction executes.
+- `situation/decisions/D-000007-bound-es256-support-claims-to-evidence.md`
 - situation/promises/P-000007-hmac-sha2-and-es384-jws-verification.md
 - situation/oracles/O-000008-judge-hmac-sha2-and-es384-jws-verification.md
 - situation/witnesses/P-000007/W-000006-hmac-sha2-and-es384-jws-verification.md
