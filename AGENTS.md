@@ -253,15 +253,11 @@ Repository-specific orientation belongs in the repository block that follows.
 <bedrock-repository>
 ## oidc-client
 
-- Identity: A public, standalone, Rust OIDC relying-party client library — a maintained continuation of the `openidconnect` crate with ES256 verification support, published on crates.io and consumed by Poda Chat.
-- Ownership: `OWNED` (not a GitHub fork; standalone repository carrying forward MIT-licensed code with attribution).
+- Identity: A standalone Rust OIDC relying-party client library carrying an attributed openidconnect 4.0.1 baseline and an implemented, unassured ES256 verification path.
+- Ownership: `OWNED`.
 - Phase and implementation map: `situation/context.md`.
-- Critical invariants:
-  - Upstream attribution preserved (MIT; David Ramos (ramosbugs) and contributors credited).
-  - Published on crates.io as a versioned, maintained crate.
-  - ES256 verification is a first-class supported algorithm.
-  - Poda Chat consumes this crate via Cargo.toml, not vendored code.
-- Verification: situation records track implementation and assurance state.
+- Critical invariants: none.
+- Verification: Unassured — no assured witness route is presently recorded for repository gate claims; [G-000004](situation/gaps/G-000004-no-assured-ci-witness-route.md) retains the absence and [C-000004](situation/candidates/C-000004-ci-pipeline-fmt-clippy-test-audit.md) remains qualifying.
 - Tool priority: organization defaults.
-- Upstream coordinate: `https://github.com/ramosbugs/openidconnect-rs` (code taken at tag `4.0.1` = commit `b639b5d39eac6903238867aeb2b29326502e6b26`; see `situation/references/R-000001-upstream-pin.md`).
+- Donor boundary: `92946acf13d02a67caab38cb64444a902217fae4` (the BACKPORT opening checkpoint at which the trigger tree became historical donor material).
 </bedrock-repository>
