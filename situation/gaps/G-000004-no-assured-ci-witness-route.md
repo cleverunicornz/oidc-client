@@ -63,8 +63,7 @@ combining them with the passing evidence.
 
 - `.github/workflows/ci.yml`
 - `situation/candidates/C-000004-ci-pipeline-fmt-clippy-test-audit.md`
-- situation/witnesses/P-000001/W-000001-import-head-offline-parity-leg-p6.md —
-  the retained local-run observation (not workflow evidence).
+- `situation/witnesses/P-000001/W-000001-import-head-offline-parity-leg-p6.md`
 - situation/witnesses/P-000005/W-000004-configured-ci-fleet-run.md
 - situation/witnesses/P-000005/W-000007-configured-ci-public-entry-fixture-run.md
 - situation/witnesses/P-000005/W-000008-later-passing-configured-ci-run.md
