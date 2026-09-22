@@ -62,4 +62,3 @@ Materialized 2026-09-22 from cleverunicornz Project #20 item G-000001
 (project Status: Todo). The Evidence section draws on the bootstrap
 situation/context.md "Origin evidence" (in-repo at b197618) beyond the
 project item body.
-
