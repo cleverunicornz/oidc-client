@@ -2,7 +2,7 @@
 
 ## State
 
-open
+closed
 
 ## Gap
 
@@ -45,10 +45,23 @@ verified CI gate until a qualifying run is retained as a Witness.
 
 ## Resolution
 
-none
+closed — the prescribed assured-witness route is executed: CI was dispatched
+on the PR #2 branch (`gh workflow run ci.yml --ref bank2/assurance`) and the
+green retained run
+https://github.com/cleverunicornz/oidc-client/actions/runs/35743515109
+(head `7fe8265c8166e16ea4da77b5722a35503fa67665`, conclusion `success`,
+event `workflow_dispatch`) executes the capability checks and all four named
+gate commands on `cvu-test-runner-x64`. Witness
+situation/witnesses/P-000005/W-000004-configured-ci-fleet-run.md applies
+O-000006 to every leg; P-000005 moved to `assured`. An earlier dispatched
+run of the same branch (35743127287) failed at Clippy and is retained as
+the correction trail behind commit `7fe8265`.
 
 ## References
 
 - `.github/workflows/ci.yml`
 - `situation/candidates/C-000004-ci-pipeline-fmt-clippy-test-audit.md`
-- `situation/witnesses/P-000001/W-000001-import-head-offline-parity-leg-p6.md`
+- situation/witnesses/P-000005/W-000004-configured-ci-fleet-run.md — the
+  PASS witness closing this gap.
+- situation/witnesses/P-000001/W-000001-import-head-offline-parity-leg-p6.md —
+  the retained local-run observation (not workflow evidence).

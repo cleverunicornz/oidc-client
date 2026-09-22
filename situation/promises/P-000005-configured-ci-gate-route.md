@@ -2,7 +2,7 @@
 
 ## State
 
-implemented
+assured
 
 ## Promise
 
@@ -15,9 +15,9 @@ dispatch.
 ## Scope
 
 The single `ci` job in `.github/workflows/ci.yml`, its declared triggers,
-runner, capability checks, and four gate commands. This promise does not assure
-that any workflow run has succeeded, that a future runner has the capabilities,
-or that a package has been published.
+runner, capability checks, and four gate commands. This promise does not
+assure that a future runner retains those capabilities, or that a package
+has been published.
 
 ## Oracle
 
@@ -25,19 +25,31 @@ situation/oracles/O-000006-judge-configured-ci-gate-route.md
 
 ## State evidence
 
-State `implemented` is supported by commit
-`8160e19c82e76aadc967ce470d4a4285da5c1617`, which added the configured
-workflow route. G-000004 records that no retained workflow-run Witness yet
-applies O-000006.
+State `assured` cites Oracle
+situation/oracles/O-000006-judge-configured-ci-gate-route.md and the PASS
+witness
+situation/witnesses/P-000005/W-000004-configured-ci-fleet-run.md: the
+dispatched run
+https://github.com/cleverunicornz/oidc-client/actions/runs/35743515109
+(head `7fe8265c8166e16ea4da77b5722a35503fa67665` on `bank2/assurance`)
+executed the capability checks and all four named gate commands
+successfully on `cvu-test-runner-x64`. The configuration was added by
+commit `8160e19c82e76aadc967ce470d4a4285da5c1617`.
 
 ## Residual
 
-The first configured fleet-run observation remains absent. Local or
-pinned-container gates are not workflow evidence and do not assure this
-promise.
+A future runner environment is not assured; a capability regression will
+fail the configured gate. Local or pinned-container gate runs remain
+non-workflow evidence and do not assure this promise. The workflow's
+non-normative test-count comment at `.github/workflows/ci.yml` line 43
+("70 offline unit + doc tests"; the retained run executes 72 unit tests
+plus 7 passing and 2 ignored doctests) remains stale, as recorded in
+G-000004's evidence.
 
 ## References
 
 - situation/candidates/C-000004-ci-pipeline-fmt-clippy-test-audit.md
 - situation/decisions/D-000009-promote-configured-ci-gate-route.md
-- situation/gaps/G-000004-no-assured-ci-witness-route.md
+- situation/gaps/G-000004-no-assured-ci-witness-route.md — closed by the
+  retained witness above.
+- situation/witnesses/P-000005/W-000004-configured-ci-fleet-run.md

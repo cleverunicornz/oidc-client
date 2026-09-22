@@ -61,8 +61,11 @@ healthy). The OIDC layer on top is the abandoned part.
 
 `deny.toml` records a scoped `RUSTSEC-2023-0071` disposition together with
 the two dev-path informational dispositions; D-000003, D-000005, and P-000004
-state its boundary. No retained configured-fleet workflow observation yet
-assures the policy route (G-000004).
+state its boundary. The policy route is assured: P-000005 is assured under
+O-000006 by witness
+situation/witnesses/P-000005/W-000004-configured-ci-fleet-run.md, whose
+dispatched run (https://github.com/cleverunicornz/oidc-client/actions/runs/35743515109)
+executed `cargo deny check` on the configured fleet runner.
 
 ## Closure state
 
