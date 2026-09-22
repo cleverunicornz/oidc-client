@@ -52,7 +52,8 @@ Renaming the files would require an all-caller clean cutover.
 Retain the existing record filenames unchanged and record this retention as
 an explicit stability choice. Record content — title, State, and body —
 governs meaning; the slug is a historical label of the record's creation.
-I-000003 carries the resulting binding citation rule.
+`situation/invariants/I-000003-record-content-governs-citation-propositions.md`
+carries the resulting binding citation rule.
 
 ## Why
 
@@ -83,8 +84,9 @@ G-000012 moves to `accepted` with this Decision as its basis. Search or
 navigation by filename can still surface superseded wording; readers must
 consult the record's title, State, and body. The citations retained in
 closed records stay byte-stable.
-I-000003 carries the standard Invariant derived from this Decision, so the
-binding citation rule is discoverable outside this rationale record.
+`situation/invariants/I-000003-record-content-governs-citation-propositions.md`
+carries the standard Invariant derived from this Decision, so the binding
+citation rule is discoverable outside this rationale record.
 
 ## Revisit when
 
