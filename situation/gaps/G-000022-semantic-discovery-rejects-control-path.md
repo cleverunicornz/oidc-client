@@ -2,7 +2,7 @@
 
 ## State
 
-open
+closed
 
 ## Gap
 
@@ -28,6 +28,11 @@ fallback.
 - The workspace's initial `git status --short` reported `?? control/`.
 - The completed validator docket independently records the same unavailable
   semantic discovery condition and its use of bounded exact search.
+- Bookkeeping observation (PR #3 branch `bank3/bookkeeping`, 2026-09-22):
+  `git log --all -- control/` is empty at this branch — no commit in the
+  repository's history contains a `control/` path — and no such path exists
+  in the current worktree, confirming the rejected path was never repository
+  content.
 
 ## Impact
 
@@ -38,7 +43,15 @@ semantic ranking.
 
 ## Resolution
 
-none
+closed — environmental/tooling disposition. The rejected `control/` path was
+untracked worktree-local scratch (the workspace's initial
+`git status --short` reported `?? control/`), never repository content: the
+repository's history contains no `control/` path. The semantic index
+rejection described that workspace scratch, not committed bytes, and no
+repository record depends on the unavailable discovery capability — the
+correction work proceeded with exact search and direct reads. No repository
+change is required; the observation above is retained as the record of the
+tool failure.
 
 ## References
 
