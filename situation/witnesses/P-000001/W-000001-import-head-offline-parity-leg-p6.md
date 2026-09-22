@@ -14,7 +14,9 @@ INVALID — a partial observation, recorded honestly: oracle leg P6 is PASS
 with committed evidence; legs P1–P5 were NOT executed. Per the witnesses
 law, a PASS that omits an oracle leg is INVALID, not a partial PASS. Legs
 P1–P5 (live-flow parity against a real OIDC provider) remain unexecuted
-pending the ES256 lane's fixtures (P-000002) and later qualification; this
+pending the ES256 lane's fixtures
+(situation/promises/P-000002-es256-ecdsa-p-256-id-token-verification.md)
+and later qualification; this
 witness does not claim them. The observation additionally recorded the full
 standing gate suite (fmt, clippy, test, deny) green at the same head.
 
@@ -64,11 +66,14 @@ situation/decisions/D-000004-import-fidelity-rules-for-the-openidconnect-4-0-1-i
   tests/rp_certification_code.rs 10, 16, 17; tests/rp_common.rs 4, 8, 100;
   examples/gitlab.rs 19, 23, 24, 25; examples/google.rs 17, 23, 24;
   examples/okta_device_grant.rs 18, 24, 25 (`openidconnect::` →
-  `oidc_client::`); 18 doc-comment lines carrying 19 literals —
-  src/lib.rs 14, 24, 82, 136, 151, 159, 281, 291, 373, 374, 415, 426, 507,
+  `oidc_client::`); 17 doc-comment import-path lines —
+  src/lib.rs 14, 24, 136, 151, 159, 281, 291, 373, 374, 415, 426, 507,
   522, 529 (line 14 renames the heading text and its
   `#importing-openidconnect-...` anchor in lockstep), src/client.rs 36–37,
-  src/jwt/mod.rs 62.
+  src/jwt/mod.rs 62; plus the Cargo dependency example src/lib.rs 82,
+  which renames to the Cargo package name `oidc-client` (a dependency key
+  resolves the package name, not the import identifier — confirmed by a
+  `cargo add` probe during validation).
 - mechanical-lint (22 items, behavior-neutral, commits d51e1f4, 12d22ab,
   36f761d5): mismatched_lifetime_syntaxes ×11 (src/client.rs 642, 765, 855,
   868, 989, 1005, 1124, 1281, 1366, 1454; tests/rp_certification_code.rs

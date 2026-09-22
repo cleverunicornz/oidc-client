@@ -11,7 +11,9 @@ accepted
 ## Context
 
 The faithful import carries the openidconnect 4.0.1 code forward under the
-new crate name `oidc-client` (D-000001). The first version declared in the
+new crate name `oidc-client`
+(situation/decisions/D-000001-create-oidc-client-as-a-standalone-public-crate-not-a-vendored-fork.md).
+The first version declared in the
 root `Cargo.toml` must choose between continuing the upstream version
 lineage and starting a fresh line. Existing consumers of openidconnect
 4.0.x — including Poda Chat — need a migration signal that maps their

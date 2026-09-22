@@ -10,7 +10,9 @@ accepted
 
 ## Context
 
-The faithful import (C-000001) must distinguish deliberate continuity
+The faithful import
+(situation/candidates/C-000001-import-openidconnect-v4-0-1-code-with-attribution.md)
+must distinguish deliberate continuity
 deltas from upstream bytes so any future upstream re-sync is a mechanical,
 auditable operation. Every deviation from upstream bytes at the pin must
 fall into a classified category, and everything not classified as a delta
@@ -59,6 +61,10 @@ lint drift that needs a predeclared remediation policy.
    become `oidc_client::`, including the lib.rs table-of-contents anchor,
    which is renamed in lockstep with its heading so the intra-document
    link keeps resolving.
+   Cargo dependency examples in documentation (lib.rs line 82) rename to
+   the Cargo package name `oidc-client`, not the import identifier — a
+   dependency key resolves the package, and a `cargo add` probe confirms
+   the underscore form does not resolve.
 4. Preserved verbatim by policy (never deltas, never renamed):
    rp.certification.openid.net/openidconnect-rs URL fixtures
    (`src/discovery/tests.rs`, `src/logout.rs`), the lib.rs examples URL

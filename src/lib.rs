@@ -79,7 +79,7 @@
 //!    `default-features = false` in `Cargo.toml` (replacing `...` with the desired version of this
 //!    crate):
 //!    ```toml
-//!    oidc_client = { version = "...", default-features = false }
+//!    oidc-client = { version = "...", default-features = false }
 //!    ```
 //!
 //!    Synchronous HTTP clients should implement the [`SyncHttpClient`] trait, which is

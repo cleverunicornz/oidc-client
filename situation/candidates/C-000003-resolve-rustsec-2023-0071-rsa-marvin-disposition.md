@@ -2,15 +2,20 @@
 
 ## State
 
-promoted — situation/decisions/D-000003-rustsec-2023-0071-rsa-disposition-scoped-ignore.md
-(with the gate bring-up addendum
-situation/decisions/D-000005-unmaintained-dev-path-advisory-ignores.md)
-adopted this possibility as standing configuration: the scoped advisory
-ignore in deny.toml, enforced by the CI deny job in
-.github/workflows/ci.yml. No dedicated Promise/Oracle pair was created —
-the outcome is configuration, not runtime behavior; its judgment evidence
-is the deny gate itself and the committed gate log
-situation/witnesses/evidence/W-000001/deny-check.log.
+qualifying — the plan
+(situation/plans/active/PLAN-000001-import-es256-publish-consume.md)
+actively qualified this possibility: the disposition is decided and landed
+(situation/decisions/D-000003-rustsec-2023-0071-rsa-disposition-scoped-ignore.md,
+gate bring-up addendum
+situation/decisions/D-000005-unmaintained-dev-path-advisory-ignores.md,
+the scoped ignores in deny.toml, enforced by the CI deny job in
+.github/workflows/ci.yml), with the committed gate evidence
+situation/witnesses/evidence/W-000001/deny-check.log (FAILED before the
+dispositions) and situation/witnesses/evidence/W-000001/gates-final.log
+(green after). The candidates law promotes only into a Decision + Promise
++ Oracle, and this outcome is configuration rather than runtime behavior,
+so the candidate stays under the plan's qualification until the deny job's
+first real run on the integration pull request completes the evidence.
 
 ## What
 
