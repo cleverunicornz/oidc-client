@@ -8,15 +8,17 @@ implemented
 
 The crate verifies an ES256 (ECDSA P-256 with SHA-256) JWS signature used by
 an ID token when the matching EC P-256 JWK is supplied. It accepts that JWK
-during key selection, uses `p256` for verification, and parses `ES256` in
-provider discovery metadata.
+during key selection, parses `ES256` in provider discovery metadata, and
+applies issuer, audience, nonce, and expiry validation through the public
+ID-token verifier for an ES256-signed ID token.
 
 ## Scope
 
-The carried `CoreJsonWebKey` and generic ID-token verification path for ES256
-with EC P-256 public keys. This promise covers signature verification and
-metadata parsing in the crate; it does not promise a provider deployment,
-publication, or support for ES384 or ES512.
+The carried `CoreJsonWebKey` and generic public ID-token verification path for
+ES256 with EC P-256 public keys: signature verification, key selection,
+discovery-metadata parsing, and issuer/audience/nonce/expiry validation. This
+promise does not promise a provider deployment, publication, ES384 or ES512,
+or mismatched-curve behavior.
 
 ## Oracle
 
@@ -38,9 +40,10 @@ reconciles the earlier hypothesis against those facts. The state is not
 ## Residual
 
 No retained witness yet exercises a complete ES256 ID-token validation through
-a real provider or a full ID-token fixture, so issuer, audience, nonce, and
-expiry validation with an ES256 signature remain unassured (G-000006). ES384
-and ES512 are outside this promise.
+a real provider or a full ID-token fixture, so signature plus issuer,
+audience, nonce, and expiry validation remain unassured (G-000006). ES384 and
+ES512 are outside this promise. Mismatched-curve behavior is not an in-scope
+claim.
 
 ## References
 
