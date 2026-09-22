@@ -2,7 +2,7 @@
 
 ## State
 
-implemented
+assured
 
 ## Promise
 
@@ -23,12 +23,15 @@ situation/oracles/O-000007-judge-invalid-request-object-serialization-round-trip
 
 ## State evidence
 
-State `implemented` is supported by commit
-`f37c32447b099e72a0b6bfeccf32556b02c9bd6c`, which changes the outbound mapping
-to `invalid_request_object` and adds
-`src/core/tests.rs::test_auth_error_type_round_trip`. D-000010 records the
-selected behavior correction for the inherited defect; G-000003 retains the
-pre-correction observation.
+State `assured` cites
+situation/oracles/O-000007-judge-invalid-request-object-serialization-round-trip.md
+and the complete PASS witness
+situation/witnesses/P-000006/W-000005-invalid-request-object-serialization-round-trip.md,
+observed 2026-09-22 at head
+`6bc21cdbcf933bcaf52a9f7f7ef33e3dda851bb3`: its scoped declared Cargo test
+passed every Oracle Pass leg. The implementation originates in commit
+`f37c32447b099e72a0b6bfeccf32556b02c9bd6c`; D-000010 records the selected
+behavior correction and G-000003 retains the pre-correction observation.
 
 ## Residual
 
@@ -41,3 +44,4 @@ serialization and parsing surface.
 - situation/decisions/D-000010-correct-invalid-request-object-serialization.md
 - situation/gaps/G-000003-invalid-request-object-serialization-typo.md
 - src/core/tests.rs::test_auth_error_type_round_trip
+- situation/witnesses/P-000006/W-000005-invalid-request-object-serialization-round-trip.md
