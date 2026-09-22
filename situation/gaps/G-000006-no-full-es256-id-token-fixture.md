@@ -55,7 +55,6 @@ records the PASS run at head
 
 - `situation/promises/P-000002-es256-ecdsa-p-256-id-token-verification.md`
 - `situation/oracles/O-000002-judge-es256-verification.md`
-- situation/witnesses/P-000002/W-000002-import-head-es256-unit-observation.md —
-  the retained historical partial observation.
+- `situation/witnesses/P-000002/W-000002-import-head-es256-unit-observation.md`
 - situation/witnesses/P-000002/W-000003-es256-id-token-fixture-public-verifier.md —
   the complete PASS witness that resolves this gap.
