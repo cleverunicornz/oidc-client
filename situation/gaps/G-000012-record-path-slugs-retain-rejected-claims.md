@@ -54,3 +54,6 @@ D-000011 quantifies the all-caller cutover a rename would require.
 - situation/decisions/D-000011-record-path-slugs-remain-stable-citation-coordinates.md —
   the Decision accepting this gap.
 - `situation/promises/P-000001-full-oidc-rp-flows-work-identically-to-openidconnect-4-0-1.md`
+- situation/invariants/I-000003-record-content-governs-citation-propositions.md —
+  the binding citation rule derived from D-000011 (additive link, PR #3
+  bookkeeping lane, 2026-09-22).
