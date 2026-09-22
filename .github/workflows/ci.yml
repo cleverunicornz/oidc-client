@@ -40,7 +40,7 @@ jobs:
       - name: Clippy
         if: ${{ !cancelled() && steps.capabilities.outcome == 'success' }}
         run: cargo clippy --all-targets -- -D warnings
-      # 70 unit tests plus 7 passing and 2 ignored doctests; the 21 live-network certification tests stay #[ignore]d.
+      # 70 offline unit + doc tests; the 21 live-network certification tests stay #[ignore]d.
       - name: Tests
         if: ${{ !cancelled() && steps.capabilities.outcome == 'success' }}
         run: cargo test --all-features
