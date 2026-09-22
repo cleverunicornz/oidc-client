@@ -1,28 +1,16 @@
-# I-000002 — ES256 is a first-class supported algorithm
-
-## Invariant
-
-ES256 is not an optional feature flag or an unstable path. It is a
-first-class supported algorithm alongside RS256, with equal test coverage
-and documentation. The supported-algorithms list in discovery metadata
-includes ES256 by default.
-
-## Basis
-
-The entire motivation for this crate is that ES256 was missing from the
-Rust OIDC ecosystem. Making it optional or second-class would defeat the
-purpose.
+# I-000002 — ES256 support claims are bounded by recorded evidence
 
 ## Priority
 
 standard
 
-## References
+## Invariant
 
-- situation/promises/P-000002-es256-ecdsa-p-256-id-token-verification.md —
-  the promise that implements this rule.
+Repository-facing claims about ES256 support must cite P-000002's current
+state and its named Oracle/Witness lineage. ES256 must not be represented as
+assured or first-class while that promise remains implemented but unassured.
 
-## Provenance
+## Basis
 
-Materialized 2026-09-22 from cleverunicornz Project #20 item I-000002
-(project Status: Todo).
+- situation/decisions/D-000007-bound-es256-support-claims-to-evidence.md
+- situation/promises/P-000002-es256-ecdsa-p-256-id-token-verification.md
