@@ -27,6 +27,10 @@ than narrowing the implemented behavior or implying assurance.
   `{"alg":"RS256","kid":"bilbo.baggins@hobbiton.example"}`.
 - `situation/oracles/O-000002-judge-es256-verification.md` records P4/F4 as
   manual; W-000002 is INVALID for those unexecuted legs.
+- Corrector observation in closure run
+  `20260922T160102Z-2225beb0f70ca521911ef82a7bad12ec04d91a52`: O-000002's
+  formerly manual P4/F4 behavior is exercised by the public-verifier fixture
+  retained in W-000003.
 
 ## Impact
 
@@ -51,7 +55,7 @@ records the PASS run at head
 
 - `situation/promises/P-000002-es256-ecdsa-p-256-id-token-verification.md`
 - `situation/oracles/O-000002-judge-es256-verification.md`
-- situation/witnesses/P-000002/W-000003-es256-id-token-fixture-public-verifier.md —
-  the complete PASS witness this gap required.
 - situation/witnesses/P-000002/W-000002-import-head-es256-unit-observation.md —
   the retained historical partial observation.
+- situation/witnesses/P-000002/W-000003-es256-id-token-fixture-public-verifier.md —
+  the complete PASS witness that resolves this gap.
