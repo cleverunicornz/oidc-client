@@ -69,6 +69,6 @@ executed `cargo deny check` on the configured fleet runner.
 
 ## Closure state
 
-- Current run: none
+- Current run: `20260922T183045Z-72a7dd2ce3a328bb5eb238e632d55ccf0cd74d6d` (open)
 - Last completed closure: run `20260922T160102Z-2225beb0f70ca521911ef82a7bad12ec04d91a52`, opened at `fd1653e33ca8b9b90da213ff0c74292e92bca427`
 - Transcript: `https://github.com/cleverunicornz/infrastructure/actions/runs/35750974850`
