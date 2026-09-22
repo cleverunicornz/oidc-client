@@ -10,7 +10,8 @@ No maintained, published Rust OIDC relying-party crate is established by the
 retained research as supporting ES256 (ECDSA P-256 with SHA-256) for ID-token
 verification. The `openidconnect` 4.0.1 donor does implement ES256
 verification, but its project is recorded as unmaintained; this repository's
-continuation is not yet published or assured.
+continuation is not yet published; its ES256 verification is assured by
+P-000002 and W-000003.
 
 ## Relevance
 
@@ -49,6 +50,7 @@ P-000002 and a maintained released package is assured under P-000003.
 
 - `situation/promises/P-000002-es256-ecdsa-p-256-id-token-verification.md`
 - `situation/promises/P-000003-published-on-crates-io-as-oidc-client.md`
+- `situation/witnesses/P-000002/W-000003-es256-id-token-fixture-public-verifier.md`
 
 ## Provenance
 
@@ -56,3 +58,8 @@ Materialized 2026-09-22 from cleverunicornz Project #20 item G-000001
 (project Status: Todo). The Evidence section draws on the bootstrap
 situation/context.md "Origin evidence" (in-repo at b197618) beyond the
 project item body.
+
+Corrected in place on open PR #2 before any closing checkpoint (CodeRabbit
+thread PRRT_kwDOUlFWIM6kzMf2): the continuation's ES256 verification is now
+assured under P-000002 with witness W-000003; publication remains pending.
+Historical observations are unchanged.

@@ -253,7 +253,7 @@ Repository-specific orientation belongs in the repository block that follows.
 <bedrock-repository>
 ## oidc-client
 
-- Identity: A standalone Rust OIDC relying-party client library carrying an attributed openidconnect 4.0.1 baseline and an implemented, unassured ES256 verification path.
+- Identity: A standalone Rust OIDC relying-party client library carrying an attributed openidconnect 4.0.1 baseline and an implemented, assured ES256 verification path ([P-000002](situation/promises/P-000002-es256-ecdsa-p-256-id-token-verification.md), witnessed by [W-000003](situation/witnesses/P-000002/W-000003-es256-id-token-fixture-public-verifier.md); corrected on open PR #2, thread PRRT_kwDOUlFWIM6kzMf2).
 - Ownership: `OWNED`.
 - Phase and implementation map: `situation/context.md`.
 - Critical invariants: none.
