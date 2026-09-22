@@ -6,29 +6,25 @@ open
 
 ## Gap
 
-The bootstrap-written situation/context.md carries three factual drifts
-against the pinned evidence in R-000001:
+The checkpoint-owned `situation/context.md` carries four factual drifts
+against the admitted tree and pinned evidence:
 
 1. It states openidconnect 4.0.1 was "released 2026-07-06"; the actual
    crates.io release is 2025-07-06T22:08:11Z.
-2. It carried no upstream commit SHA; the 4.0.1 tag is now pinned to commit
-   b639b5d39eac6903238867aeb2b29326502e6b26.
-3. The repository blocks claim the code is "MIT OR Apache-2.0" while the
-   tag is MIT-only. RESOLVED BY EVIDENCE: the Phase A upstream-facts scout
-   verified at pin b639b5d that the tag carries a single MIT LICENSE file,
-   Cargo.toml license "MIT", and zero Apache references (R-000001). Only
-   the wording in the Project #20 bodies and this repository's repository
-   block remains to be corrected; those corrections are routed through
-   PR #1 by Main per the Phase A steering (only the protocol and
-   organization blocks are agent-protected).
+2. It carries no upstream commit SHA; the 4.0.1 tag is pinned to
+   `b639b5d39eac6903238867aeb2b29326502e6b26`.
+3. It describes the donor as `MIT OR Apache-2.0`, while the pinned tag is
+   MIT-only with one `LICENSE` file.
+4. Its current-phase text says the repository has "no code yet", while the
+   admitted tree contains the imported Rust crate.
 
 ## Relevance
 
-situation/context.md is closure state written only by checkpoint commits
-(situation/AGENTS.md), so corrections cannot be applied by ordinary record
-edits; they must ride a closure. Other records (I-000001, D-000001,
-C-000001) already carry the corrected MIT-only fact with one-line
-correction notes.
+`situation/context.md` is closure state written only by checkpoint commits
+(situation/AGENTS.md), so these corrections cannot be applied by ordinary
+record edits; they must ride a checkpoint. The root `AGENTS.md` repository
+block and the affected attribution records have already been corrected, but
+they cannot correct the checkpoint-owned context.
 
 ## Evidence
 
@@ -53,18 +49,15 @@ Direct comparison on 2026-09-22 of situation/context.md against R-000001
 
 ## Impact
 
-Until corrected, context.md misstates the release year, omits the commit
-pin, and carries a wrong license characterization in the document other
-records treat as the phase map.
-
-The stale no-code statement also makes the phase and implementation map
-inaccurate for readers who begin at `context.md`.
+Until corrected, `context.md` misstates the release year, omits the commit
+pin, mischaracterizes the license, and describes an implementation-free
+repository. Readers who begin at the canonical phase and implementation map
+receive an inaccurate orientation.
 
 ## Resolution
 
-none — corrections 1, 2, and the context.md license wording ride the FIRST
-closure checkpoint commit that writes situation/context.md after the Phase
-A records land. context.md is not edited by this batch.
+none — corrections 1–4 must ride the next closure checkpoint that writes
+`situation/context.md`. The closer does not edit that checkpoint-owned file.
 
 ## References
 
