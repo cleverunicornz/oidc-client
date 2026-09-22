@@ -14,7 +14,8 @@ situation/witnesses/P-000001/W-000001-import-head-offline-parity-leg-p6.md
 ## What
 
 Import the complete openidconnect v4.0.1 source into this repository.
-Preserve the MIT license (the upstream tag is MIT-only — see R-000001). Add
+Preserve the MIT license (the upstream tag is MIT-only — see
+situation/references/R-000001-upstream-pin.md). Add
 a NOTICE or README section crediting the original authors (ramosbugs /
 David Ramos and contributors). Do NOT use a GitHub fork — this is a fresh
 import.
@@ -22,8 +23,9 @@ import.
 ## Approach
 
 1. Clone https://github.com/ramosbugs/openidconnect-rs at the 4.0.1 tag
-   (pinned in R-000001)
-2. Copy the faithful-import surface (41 files per R-000001: src/, tests,
+   (pinned in situation/references/R-000001-upstream-pin.md)
+2. Copy the faithful-import surface (41 files per
+   situation/references/R-000001-upstream-pin.md: src/, tests,
    examples, build config; excludes .github/)
 3. Rename the crate from openidconnect to oidc-client in Cargo.toml and all
    internal references
@@ -43,4 +45,6 @@ Materialized 2026-09-22 from cleverunicornz Project #20 item C-000001
 (project Status: Todo). Corrected against evidence: the project text says
 "MIT OR Apache-2.0" and "Add LICENSE-MIT and LICENSE-APACHE files"; the
 Phase A upstream-facts scout verified at pin b639b5d that the tag is
-MIT-only with a single LICENSE file (R-000001).
+MIT-only with a single LICENSE file
+(situation/references/R-000001-upstream-pin.md). Bare references to the
+upstream-pin record were inherited from 4878215 and normalized here.
