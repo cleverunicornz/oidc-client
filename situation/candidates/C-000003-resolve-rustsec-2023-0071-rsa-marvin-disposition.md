@@ -2,45 +2,49 @@
 
 ## State
 
-qualifying — the plan
-(situation/plans/active/PLAN-000001-import-es256-publish-consume.md)
-actively qualified this possibility: the disposition is decided and landed
-(situation/decisions/D-000003-rustsec-2023-0071-rsa-disposition-scoped-ignore.md,
-gate bring-up addendum
-situation/decisions/D-000005-unmaintained-dev-path-advisory-ignores.md,
-the scoped ignores in deny.toml, enforced by the CI deny job in
-.github/workflows/ci.yml), with the committed gate evidence
-situation/witnesses/evidence/W-000001/deny-check.log (FAILED before the
-dispositions) and situation/witnesses/evidence/W-000001/gates-final.log
-(green after). The candidates law promotes only into a Decision + Promise
-+ Oracle, and this outcome is configuration rather than runtime behavior,
-so the candidate stays under the plan's qualification until the deny job's
-first real run on the integration pull request completes the evidence.
+qualifying
 
-## What
+## Candidate
 
-The upstream crate depends on the rsa crate for RSA verification.
-RUSTSEC-2023-0071 (the Marvin timing side-channel) affects the rsa crate
-with no fixed release. Poda Chat currently ignores this advisory in
-deny.toml with the reason: verification-only usage.
+Establish a narrow, evidence-based dependency-policy disposition for the
+unpatched `rsa` Marvin advisory and the related dev-path informational
+advisories.
 
-## Approach
+## Origin
 
-1. Check if a fixed rsa release is now available (the advisory was
-   published 2023; check current rsa crate versions)
-2. If fixed: bump the rsa dependency to the fixed version
-3. If NOT fixed: scope the disposition properly in this crate: document
-   that the crate uses rsa for signature VERIFICATION only (public key
-   operations), and the Marvin attack targets private-key operations
-   (signing/decryption), making the advisory not applicable to
-   verification-only consumers
-4. Add a cargo-deny or cargo-audit configuration that properly scopes this
+The retained cargo-deny bring-up failure in
+`situation/witnesses/evidence/W-000001/deny-check.log`, the RustSec advisory,
+and the imported crate's `rsa` dependency surfaced this candidate.
 
-## Dependencies
+## Why consider it
 
-situation/candidates/C-000001-import-openidconnect-v4-0-1-code-with-attribution.md
+An unexplained ignore would weaken dependency policy, while a permanently red
+gate would not truthfully report the dependency posture. The import's public
+private-signing wrapper also prevents an overly broad verification-only claim.
 
-## Provenance
+## Qualification questions
 
-Materialized 2026-09-22 from cleverunicornz Project #20 item C-000003
-(project Status: Todo).
+- Is an unaffected or patched `rsa` release available?
+- Which affected paths are production-reachable versus dev-only?
+- Does the scoped configuration run on the configured CI route without
+  relaxing unrelated advisories?
+
+The first two questions inform D-000003 and D-000005. The CI-route question
+remains open pending a retained fleet-run Witness.
+
+## Candidate approaches
+
+- Upgrade to an unaffected `rsa` release when one exists.
+- Use exact, recorded advisory ignores with explicit revisit conditions.
+- Globally relax advisory severity or leave the gate red.
+
+## Disposition
+
+Qualification continues under
+`situation/plans/active/PLAN-000001-import-es256-publish-consume.md`.
+`situation/decisions/D-000003-rustsec-2023-0071-rsa-disposition-scoped-ignore.md`
+and
+`situation/decisions/D-000005-unmaintained-dev-path-advisory-ignores.md`
+record the current configuration choices; no Candidate promotion occurs until
+the resulting operational gate behavior has its own justified Promise/Oracle
+lineage or the candidate is otherwise settled.
