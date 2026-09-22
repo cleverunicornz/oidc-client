@@ -1,11 +1,11 @@
 #![allow(clippy::cognitive_complexity, clippy::expect_fun_call)]
 
 use log::{error, warn};
-use openidconnect::core::{
+use oidc_client::core::{
     CoreApplicationType, CoreClientRegistrationRequest, CoreClientRegistrationResponse,
     CoreProviderMetadata,
 };
-use openidconnect::{
+use oidc_client::{
     ClientContactEmail, ClientName, HttpClientError, HttpRequest, HttpResponse, IssuerUrl,
     RedirectUrl,
 };
@@ -97,7 +97,7 @@ pub fn http_client(request: HttpRequest) -> Result<HttpResponse, HttpClientError
         || -> Result<HttpResponse, HttpClientError<reqwest::Error>> {
             #[cfg(feature = "reqwest-blocking")]
             {
-                use openidconnect::SyncHttpClient;
+                use oidc_client::SyncHttpClient;
                 reqwest::blocking::Client::default().call(clone_request(&request))
             }
             #[cfg(not(feature = "reqwest-blocking"))]

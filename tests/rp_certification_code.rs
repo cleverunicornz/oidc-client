@@ -7,14 +7,14 @@ use crate::rp_common::{
 use http::header::LOCATION;
 use http::method::Method;
 use log::{debug, error, info};
-use openidconnect::core::{
+use oidc_client::core::{
     CoreClient, CoreClientAuthMethod, CoreClientRegistrationRequest,
     CoreClientRegistrationResponse, CoreIdToken, CoreIdTokenClaims, CoreIdTokenVerifier,
     CoreJsonWebKeySet, CoreJwsSigningAlgorithm, CoreProviderMetadata, CoreResponseType,
     CoreUserInfoClaims,
 };
-use openidconnect::Nonce;
-use openidconnect::{
+use oidc_client::Nonce;
+use oidc_client::{
     AccessToken, AuthType, AuthenticationFlow, AuthorizationCode, ClaimsVerificationError,
     CsrfToken, EndpointMaybeSet, EndpointNotSet, EndpointSet, HttpClientError, OAuth2TokenResponse,
     RequestTokenError, Scope, SignatureVerificationError, UserInfoError,

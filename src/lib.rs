@@ -11,7 +11,7 @@
 //! [`core`] module.
 //!
 //! # Contents
-//!  * [Importing `openidconnect`: selecting an HTTP client interface](#importing-openidconnect-selecting-an-http-client-interface)
+//!  * [Importing `oidc_client`: selecting an HTTP client interface](#importing-oidc_client-selecting-an-http-client-interface)
 //!  * [OpenID Connect Relying Party (Client) Interface](#openid-connect-relying-party-client-interface)
 //!    * [Examples](#examples)
 //!    * [Getting started: Authorization Code Grant w/ PKCE](#getting-started-authorization-code-grant-w-pkce)
@@ -21,7 +21,7 @@
 //!    * [OpenID Connect ID Token](#openid-connect-id-token)
 //!  * [Asynchronous API](#asynchronous-api)
 //!
-//! # Importing `openidconnect`: selecting an HTTP client interface
+//! # Importing `oidc_client`: selecting an HTTP client interface
 //!
 //!
 //! This library offers a flexible HTTP client interface with two modes:
@@ -79,7 +79,7 @@
 //!    `default-features = false` in `Cargo.toml` (replacing `...` with the desired version of this
 //!    crate):
 //!    ```toml
-//!    openidconnect = { version = "...", default-features = false }
+//!    oidc_client = { version = "...", default-features = false }
 //!    ```
 //!
 //!    Synchronous HTTP clients should implement the [`SyncHttpClient`] trait, which is
@@ -133,7 +133,7 @@
 //!
 //! ```rust,no_run
 //! use anyhow::anyhow;
-//! use openidconnect::{
+//! use oidc_client::{
 //!     AccessTokenHash,
 //!     AuthenticationFlow,
 //!     AuthorizationCode,
@@ -148,7 +148,7 @@
 //!     Scope,
 //!     TokenResponse,
 //! };
-//! use openidconnect::core::{
+//! use oidc_client::core::{
 //!   CoreAuthenticationFlow,
 //!   CoreClient,
 //!   CoreProviderMetadata,
@@ -156,7 +156,7 @@
 //!   CoreUserInfoClaims,
 //! };
 //! # #[cfg(feature = "reqwest-blocking")]
-//! use openidconnect::reqwest;
+//! use oidc_client::reqwest;
 //! use url::Url;
 //!
 //! # #[cfg(feature = "reqwest-blocking")]
@@ -278,7 +278,7 @@
 //! ### Example
 //!
 //! ```rust,no_run
-//! use openidconnect::{
+//! use oidc_client::{
 //!     AuthUrl,
 //!     EmptyAdditionalProviderMetadata,
 //!     IssuerUrl,
@@ -288,7 +288,7 @@
 //!     TokenUrl,
 //!     UserInfoUrl,
 //! };
-//! use openidconnect::core::{
+//! use oidc_client::core::{
 //!     CoreClaimName,
 //!     CoreJwsSigningAlgorithm,
 //!     CoreProviderMetadata,
@@ -370,8 +370,8 @@
 //! ### Example
 //!
 //! ```rust,no_run
-//! use openidconnect::{JsonWebKeyId, PrivateSigningKey};
-//! use openidconnect::core::{CoreJsonWebKey, CoreJsonWebKeySet, CoreRsaPrivateSigningKey};
+//! use oidc_client::{JsonWebKeyId, PrivateSigningKey};
+//! use oidc_client::core::{CoreJsonWebKey, CoreJsonWebKeySet, CoreRsaPrivateSigningKey};
 //!
 //! # fn err_wrapper() -> Result<String, anyhow::Error> {
 //! # let rsa_pem = "";
@@ -412,7 +412,7 @@
 //!
 //! ```rust,no_run
 //! use chrono::{Duration, Utc};
-//! use openidconnect::{
+//! use oidc_client::{
 //!     AccessToken,
 //!     Audience,
 //!     EmptyAdditionalClaims,
@@ -423,7 +423,7 @@
 //!     StandardClaims,
 //!     SubjectIdentifier,
 //! };
-//! use openidconnect::core::{
+//! use oidc_client::core::{
 //!     CoreIdToken,
 //!     CoreIdTokenClaims,
 //!     CoreIdTokenFields,
@@ -504,7 +504,7 @@
 //!
 //! ```rust,no_run
 //! use anyhow::anyhow;
-//! use openidconnect::{
+//! use oidc_client::{
 //!     AccessTokenHash,
 //!     AuthenticationFlow,
 //!     AuthorizationCode,
@@ -519,14 +519,14 @@
 //!     Scope,
 //!     TokenResponse,
 //! };
-//! use openidconnect::core::{
+//! use oidc_client::core::{
 //!   CoreAuthenticationFlow,
 //!   CoreClient,
 //!   CoreProviderMetadata,
 //!   CoreResponseType,
 //! };
 //! # #[cfg(feature = "reqwest")]
-//! use openidconnect::reqwest;
+//! use oidc_client::reqwest;
 //! use url::Url;
 //!
 //!

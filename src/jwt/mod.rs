@@ -59,7 +59,7 @@ new_type![
 /// It is recommended to instantiate `NormalizedJsonWebTokenType` objects via [`JsonWebTokenType`] and then call [`JsonWebTokenType::normalize`].
 ///
 /// ```rust
-/// # use openidconnect::{NormalizedJsonWebTokenType, JsonWebTokenType};
+/// # use oidc_client::{NormalizedJsonWebTokenType, JsonWebTokenType};
 /// let token_type = JsonWebTokenType::new("jwt+at".to_string()).normalize();
 /// // normalized value looks like "application/jwt+at"
 /// # assert_eq!(*token_type.unwrap(), "application/jwt+at")

@@ -33,8 +33,8 @@ const OPENID_SCOPE: &str = "openid";
 /// ```rust
 /// # use http::status::StatusCode;
 /// # use http::header::{HeaderValue, CONTENT_TYPE};
-/// # use openidconnect::core::CoreClient;
-/// # use openidconnect::{
+/// # use oidc_client::core::CoreClient;
+/// # use oidc_client::{
 /// #     AccessToken,
 /// #     AuthUrl,
 /// #     ClientId,

@@ -16,13 +16,13 @@
 //! ...and follow the instructions.
 //!
 
-use openidconnect::core::{
+use oidc_client::core::{
     CoreClient, CoreGenderClaim, CoreIdTokenClaims, CoreIdTokenVerifier, CoreProviderMetadata,
     CoreResponseType,
 };
-use openidconnect::reqwest;
-use openidconnect::{AdditionalClaims, UserInfoClaims};
-use openidconnect::{
+use oidc_client::reqwest;
+use oidc_client::{AdditionalClaims, UserInfoClaims};
+use oidc_client::{
     AuthenticationFlow, AuthorizationCode, ClientId, ClientSecret, CsrfToken, IssuerUrl, Nonce,
     OAuth2TokenResponse, RedirectUrl, Scope,
 };

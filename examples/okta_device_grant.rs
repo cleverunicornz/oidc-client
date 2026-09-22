@@ -15,14 +15,14 @@
 //! ...and follow the instructions.
 //!
 
-use openidconnect::core::{
+use oidc_client::core::{
     CoreAuthDisplay, CoreClaimName, CoreClaimType, CoreClient, CoreClientAuthMethod,
     CoreDeviceAuthorizationResponse, CoreGrantType, CoreJsonWebKey,
     CoreJweContentEncryptionAlgorithm, CoreJweKeyManagementAlgorithm, CoreResponseMode,
     CoreResponseType, CoreSubjectIdentifierType,
 };
-use openidconnect::reqwest;
-use openidconnect::{
+use oidc_client::reqwest;
+use oidc_client::{
     AdditionalProviderMetadata, AuthType, ClientId, ClientSecret, DeviceAuthorizationUrl,
     IssuerUrl, ProviderMetadata, Scope,
 };
