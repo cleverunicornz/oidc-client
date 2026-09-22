@@ -29,15 +29,19 @@ Renaming the files would require an all-caller clean cutover.
 - situation/gaps/G-000012-record-path-slugs-retain-rejected-claims.md — the
   observation and its impact analysis.
 - Reference-count survey performed 2026-09-22 on this repository's tracked
-  `*.md` files at PR-2 assurance-branch head f21b6d3 (source: `grep -rFl`
-  over the working tree, excluding the cited file itself):
+  `*.md` files, first at PR-2 assurance-branch head f21b6d3 and refreshed at
+  the branch's final head 6c098f3 (source: `grep -rlF` over the working tree,
+  excluding the cited files themselves and including this Decision's own
+  three citations):
   `P-000001-full-oidc-rp-flows-work-identically-to-openidconnect-4-0-1.md`
-  is cited by 10 other files (decisions D-000003, D-000004; gaps G-000005,
-  G-000008, G-000012, G-000014; oracles O-000001, O-000004; witness
-  W-000001; `README.md`), `I-000002-es256-is-a-first-class-supported-algorithm.md`
-  by 1 (G-000012), and `PLAN-000001-import-es256-publish-consume.md` by 1
-  (G-000012, self-listing excluded). Renaming therefore rewrites at least
-  twelve cross-references, several inside records already closed by the
+  is cited by 12 files (decisions D-000003, D-000004, D-000011; gaps
+  G-000005, G-000008, G-000012, G-000014; oracles O-000001, O-000004; plan
+  PLAN-000001; witness W-000001; `README.md`),
+  `I-000002-es256-is-a-first-class-supported-algorithm.md` by 2 (G-000012;
+  D-000011), and `PLAN-000001-import-es256-publish-consume.md` by 2
+  (G-000012; D-000011). The original survey counted 10 / 1 / 1 at f21b6d3;
+  the lower bound of twelve cross-references remains valid — renaming now
+  rewrites at least sixteen, several inside records already closed by the
   previous closure's checkpoint commits.
 - situation/AGENTS.md ("Reference discipline") — repository-root-relative
   paths are the protocol's stable citation coordinates for records in this
@@ -85,3 +89,11 @@ closed records stay byte-stable.
 A bulk record-migration procedure exists that renames paths and rewrites all
 callers atomically (for example at a future closure boundary), or the
 records are restructured such that these paths lose their citation traffic.
+
+## Provenance
+
+Survey corrected in place on open PR #2 before any closing checkpoint (this
+record was born in this PR; CodeRabbit thread PRRT_kwDOUlFWIM6kzMgg): counts
+refreshed from 10 / 1 / 1 at head f21b6d3 to 12 / 2 / 2 at final head
+6c098f3, now counting this Decision's own three citations; the
+lower-bound-of-twelve statement is retained.
