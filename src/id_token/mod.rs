@@ -172,6 +172,10 @@ where
             .signing_key(self.0.unverified_header().kid.as_ref(), self.signing_alg()?)
     }
 }
+// clippy 1.98 (`to_string_trait_impl`) prefers `Display` here; upstream deliberately
+// implements `ToString` via serde serialization with panic-on-failure semantics. Kept
+// verbatim for import fidelity (situation/decisions/D-000004-import-fidelity-rules-for-the-openidconnect-4-0-1-import.md).
+#[allow(clippy::to_string_trait_impl)]
 impl<AC, GC, JE, JS> ToString for IdToken<AC, GC, JE, JS>
 where
     AC: AdditionalClaims,
