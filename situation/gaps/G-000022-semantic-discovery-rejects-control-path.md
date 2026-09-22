@@ -30,9 +30,10 @@ fallback.
   semantic discovery condition and its use of bounded exact search.
 - Bookkeeping observation (PR #3 branch `bank3/bookkeeping`, 2026-09-22):
   `git log --all -- control/` is empty at this branch — no commit in the
-  repository's history contains a `control/` path — and no such path exists
-  in the current worktree, confirming the rejected path was never repository
-  content.
+  repository's history contains a `control/` path. The current worktree does
+  contain an untracked `control/` scratch directory (`git status --short`
+  reports `?? control/`), so the rejected path is workspace-local rather than
+  committed repository content.
 
 ## Impact
 
