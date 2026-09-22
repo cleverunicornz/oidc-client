@@ -28,9 +28,9 @@ State `implemented` is retrospective and is supported by the donor import
 commit `eeb0e6d847d7665cc8b0c9e46b9716323ded3c6a`: its source contains the
 ES256 dispatch in `src/core/jwk/mod.rs` and P-256 verifier in
 `src/core/crypto.rs`. The retained gate observation at
-`24835e4b44caa8a0baae2ac5b865bbd6bdf355ba` records passing EC-JWK parsing
-and ECDSA verification tests in
-`situation/witnesses/evidence/W-000001/gates-final.log`. Decision
+`24835e4b44caa8a0baae2ac5b865bbd6bdf355ba` is captured as the retrospective,
+`INVALID` partial witness
+`situation/witnesses/P-000002/W-000002-import-head-es256-unit-observation.md`.
 `situation/decisions/D-000006-recognize-carried-es256-verification.md`
 reconciles the earlier hypothesis against those facts. The state is not
 `assured`: no complete PASS witness applies O-000002 to every leg.
@@ -47,3 +47,4 @@ are outside this promise.
 - situation/decisions/D-000006-recognize-carried-es256-verification.md
 - situation/gaps/G-000001-no-maintained-rust-oidc-rp-library-supports-es256.md
 - situation/witnesses/evidence/W-000001/gates-final.log
+- situation/witnesses/P-000002/W-000002-import-head-es256-unit-observation.md
