@@ -33,9 +33,9 @@ No PASS witness applies O-000005 to this promise.
 
 ## Residual
 
-A retained configured-fleet workflow observation is absent (G-000004), and the
-promise does not pre-approve any advisory, dependency, or configuration change
-outside its stated three exceptions.
+No Witness yet applies O-000005, and the promise does not pre-approve any
+advisory, dependency, or configuration change outside its stated three
+exceptions.
 
 ## References
 
@@ -43,4 +43,3 @@ outside its stated three exceptions.
 - situation/decisions/D-000003-rustsec-2023-0071-rsa-disposition-scoped-ignore.md
 - situation/decisions/D-000005-unmaintained-dev-path-advisory-ignores.md
 - situation/decisions/D-000008-promote-dependency-policy-contract.md
-- situation/gaps/G-000004-no-assured-ci-witness-route.md
