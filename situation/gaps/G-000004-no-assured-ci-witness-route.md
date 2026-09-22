@@ -36,6 +36,11 @@ This absence also bounds the CI portion of
   the retained `gates-final.log` records 70 unit tests plus 7 passing and 2
   ignored doctests. The executed command is unaffected, but the configured
   route's count annotation is stale.
+- Corrector observation in closure run
+  `20260922T160102Z-2225beb0f70ca521911ef82a7bad12ec04d91a52`: every retained
+  CI run now has its own Witness — W-000004 for the primary PASS, W-000007 and
+  W-000008 for later PASS runs, and W-000009 and W-000010 for the failed
+  dispatch and pull-request observations.
 
 ## Impact
 
@@ -45,23 +50,24 @@ verified CI gate until a qualifying run is retained as a Witness.
 
 ## Resolution
 
-closed — the prescribed assured-witness route is executed: CI was dispatched
-on the PR #2 branch (`gh workflow run ci.yml --ref bank2/assurance`) and the
-green retained run
-https://github.com/cleverunicornz/oidc-client/actions/runs/35743515109
-(head `7fe8265c8166e16ea4da77b5722a35503fa67665`, conclusion `success`,
-event `workflow_dispatch`) executes the capability checks and all four named
-gate commands on `cvu-test-runner-x64`. Witness
-situation/witnesses/P-000005/W-000004-configured-ci-fleet-run.md applies
-O-000006 to every leg; P-000005 moved to `assured`. An earlier dispatched
-run of the same branch (35743127287) failed at Clippy and is retained as
-the correction trail behind commit `7fe8265`.
+closed — the prescribed assured-witness route is executed: W-000004 retains
+the successful dispatched run 35743515109 at
+`7fe8265c8166e16ea4da77b5722a35503fa67665`, which executes the capability
+checks and all four named gate commands on `cvu-test-runner-x64`. P-000005 is
+assured under O-000006 by that bounded PASS witness. W-000007 and W-000008
+retain later successful dispatches at their own heads; W-000009 and W-000010
+preserve the failed dispatch and pull-request observations rather than
+combining them with the passing evidence.
 
 ## References
 
 - `.github/workflows/ci.yml`
 - `situation/candidates/C-000004-ci-pipeline-fmt-clippy-test-audit.md`
-- situation/witnesses/P-000005/W-000004-configured-ci-fleet-run.md — the
-  PASS witness closing this gap.
 - situation/witnesses/P-000001/W-000001-import-head-offline-parity-leg-p6.md —
   the retained local-run observation (not workflow evidence).
+- situation/witnesses/P-000005/W-000004-configured-ci-fleet-run.md
+- situation/witnesses/P-000005/W-000007-configured-ci-public-entry-fixture-run.md
+- situation/witnesses/P-000005/W-000008-later-passing-configured-ci-run.md
+- situation/witnesses/P-000005/W-000009-configured-ci-dispatch-clippy-failure.md
+- situation/witnesses/P-000005/W-000010-configured-ci-pull-request-clippy-failure.md
+- situation/gaps/G-000021-ci-test-count-comment-is-stale.md
