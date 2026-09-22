@@ -6,35 +6,49 @@ open
 
 ## Gap
 
-No Rust OIDC relying-party library supports ES256 (ECDSA P-256 SHA-256) for
-ID token verification. openidconnect dropped it in a rewrite; openid
-(kilork) rejects EC JWKs at client.rs:276. The jsonwebtoken crate supports
-ES256 but is not an OIDC flow library. Kanidm defaults to ES256.
+No maintained, published Rust OIDC relying-party crate is established by the
+retained research as supporting ES256 (ECDSA P-256 with SHA-256) for ID-token
+verification. The `openidconnect` 4.0.1 donor does implement ES256
+verification, but its project is recorded as unmaintained; this repository's
+continuation is not yet published or assured.
 
 ## Relevance
 
-This gap is the reason this repository exists: its core deliverable
-(P-000002) closes it. Poda Chat currently uses RS256 under Kanidm's
-legacy-crypto flag because it is the only algorithm both sides speak.
+This gap explains why a maintained continuation and its publication matter.
+P-000002 records the carried ES256 implementation; P-000003 records the
+separate publication commitment. Poda Chat's recorded deployment still uses
+RS256 under Kanidm's legacy-crypto setting.
 
 ## Evidence
 
-Poda Chat Banks 1–6 scoping evidence (2026-09-17 through 2026-09-22),
-retained in situation/context.md ("Origin evidence"): openidconnect
-implemented ECDSA in 2020 (issue #32, v1.1.0) then dropped it in the
-2.x→4.x rewrite with no open issue requesting its return; kilork/openid
-v0.24.0 explicitly rejects elliptic curve JWKs; Kanidm 1.11.0 labels RS256
-"legacy".
+- The retained Poda Chat scoping research in `situation/context.md` reports
+  that no maintained alternative was available and that Kanidm 1.11.0 labels
+  RS256 as legacy.
+- `src/core/jwk/mod.rs` dispatches
+  `CoreJwsSigningAlgorithm::EcdsaP256Sha256` to EC signature verification,
+  and `src/core/crypto.rs` verifies P-256 signatures with `p256`; the
+  imported donor therefore contradicts the earlier claim that openidconnect
+  dropped ES256 in the 2.x→4.x rewrite.
+- `situation/references/R-000001-upstream-pin.md` identifies that donor as
+  openidconnect 4.0.1 and records its unmaintained status in the repository
+  context.
 
 ## Impact
 
-Any Rust project consuming an ES256-defaulting IdP must either use RS256
-(legacy flag on Kanidm) or hand-roll the verification outside an OIDC
-library. This blocks modern crypto adoption in the Rust OIDC ecosystem.
+Until an ES256-capable continuation is both published and assured, consumers
+cannot rely on a maintained, released Rust OIDC RP package for an
+ES256-defaulting provider. They may remain on an issuer's legacy algorithm or
+take on verification work outside the package boundary.
 
 ## Resolution
 
-none — this gap closes when P-000002 is assured.
+none — this gap can close only when the ES256 behavior is assured under
+P-000002 and a maintained released package is assured under P-000003.
+
+## References
+
+- `situation/promises/P-000002-es256-ecdsa-p-256-id-token-verification.md`
+- `situation/promises/P-000003-published-on-crates-io-as-oidc-client.md`
 
 ## Provenance
 
