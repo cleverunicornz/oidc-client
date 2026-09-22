@@ -2,7 +2,7 @@
 
 ## State
 
-open
+accepted
 
 ## Gap
 
@@ -40,10 +40,17 @@ may be acceptable only as an explicit stability choice.
 
 ## Resolution
 
-none
+accepted — an explicit stability choice is now recorded:
+situation/decisions/D-000011-record-path-slugs-remain-stable-citation-coordinates.md
+retains the existing filenames as stable citation coordinates. Record
+content (title, State, body) governs meaning; slugs are historical labels
+and never an authority for a proposition by path alone. A citation survey in
+D-000011 quantifies the all-caller cutover a rename would require.
 
 ## References
 
 - `situation/decisions/D-000007-bound-es256-support-claims-to-evidence.md`
 - `situation/plans/active/PLAN-000001-import-es256-publish-consume.md`
+- situation/decisions/D-000011-record-path-slugs-remain-stable-citation-coordinates.md —
+  the Decision accepting this gap.
 - `situation/promises/P-000001-full-oidc-rp-flows-work-identically-to-openidconnect-4-0-1.md`
