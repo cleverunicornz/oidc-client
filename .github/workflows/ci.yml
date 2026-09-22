@@ -8,51 +8,42 @@ on:
 permissions:
   contents: read
 
+# A toolchain lookup must fail when the fleet lacks the pinned capability,
+# rather than allowing rustup to install a toolchain on the host.
 env:
+  RUSTUP_AUTO_INSTALL: '0'
   CARGO_TERM_COLOR: never
 
 jobs:
-  fmt:
-    name: cargo fmt
+  ci:
+    if: >-
+      github.repository == 'cleverunicornz/oidc-client' &&
+      (github.event_name == 'workflow_dispatch' ||
+       github.event.pull_request.head.repo.full_name == github.repository)
     runs-on: cvu-test-runner-x64
-    container:
-      image: rust:1.98.0
+    timeout-minutes: 60
     steps:
-      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5.1.0
-      # The pinned rust:1.98.0 image ships a minimal toolchain without the
-      # rustfmt/clippy components preinstalled.
-      - run: rustup component add rustfmt
-      - run: cargo fmt --all --check
-
-  clippy:
-    name: cargo clippy
-    runs-on: cvu-test-runner-x64
-    container:
-      image: rust:1.98.0
-    steps:
-      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5.1.0
-      - run: rustup component add clippy
-      - run: cargo clippy --all-targets -- -D warnings
-
-  test:
-    name: cargo test
-    runs-on: cvu-test-runner-x64
-    container:
-      image: rust:1.98.0
-    steps:
-      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5.1.0
-      # Covers the 70 offline unit tests and the doc tests; the 21
-      # live-network certification tests stay #[ignore]d.
-      - run: cargo test --all-features
-
-  deny:
-    name: cargo deny
-    runs-on: cvu-test-runner-x64
-    container:
-      image: rust:1.98.0
-    steps:
-      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5.1.0
-      - uses: taiki-e/install-action@899b013517f9e7774591216672bf75a46bb9a481 # v2.9.4
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
-          tool: cargo-deny
-      - run: cargo deny check
+          persist-credentials: false
+      - name: Required native capabilities
+        id: capabilities
+        run: |
+          rustc --version
+          cargo --version
+          cargo fmt --version
+          cargo clippy --version
+          cargo deny --version
+      - name: Formatting
+        if: ${{ !cancelled() && steps.capabilities.outcome == 'success' }}
+        run: cargo fmt --all --check
+      - name: Clippy
+        if: ${{ !cancelled() && steps.capabilities.outcome == 'success' }}
+        run: cargo clippy --all-targets -- -D warnings
+      # 70 offline unit + doc tests; the 21 live-network certification tests stay #[ignore]d.
+      - name: Tests
+        if: ${{ !cancelled() && steps.capabilities.outcome == 'success' }}
+        run: cargo test --all-features
+      - name: Dependency policy
+        if: ${{ !cancelled() && steps.capabilities.outcome == 'success' }}
+        run: cargo deny check

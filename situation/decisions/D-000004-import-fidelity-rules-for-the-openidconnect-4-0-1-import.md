@@ -124,8 +124,14 @@ dedicated commits — mismatched_lifetime_syntaxes ×11
 ×1 (src/core/crypto.rs), doc_overindented_list_items ×2 (src/lib.rs),
 useless_conversion ×1 (src/jwt/mod.rs) — plus 2 justified allow-additions
 (clippy::to_string_trait_impl on `IdToken`, dead_code on the shared
-`PanicIfFail` helper in tests/rp_common.rs). Commits d51e1f4, 159e9a7, and
-12d22ab on this branch. No behavior change; the full gate suite is green.
+`PanicIfFail` helper in tests/rp_common.rs).
+Commits on this branch, by
+classification: mechanical-lint — d51e1f4: round 1, 21 items, all
+`src/`-side; 12d22ab: round 2, mixed — 1 mechanical item plus the
+dead_code allow-addition; 36f761d5: 1 doc_lazy_continuation item,
+correcting 12d22ab's tests/-only staging of that fix. Allow-addition —
+159e9a7 (clippy::to_string_trait_impl) plus the dead_code allow inside
+12d22ab. No behavior change; the full gate suite is green.
 
 ## Revisit when
 
@@ -137,3 +143,11 @@ policy.
 
 Recorded 2026-09-22 by the Phase B import lane, ahead of the import work
 it governs; rename-surface facts verified at the pin the same day.
+
+Commit-list classification reconciled 2026-09-22 by forward commit,
+responding to CodeRabbit round-1 review thread PRRT_kwDOUlFWIM6kr1fn on
+PR #1; each commit's content verified with `git show --stat` (full SHAs:
+d51e1f41d77b9452dbfc04d135fa076d63d27294,
+159e9a77ad9aff5d46a74f112f220844f51f3eac,
+12d22ab00cca4d71d538a1bcf1ee6a61f6a2a0ef,
+36f761d53149dc7d6ce329b7ffe68e3251cd24ef).

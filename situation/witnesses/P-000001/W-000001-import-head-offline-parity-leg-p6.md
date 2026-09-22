@@ -74,8 +74,11 @@ situation/decisions/D-000004-import-fidelity-rules-for-the-openidconnect-4-0-1-i
   which renames to the Cargo package name `oidc-client` (a dependency key
   resolves the package name, not the import identifier — confirmed by a
   `cargo add` probe during validation).
-- mechanical-lint (22 items, behavior-neutral, commits d51e1f4, 12d22ab,
-  36f761d5): mismatched_lifetime_syntaxes ×11 (src/client.rs 642, 765, 855,
+- mechanical-lint (22 items, behavior-neutral; commits by classification —
+  d51e1f4: round 1, 21 items, all `src/`-side; 12d22ab: round 2, mixed —
+  1 mechanical item plus the dead_code allow-addition; 36f761d5: 1
+  doc_lazy_continuation item, correcting 12d22ab's tests/-only staging of
+  that fix): mismatched_lifetime_syntaxes ×11 (src/client.rs 642, 765, 855,
   868, 989, 1005, 1124, 1281, 1366, 1454; tests/rp_certification_code.rs
   183); needless_lifetimes ×4 (src/id_token/mod.rs 348, 366;
   src/user_info.rs 425, 444); deprecated `GenericArray::as_slice` ×3
@@ -124,3 +127,8 @@ situation/decisions/D-000004-import-fidelity-rules-for-the-openidconnect-4-0-1-i
 Recorded 2026-09-22 by the Phase B import lane from the gate run against
 head 24835e4b44caa8a0baae2ac5b865bbd6bdf355ba in the pinned rust:1.98.0
 container; evidence committed the same day.
+
+Mechanical-lint commit classification reconciled 2026-09-22 by forward
+commit, responding to CodeRabbit round-1 review thread
+PRRT_kwDOUlFWIM6kr1fn on PR #1; each commit verified with
+`git show --stat`.
