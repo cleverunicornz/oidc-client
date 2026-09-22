@@ -1,4 +1,4 @@
-# W-000001 — Import-head offline parity: P6 passed; complete observation invalid
+# W-000001 — Import-head offline suite ran; complete observation invalid
 
 ## Promise
 
@@ -10,8 +10,9 @@ situation/oracles/O-000001-judge-full-oidc-rp-flow-parity-with-upstream.md
 
 ## Result
 
-INVALID — the real-provider Pass legs P1–P5 were not exercised. P6 passed,
-but a PASS witness must evidence every Pass leg.
+INVALID — the real-provider Pass legs P1–P5 were not exercised. The retained
+test run passed, but it cannot decide historical O-000001 P6 because that rule
+required an unchanged suite except for import renames.
 
 ## Head
 
@@ -33,9 +34,11 @@ but a PASS witness must evidence every Pass leg.
   certification tests compiled and remained ignored.
 - `situation/witnesses/evidence/W-000001/SHA256SUMS` retains the evidence
   digests, and `image-digest.txt` identifies the pinned rust:1.98.0 image.
-- The import-fidelity classification that supports the unchanged-test premise
-  is retained in
-  `situation/decisions/D-000004-import-fidelity-rules-for-the-openidconnect-4-0-1-import.md`.
+- D-000004 records non-rename test deltas: the
+  `CoreIdTokenVerifier<'_>` mechanical-lint change in
+  `tests/rp_certification_code.rs` and the `#[allow(dead_code)]` plus
+  explanatory comment in `tests/rp_common.rs`. It retains no exhaustive
+  classification table in this witness; the gate log establishes only the run.
 
 ## Oracle legs
 
@@ -46,4 +49,4 @@ but a PASS witness must evidence every Pass leg.
 | P3 | NOT EXECUTED — no real-provider ID-token matrix or upstream comparison ran. |
 | P4 | NOT EXECUTED — no real-provider UserInfo matrix or upstream comparison ran. |
 | P5 | NOT EXECUTED — no real-provider refresh-token matrix or upstream comparison ran. |
-| P6 | PASS — `gates-final.log` records the imported `cargo test --all-features` suite passing at the stated head; the import-fidelity decision records the only allowed crate-name test-import changes. |
+| P6 | NOT DECIDED — `gates-final.log` records the imported `cargo test --all-features` suite passing at the stated head, but O-000001 requires unchanged test bytes except for imports and D-000004 records non-rename deltas. |
