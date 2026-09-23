@@ -11,7 +11,7 @@ use crate::jwt::tests::{
 use crate::verification::SignatureVerificationError;
 use crate::{JsonWebKey, JsonWebKeyId, JsonWebTokenAlgorithm, PrivateSigningKey, SigningError};
 
-use base64::prelude::BASE64_STANDARD;
+use base64::prelude::{BASE64_STANDARD, BASE64_URL_SAFE_NO_PAD};
 use base64::Engine;
 use rand::rngs::mock::StepRng;
 use rand::{CryptoRng, RngCore};
@@ -186,6 +186,137 @@ fn test_core_jwk_deserialization_dupe_fields() {
         // error message. However, we want to be sure that this fails for the expected reason
         // and not by happenstance, so this is fine for now.
         .contains("duplicate field"));
+}
+
+// Distinctive canary secret for Debug-redaction tests: the printable tail
+// catches leak paths that render the secret as a string, the base64url export
+// form catches leak paths that render the serialized form, and the four lead
+// bytes (0xde 0xad 0xbe 0xef) catch leak paths that render the raw byte array
+// in decimal.
+const DEBUG_CANARY_PRINTABLE: &str = "TopSecret-canary";
+const DEBUG_CANARY_SECRET: &[u8] = b"\xde\xad\xbe\xefTopSecret-canary";
+
+#[test]
+fn test_core_jwk_debug_redacts_symmetric_secret() {
+    let key = CoreJsonWebKey::new_symmetric(DEBUG_CANARY_SECRET.to_vec());
+    let debug = format!("{:?}", key);
+    let debug_pretty = format!("{:#?}", key);
+    let exported_secret = BASE64_URL_SAFE_NO_PAD.encode(DEBUG_CANARY_SECRET);
+
+    for output in [&debug, &debug_pretty] {
+        assert!(!output.contains(DEBUG_CANARY_PRINTABLE));
+        assert!(!output.contains(&exported_secret));
+        for byte in [222, 173, 190, 239] {
+            assert!(!output.contains(&byte.to_string()));
+        }
+    }
+    // Presence stays visible even though the bytes never do.
+    assert!(debug.contains("k: Some([redacted])"));
+    assert!(debug_pretty.contains("[redacted]"));
+}
+
+#[test]
+fn test_core_jwk_debug_redacts_ec_private_member() {
+    // `x` and `y` are deliberately uniform 0x11/0x22 fills so that their Debug
+    // output can never contain the 0xaa (decimal 170) run that a leaked `d`
+    // would print.
+    let d = [0xaa_u8; 32];
+    let json = format!(
+        "{{\
+            \"kty\": \"EC\",\
+            \"crv\": \"P-256\",\
+            \"x\": \"{}\",\
+            \"y\": \"{}\",\
+            \"d\": \"{}\"\
+        }}",
+        BASE64_URL_SAFE_NO_PAD.encode([0x11_u8; 32]),
+        BASE64_URL_SAFE_NO_PAD.encode([0x22_u8; 32]),
+        BASE64_URL_SAFE_NO_PAD.encode(d),
+    );
+    let key: CoreJsonWebKey = serde_json::from_str(&json).expect("deserialization failed");
+    let debug = format!("{:?}", key);
+    let debug_pretty = format!("{:#?}", key);
+
+    for output in [&debug, &debug_pretty] {
+        assert!(!output.contains("170, 170, 170, 170"));
+        assert!(!output.contains(&BASE64_URL_SAFE_NO_PAD.encode(d)));
+    }
+    assert!(debug.contains("d: Some([redacted])"));
+    assert!(debug.contains("k: None"));
+    assert!(debug_pretty.contains("[redacted]"));
+
+    // Serialization is the intentional export path and must still carry `d`.
+    let exported = serde_json::to_string(&key).expect("serialization failed");
+    assert!(exported.contains(&BASE64_URL_SAFE_NO_PAD.encode(d)));
+    let round_tripped: CoreJsonWebKey =
+        serde_json::from_str(&exported).expect("deserialization failed");
+    assert_eq!(key, round_tripped);
+}
+
+#[test]
+fn test_core_jwks_debug_redacts_symmetric_secret() {
+    let jwks_json = format!(
+        "{{\"keys\": [{{\
+            \"kty\": \"oct\",\
+            \"k\": \"{}\"\
+        }}]}}",
+        BASE64_URL_SAFE_NO_PAD.encode(DEBUG_CANARY_SECRET),
+    );
+    let jwks: CoreJsonWebKeySet =
+        serde_json::from_str(&jwks_json).expect("deserialization failed");
+    let debug = format!("{:?}", jwks);
+
+    assert!(!debug.contains(DEBUG_CANARY_PRINTABLE));
+    assert!(!debug.contains(&BASE64_URL_SAFE_NO_PAD.encode(DEBUG_CANARY_SECRET)));
+    assert!(!debug.contains("222, 173, 190, 239"));
+    assert!(debug.contains("k: Some([redacted])"));
+}
+
+#[test]
+fn test_core_jwk_debug_redaction_is_stable_while_partial_eq_distinguishes() {
+    let symmetric_a = CoreJsonWebKey::new_symmetric(DEBUG_CANARY_SECRET.to_vec());
+    let symmetric_b = CoreJsonWebKey::new_symmetric(b"a completely different secret".to_vec());
+    assert_eq!(format!("{:?}", symmetric_a), format!("{:?}", symmetric_b));
+    assert_ne!(symmetric_a, symmetric_b);
+
+    // Serialization is the intentional export path and must still carry `k`.
+    let exported = serde_json::to_string(&symmetric_a).expect("serialization failed");
+    assert!(exported.contains(&BASE64_URL_SAFE_NO_PAD.encode(DEBUG_CANARY_SECRET)));
+    let round_tripped: CoreJsonWebKey =
+        serde_json::from_str(&exported).expect("deserialization failed");
+    assert_eq!(symmetric_a, round_tripped);
+
+    let build_ec_key = |d: &[u8]| -> CoreJsonWebKey {
+        let json = format!(
+            "{{\
+                \"kty\": \"EC\",\
+                \"crv\": \"P-256\",\
+                \"x\": \"{}\",\
+                \"y\": \"{}\",\
+                \"d\": \"{}\"\
+            }}",
+            BASE64_URL_SAFE_NO_PAD.encode([0x11_u8; 32]),
+            BASE64_URL_SAFE_NO_PAD.encode([0x22_u8; 32]),
+            BASE64_URL_SAFE_NO_PAD.encode(d),
+        );
+        serde_json::from_str(&json).expect("deserialization failed")
+    };
+    let ec_a = build_ec_key(&[0xaa_u8; 32]);
+    let ec_b = build_ec_key(&[0xbb_u8; 32]);
+    assert_eq!(format!("{:?}", ec_a), format!("{:?}", ec_b));
+    assert_ne!(ec_a, ec_b);
+}
+
+#[test]
+fn test_core_jwk_rsa_verification_key_debug_has_no_private_material() {
+    let signing_key =
+        CoreRsaPrivateSigningKey::from_pem(TEST_RSA_KEY, None).expect("key parsing failed");
+    let verification_key = signing_key.as_verification_key();
+    let debug = format!("{:?}", verification_key);
+
+    assert!(debug.contains("d: None"));
+    assert!(debug.contains("k: None"));
+    assert!(!debug.contains("d: Some"));
 }
 
 fn verify_signature(

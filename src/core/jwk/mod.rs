@@ -25,7 +25,7 @@ mod tests;
 // parameter, and then deserializing the fields and types appropriate for that key type.
 /// Public or symmetric key expressed as a JSON Web Key.
 #[skip_serializing_none]
-#[derive(Clone, Debug, Deserialize, PartialEq, Eq, Serialize)]
+#[derive(Clone, Deserialize, PartialEq, Eq, Serialize)]
 pub struct CoreJsonWebKey {
     pub(crate) kty: CoreJsonWebKeyType,
     #[serde(rename = "use")]
@@ -63,6 +63,39 @@ pub struct CoreJsonWebKey {
     // are never part of the JWK set.
     #[serde(default, deserialize_with = "deserialize_option_or_none")]
     pub(crate) k: Option<Base64UrlEncodedBytes>,
+}
+
+/// Renders the presence of secret JWK key material without its bytes.
+struct RedactedKeyMaterial;
+
+impl std::fmt::Debug for RedactedKeyMaterial {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        f.write_str("[redacted]")
+    }
+}
+
+impl std::fmt::Debug for CoreJsonWebKey {
+    // `d` (the EC/RSA private member) and `k` (the symmetric secret) are secret
+    // key material: they are rendered as presence markers only, so that `Debug`
+    // output (log lines, panic messages, test failures) can never disclose
+    // them. Serialization remains the intentional export path for these fields.
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        let d = self.d.as_ref().map(|_| RedactedKeyMaterial);
+        let k = self.k.as_ref().map(|_| RedactedKeyMaterial);
+        f.debug_struct("CoreJsonWebKey")
+            .field("kty", &self.kty)
+            .field("use_", &self.use_)
+            .field("kid", &self.kid)
+            .field("alg", &self.alg)
+            .field("n", &self.n)
+            .field("e", &self.e)
+            .field("crv", &self.crv)
+            .field("x", &self.x)
+            .field("y", &self.y)
+            .field("d", &d)
+            .field("k", &k)
+            .finish()
+    }
 }
 impl CoreJsonWebKey {
     /// Instantiate a new RSA public key from the raw modulus (`n`) and public exponent (`e`),
@@ -690,7 +723,10 @@ impl PrivateSigningKey for CoreRsaPrivateSigningKey {
 pub enum CoreJsonWebKeyType {
     /// Elliptic Curve Cryptography (ECC) key.
     ///
-    /// ECC algorithms such as ECDSA are currently unsupported.
+    /// EC keys are supported for JWS signature verification with the P-256
+    /// and P-384 curves, using the corresponding ECDSA algorithms (`ES256`
+    /// and `ES384`). Other curves, such as P-521 (`ES512`), are currently
+    /// unsupported.
     #[serde(rename = "EC")]
     EllipticCurve,
     /// RSA key.
