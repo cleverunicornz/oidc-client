@@ -4,7 +4,7 @@ use crate::jwt::{JsonWebTokenError, JsonWebTokenJsonPayloadSerde};
 use crate::verification::UserInfoVerifier;
 use crate::{
     AccessToken, AdditionalClaims, AddressClaim, AsyncHttpClient, Audience, AudiencesClaim,
-    AuthDisplay, AuthPrompt, ClaimsVerificationError, Client, EndUserBirthday, EndUserEmail,
+    AuthDisplay, AuthPrompt, ClaimsVerificationError, Client, ClientSecret, EndUserBirthday, EndUserEmail,
     EndUserFamilyName, EndUserGivenName, EndUserMiddleName, EndUserName, EndUserNickname,
     EndUserPhoneNumber, EndUserPictureUrl, EndUserProfileUrl, EndUserTimezone, EndUserUsername,
     EndUserWebsiteUrl, EndpointState, ErrorResponse, GenderClaim, HttpRequest, HttpResponse,
@@ -95,12 +95,26 @@ where
             access_token,
             require_signed_response: false,
             response_type: UserInfoResponseType::Json,
-            signed_response_verifier: UserInfoVerifier::new(
-                self.client_id.clone(),
-                self.issuer.clone(),
-                self.jwks.clone(),
-                expected_subject,
-            ),
+            // Route the signed-response verifier confidentially when this client holds a secret,
+            // exactly like `Client::id_token_verifier`. The algorithm allowlist stays the
+            // RS256-only default; consumers opt in to other algorithms via
+            // `UserInfoRequest::set_allowed_algs`.
+            signed_response_verifier: if let Some(client_secret) = self.client_secret() {
+                UserInfoVerifier::new_confidential_client(
+                    self.client_id.clone(),
+                    client_secret.clone(),
+                    self.issuer.clone(),
+                    self.jwks.clone(),
+                    expected_subject,
+                )
+            } else {
+                UserInfoVerifier::new(
+                    self.client_id.clone(),
+                    self.issuer.clone(),
+                    self.jwks.clone(),
+                    expected_subject,
+                )
+            },
         }
     }
 }
@@ -269,6 +283,36 @@ where
         self.signed_response_verifier = self
             .signed_response_verifier
             .require_audience_match(aud_required);
+        self
+    }
+
+    /// Specifies which JSON Web Signature algorithms are supported for the signed JWT response.
+    ///
+    /// The default allowlist contains only `RS256`. Verifying responses signed with `ES256`,
+    /// `ES384`, or an `HS*` algorithm requires explicitly allowing those algorithms here;
+    /// `HS*` algorithms additionally require a confidential verifier
+    /// ([`set_client_secret`](Self::set_client_secret) or a confidential
+    /// [`Client`](crate::Client)).
+    ///
+    /// This option has no effect on unsigned JSON responses.
+    pub fn set_allowed_algs<I>(mut self, algs: I) -> Self
+    where
+        I: IntoIterator<Item = K::SigningAlgorithm>,
+    {
+        self.signed_response_verifier = self.signed_response_verifier.set_allowed_algs(algs);
+        self
+    }
+
+    /// Specifies the client secret used to verify a signed JWT response that uses a shared
+    /// secret algorithm such as `HS256`, `HS384`, or `HS512`, replacing any secret inherited
+    /// from the [`Client`](crate::Client).
+    ///
+    /// For these algorithms, the octets of the UTF-8 representation of the client secret are
+    /// used as the key to validate the signature.
+    ///
+    /// This option has no effect on unsigned JSON responses.
+    pub fn set_client_secret(mut self, client_secret: ClientSecret) -> Self {
+        self.signed_response_verifier = self.signed_response_verifier.set_client_secret(client_secret);
         self
     }
 
@@ -611,5 +655,105 @@ mod tests {
 
         assert_eq!(claims.additional_claims().0.len(), 1);
         assert_eq!(claims.additional_claims().0["tfa_method"], "u2f");
+    }
+
+    /// The `UserInfoRequest` builders configure the embedded signed-response verifier: an
+    /// explicitly allowed shared-secret algorithm verifies through the supplied client secret,
+    /// and stays rejected without it.
+    #[test]
+    fn test_user_info_request_signed_response_policy() {
+        use crate::core::{
+            CoreHmacKey, CoreJweContentEncryptionAlgorithm, CoreJwsSigningAlgorithm,
+            CoreJsonWebKey, CoreJsonWebKeySet, CoreUserInfoVerifier,
+        };
+        use crate::{
+            AccessToken, ClaimsVerificationError, ClientId, ClientSecret,
+            EmptyAdditionalClaims, IssuerUrl, PrivateSigningKey, SignatureVerificationError,
+            SubjectIdentifier, UserInfoError, UserInfoRequest, UserInfoResponseType,
+        };
+        use base64::Engine;
+
+        let client_id = ClientId::new("my_client".to_string());
+        let issuer = IssuerUrl::new("https://example.com".to_string()).unwrap();
+        let sub = SubjectIdentifier::new("the_subject".to_string());
+
+        let b64 = crate::core::base64_url_safe_no_pad();
+        let header = "{\"alg\":\"HS256\",\"typ\":\"JWT\"}";
+        let payload = "{\"iss\":\"https://example.com\",\"aud\":[\"my_client\"],\
+\"sub\":\"the_subject\",\"name\":\"Jane Doe\"}";
+        let signing_input = format!(
+            "{}.{}",
+            b64.encode(header.as_bytes()),
+            b64.encode(payload.as_bytes())
+        );
+        let hmac_key = CoreHmacKey::new("the_client_secret");
+        let signature = hmac_key
+            .sign(
+                &CoreJwsSigningAlgorithm::HmacSha256,
+                signing_input.as_bytes(),
+            )
+            .expect("HS256 signing should succeed");
+        let token = format!("{}.{}", signing_input, b64.encode(signature));
+
+        let url = crate::UserInfoUrl::new("https://example.com/userinfo".to_string()).unwrap();
+        let make_request = || UserInfoRequest::<CoreJweContentEncryptionAlgorithm, CoreJsonWebKey> {
+            url: &url,
+            access_token: AccessToken::new("the_access_token".to_string()),
+            require_signed_response: false,
+            response_type: UserInfoResponseType::Jwt,
+            signed_response_verifier: CoreUserInfoVerifier::new(
+                client_id.clone(),
+                issuer.clone(),
+                CoreJsonWebKeySet::new(vec![]),
+                Some(sub.clone()),
+            ),
+        };
+        let jwt_response = |body: String| {
+            http::Response::builder()
+                .status(http::StatusCode::OK)
+                .header(http::header::CONTENT_TYPE, "application/jwt")
+                .body(body.into_bytes())
+                .unwrap()
+        };
+
+        // The builders reach the embedded verifier: HS256 verifies with the supplied client
+        // secret.
+        let claims = make_request()
+            .set_allowed_algs(vec![CoreJwsSigningAlgorithm::HmacSha256])
+            .set_client_secret(ClientSecret::new("the_client_secret".to_string()))
+            .user_info_response::<EmptyAdditionalClaims, CoreGenderClaim, crate::reqwest::Error>(
+                jwt_response(token.clone()),
+            )
+            .expect("verification should succeed");
+        assert_eq!(*claims.subject(), sub);
+
+        // Without the client secret, the allowed shared-secret algorithm is still rejected.
+        match make_request()
+            .set_allowed_algs(vec![CoreJwsSigningAlgorithm::HmacSha256])
+            .user_info_response::<EmptyAdditionalClaims, CoreGenderClaim, crate::reqwest::Error>(
+                jwt_response(token.clone()),
+            ) {
+            Err(UserInfoError::ClaimsVerification(
+                ClaimsVerificationError::SignatureVerification(
+                    SignatureVerificationError::DisallowedAlg(_),
+                ),
+            )) => {}
+            other => panic!("unexpected result: {:?}", other),
+        }
+
+        // Without an explicit allowlist, the RS256-only default rejects HS256 even with the
+        // client secret present.
+        match make_request()
+            .set_client_secret(ClientSecret::new("the_client_secret".to_string()))
+            .user_info_response::<EmptyAdditionalClaims, CoreGenderClaim, crate::reqwest::Error>(
+                jwt_response(token),
+            ) {
+            Err(UserInfoError::ClaimsVerification(
+                ClaimsVerificationError::SignatureVerification(
+                    SignatureVerificationError::DisallowedAlg(_),
+                ),
+            )) => {}
+            other => panic!("unexpected result: {:?}", other),
+        }
     }
 }

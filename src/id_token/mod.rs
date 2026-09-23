@@ -158,6 +158,12 @@ where
 
     /// Returns the [`JsonWebKey`] usable for verifying this ID token's JSON Web Signature.
     ///
+    /// Keys are resolved from the signature key set carried by the verifier (typically the
+    /// provider's JSON Web Key Set obtained during discovery) only. For shared-secret signature
+    /// algorithms (`HS256`, `HS384`, `HS512`), the verification key is the client secret rather
+    /// than a key from the provider's key set; use
+    /// [`verification_key`](Self::verification_key), which handles both cases.
+    ///
     /// This function returns an error if the token has no signature or a corresponding key cannot
     /// be found.
     pub fn signing_key<'s, K>(
@@ -170,6 +176,32 @@ where
         verifier
             .jwt_verifier
             .signing_key(self.0.unverified_header().kid.as_ref(), self.signing_alg()?)
+    }
+
+    /// Returns the [`JsonWebKey`] effective for verifying this ID token's JSON Web Signature,
+    /// including the client-secret-derived key for shared-secret algorithms.
+    ///
+    /// For signature algorithms that use a shared secret (`HS256`, `HS384`, `HS512`), the key is
+    /// derived from the client secret held by the verifier, which must therefore have been
+    /// created for a confidential client
+    /// ([`IdTokenVerifier::new_confidential_client`]). For all other algorithms, the key is
+    /// resolved from the verifier's signature key set exactly like
+    /// [`signing_key`](Self::signing_key). Unlike [`signing_key`](Self::signing_key), the key is
+    /// returned by value.
+    ///
+    /// This function returns an error if the token has no signature, a corresponding key cannot
+    /// be found, or a shared-secret algorithm is used with a verifier that holds no client
+    /// secret.
+    pub fn verification_key<K>(
+        &self,
+        verifier: &IdTokenVerifier<'_, K>,
+    ) -> Result<K, SignatureVerificationError>
+    where
+        K: JsonWebKey<SigningAlgorithm = JS>,
+    {
+        verifier
+            .jwt_verifier
+            .verification_key(self.0.unverified_header().kid.as_ref(), self.signing_alg()?)
     }
 }
 // clippy 1.98 (`to_string_trait_impl`) prefers `Display` here; upstream deliberately

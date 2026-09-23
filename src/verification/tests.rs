@@ -1,6 +1,6 @@
 use crate::core::{
-    CoreIdToken, CoreIdTokenClaims, CoreIdTokenVerifier, CoreJsonWebKey, CoreJsonWebKeySet,
-    CoreJsonWebKeyType, CoreJsonWebKeyUse, CoreJweContentEncryptionAlgorithm,
+    CoreHmacKey, CoreIdToken, CoreIdTokenClaims, CoreIdTokenVerifier, CoreJsonWebKey,
+    CoreJsonWebKeySet, CoreJsonWebKeyType, CoreJsonWebKeyUse, CoreJweContentEncryptionAlgorithm,
     CoreJwsSigningAlgorithm, CoreRsaPrivateSigningKey, CoreUserInfoClaims,
     CoreUserInfoJsonWebToken, CoreUserInfoVerifier,
 };
@@ -11,9 +11,10 @@ use crate::jwt::{
 };
 use crate::verification::{AudiencesClaim, IssuerClaim, JwtClaimsVerifier};
 use crate::{
-    AccessToken, Audience, AuthenticationContextClass, AuthorizationCode, ClaimsVerificationError,
-    ClientId, ClientSecret, EndUserName, IssuerUrl, JsonWebKeyId, Nonce,
-    SignatureVerificationError, StandardClaims, SubjectIdentifier, UserInfoError,
+    AccessToken, AccessTokenHash, Audience, AuthenticationContextClass, AuthorizationCode,
+    ClaimsVerificationError, ClientId, ClientSecret, EndUserName, IssuerUrl, JsonWebKey,
+    JsonWebKeyId, Nonce, PrivateSigningKey, SignatureVerificationError, StandardClaims,
+    SubjectIdentifier, UserInfoError,
 };
 
 use chrono::{TimeZone, Utc};
@@ -1512,4 +1513,439 @@ fn test_es256_id_token_verified_claims() {
         Err(ClaimsVerificationError::SignatureVerification(_)) => {}
         other => panic!("unexpected result: {:?}", other),
     }
+}
+
+/// Signed user info responses are accepted only for explicitly allowed algorithms; the default
+/// allowlist is RS256-only and there is no way to allow any algorithm.
+#[test]
+fn test_user_info_signed_response_es256() {
+    use base64::Engine;
+    use p256::ecdsa::signature::Signer;
+    use p256::elliptic_curve::sec1::ToEncodedPoint;
+
+    let b64 = crate::core::base64_url_safe_no_pad();
+
+    // Deterministic P-256 fixture keys (same derivation as test_es256_id_token_verified_claims).
+    let seed: [u8; 32] = [0x37; 32];
+    let signing_key = p256::ecdsa::SigningKey::from_bytes(&seed.into())
+        .expect("fixture scalar is a valid P-256 secret key");
+    let other_seed: [u8; 32] = [0x5a; 32];
+    let other_signing_key = p256::ecdsa::SigningKey::from_bytes(&other_seed.into())
+        .expect("fixture scalar is a valid P-256 secret key");
+
+    let public_point = p256::PublicKey::from(signing_key.verifying_key()).to_encoded_point(false);
+    let public_bytes = public_point.as_bytes();
+    let es256_key: CoreJsonWebKey = serde_json::from_value(serde_json::json!({
+        "kty": "EC",
+        "kid": "test-es256-key",
+        "crv": "P-256",
+        "x": b64.encode(&public_bytes[1..33]),
+        "y": b64.encode(&public_bytes[33..65]),
+        "use": "sig",
+    }))
+    .expect("deserialization failed");
+
+    let client_id = ClientId::new("my_client".to_string());
+    let issuer = IssuerUrl::new("https://example.com".to_string()).unwrap();
+    let sub = SubjectIdentifier::new("the_subject".to_string());
+
+    let sign_es256 = |key: &p256::ecdsa::SigningKey, payload: &str| -> String {
+        let header = "{\"alg\":\"ES256\",\"typ\":\"JWT\",\"kid\":\"test-es256-key\"}";
+        let signing_input = format!(
+            "{}.{}",
+            b64.encode(header.as_bytes()),
+            b64.encode(payload.as_bytes())
+        );
+        let signature: p256::ecdsa::Signature = key.sign(signing_input.as_bytes());
+        format!("{}.{}", signing_input, b64.encode(signature.to_bytes()))
+    };
+
+    let valid_payload = "{\"iss\":\"https://example.com\",\"aud\":[\"my_client\"],\
+\"sub\":\"the_subject\",\"name\":\"Jane Doe\"}";
+    let user_info_jwt: CoreUserInfoJsonWebToken = serde_json::from_value(serde_json::Value::String(
+        sign_es256(&signing_key, valid_payload),
+    ))
+    .expect("failed to deserialize");
+
+    // ES256 is accepted only once explicitly allowed.
+    let verifier = CoreUserInfoVerifier::new(
+        client_id.clone(),
+        issuer.clone(),
+        CoreJsonWebKeySet::new(vec![es256_key.clone()]),
+        Some(sub.clone()),
+    )
+    .set_allowed_algs(vec![CoreJwsSigningAlgorithm::EcdsaP256Sha256]);
+    let claims = user_info_jwt
+        .clone()
+        .claims(&verifier)
+        .expect("verification should succeed");
+    assert_eq!(*claims.subject(), sub);
+
+    // The default verifier rejects ES256 with DisallowedAlg (RS256-only default).
+    let default_verifier = CoreUserInfoVerifier::new(
+        client_id.clone(),
+        issuer.clone(),
+        CoreJsonWebKeySet::new(vec![es256_key.clone()]),
+        Some(sub.clone()),
+    );
+    match user_info_jwt.clone().claims(&default_verifier) {
+        Err(ClaimsVerificationError::SignatureVerification(
+            SignatureVerificationError::DisallowedAlg(_),
+        )) => {}
+        other => panic!("unexpected result: {:?}", other),
+    }
+
+    // Altered signature is rejected.
+    let token_valid = sign_es256(&signing_key, valid_payload);
+    let (signing_input, signature) = token_valid.rsplit_once('.').unwrap();
+    let mut tampered_signature = signature.to_string();
+    // Flip the first signature character: it always encodes six real bits (the final
+    // base64 character of an unpadded encoding may only carry padding bits).
+    let replacement = if tampered_signature.starts_with('A') {
+        'B'
+    } else {
+        'A'
+    };
+    tampered_signature.replace_range(0..1, &replacement.to_string());
+    let tampered: CoreUserInfoJsonWebToken =
+        serde_json::from_value(serde_json::Value::String(format!(
+            "{}.{}",
+            signing_input, tampered_signature
+        )))
+        .expect("failed to deserialize");
+    match tampered.claims(&verifier) {
+        Err(ClaimsVerificationError::SignatureVerification(_)) => {}
+        other => panic!("unexpected result: {:?}", other),
+    }
+
+    // Signature by the wrong key is rejected.
+    let wrong_key: CoreUserInfoJsonWebToken =
+        serde_json::from_value(serde_json::Value::String(sign_es256(
+            &other_signing_key,
+            valid_payload,
+        )))
+        .expect("failed to deserialize");
+    match wrong_key.claims(&verifier) {
+        Err(ClaimsVerificationError::SignatureVerification(_)) => {}
+        other => panic!("unexpected result: {:?}", other),
+    }
+}
+
+/// HS256-signed user info responses verify through a confidential verifier with an explicitly
+/// allowed algorithm using the client secret; a public verifier must reject them even when the
+/// algorithm is allowed.
+#[test]
+fn test_user_info_signed_response_hs256() {
+    use base64::Engine;
+
+    let b64 = crate::core::base64_url_safe_no_pad();
+
+    let client_id = ClientId::new("my_client".to_string());
+    let issuer = IssuerUrl::new("https://example.com".to_string()).unwrap();
+    let sub = SubjectIdentifier::new("the_subject".to_string());
+    let client_secret = ClientSecret::new("the_client_secret".to_string());
+
+    let payload = "{\"iss\":\"https://example.com\",\"aud\":[\"my_client\"],\
+\"sub\":\"the_subject\",\"name\":\"Jane Doe\"}";
+    let sign_hs256 = |secret: &str| -> String {
+        let header = "{\"alg\":\"HS256\",\"typ\":\"JWT\"}";
+        let signing_input = format!(
+            "{}.{}",
+            b64.encode(header.as_bytes()),
+            b64.encode(payload.as_bytes())
+        );
+        let hmac_key = CoreHmacKey::new(secret);
+        let signature = hmac_key
+            .sign(
+                &CoreJwsSigningAlgorithm::HmacSha256,
+                signing_input.as_bytes(),
+            )
+            .expect("HS256 signing should succeed");
+        format!("{}.{}", signing_input, b64.encode(signature))
+    };
+
+    let user_info_jwt: CoreUserInfoJsonWebToken =
+        serde_json::from_value(serde_json::Value::String(sign_hs256("the_client_secret")))
+            .expect("failed to deserialize");
+
+    // Accepted via the confidential verifier with the matching secret (empty JWKS: the
+    // verification key is derived from the client secret). HS256 requires explicit
+    // configuration in addition to the confidential verifier.
+    let verifier = CoreUserInfoVerifier::new_confidential_client(
+        client_id.clone(),
+        client_secret.clone(),
+        issuer.clone(),
+        CoreJsonWebKeySet::new(vec![]),
+        Some(sub.clone()),
+    )
+    .set_allowed_algs(vec![CoreJwsSigningAlgorithm::HmacSha256]);
+    let claims = user_info_jwt
+        .clone()
+        .claims(&verifier)
+        .expect("verification should succeed");
+    assert_eq!(*claims.subject(), sub);
+
+    // Wrong secret is rejected.
+    let wrong_secret_verifier = CoreUserInfoVerifier::new_confidential_client(
+        client_id.clone(),
+        ClientSecret::new("the_wrong_secret".to_string()),
+        issuer.clone(),
+        CoreJsonWebKeySet::new(vec![]),
+        Some(sub.clone()),
+    )
+    .set_allowed_algs(vec![CoreJwsSigningAlgorithm::HmacSha256]);
+    match user_info_jwt.clone().claims(&wrong_secret_verifier) {
+        Err(ClaimsVerificationError::SignatureVerification(_)) => {}
+        other => panic!("unexpected result: {:?}", other),
+    }
+
+    // HS256 additionally requires a confidential verifier: a public verifier rejects the
+    // response even when HS256 is explicitly allowed.
+    let public_verifier = CoreUserInfoVerifier::new(
+        client_id,
+        issuer,
+        CoreJsonWebKeySet::new(vec![]),
+        Some(sub),
+    )
+    .set_allowed_algs(vec![CoreJwsSigningAlgorithm::HmacSha256]);
+    match user_info_jwt.claims(&public_verifier) {
+        Err(ClaimsVerificationError::SignatureVerification(
+            SignatureVerificationError::DisallowedAlg(_),
+        )) => {}
+        other => panic!("unexpected result: {:?}", other),
+    }
+}
+
+/// The UserInfo subject binding rejects mismatched `sub` claims on both the JSON and signed
+/// response paths, independent of the optional `at_hash` check.
+#[test]
+fn test_user_info_subject_binding() {
+    let rsa_key =
+        serde_json::from_str::<CoreJsonWebKey>(TEST_RSA_PUB_KEY).expect("deserialization failed");
+
+    let client_id = ClientId::new("my_client".to_string());
+    let issuer = IssuerUrl::new("https://example.com".to_string()).unwrap();
+    let sub = SubjectIdentifier::new("the_subject".to_string());
+
+    let json_claims = "{\
+                           \"sub\": \"the_subject\",\
+                           \"name\": \"Jane Doe\"\
+                           }";
+
+    // JSON path: matching subject accepted.
+    CoreUserInfoClaims::from_json::<crate::reqwest::Error>(json_claims.as_bytes(), Some(&sub))
+        .expect("verification should succeed");
+
+    // JSON path: mismatched subject rejected.
+    match CoreUserInfoClaims::from_json::<crate::reqwest::Error>(
+        json_claims.as_bytes(),
+        Some(&SubjectIdentifier::new("wrong_subject".to_string())),
+    ) {
+        Err(UserInfoError::ClaimsVerification(ClaimsVerificationError::InvalidSubject(_))) => {}
+        other => panic!("unexpected result: {:?}", other),
+    }
+
+    // Signed path: matching subject accepted.
+    let signed_verifier = CoreUserInfoVerifier::new(
+        client_id.clone(),
+        issuer.clone(),
+        CoreJsonWebKeySet::new(vec![rsa_key.clone()]),
+        Some(sub.clone()),
+    );
+    let jwt_claims: CoreUserInfoJsonWebToken = serde_json::from_value(serde_json::Value::String(
+        "eyJhbGciOiJSUzI1NiJ9.eyJhdWQiOlsibXlfY2xpZW50Il0sImlzcyI6Imh0dHBzOi8vZXhhb\
+                 XBsZS5jb20iLCJzdWIiOiJ0aGVfc3ViamVjdCIsIm5hbWUiOiJKYW5lIERvZSJ9.aX7VpexLAd\
+                 43HtC1cFTot3jmqsr105rB50mzTcS1TXzWcxLbqYf1K7Kf-S1oP-ZCL_dnL9-nu3iDK_vRa6xT\
+                 nGGt3I1JwhoIv6znSS3JOPT1wtekyD-sLcUwqsJHWBBiTSBwlmGG_kVRuGkBtXgVZ9aGlqg9u1\
+                 FlxvyGUJ5q1o9gdb8mKql5ojgsThTNo9qdW3lPIVsiDO-n4mMp4HuOp1re4ZDDkHxiExjtLQAV\
+                 kR4q3SlhJC2mkr4mw3_0a2AW52ocWDiwY_lPcdmohmwFaB8aHlivYLFnmKGQIatEW-KDaW5fFo\
+                 JYreNkplo4FvzXYyxgxAsqHjHMI8MZVEa1IA"
+            .to_string(),
+    ))
+    .expect("failed to deserialize");
+    jwt_claims
+        .clone()
+        .claims(&signed_verifier)
+        .expect("verification should succeed");
+
+    // Signed path: mismatched expected subject is rejected after successful signature
+    // verification.
+    let mismatched_verifier = CoreUserInfoVerifier::new(
+        client_id,
+        issuer,
+        CoreJsonWebKeySet::new(vec![rsa_key]),
+        Some(SubjectIdentifier::new("wrong_subject".to_string())),
+    );
+    match jwt_claims.claims(&mismatched_verifier) {
+        Err(ClaimsVerificationError::InvalidSubject(_)) => {}
+        other => panic!("unexpected result: {:?}", other),
+    }
+}
+
+/// The documented `at_hash` flow resolves the effective verification key for both shared-secret
+/// (client-secret-derived) and asymmetric (JWKS) ID tokens.
+#[test]
+fn test_id_token_verification_key_at_hash() {
+    use base64::Engine;
+    use p256::ecdsa::signature::Signer;
+    use p256::elliptic_curve::sec1::ToEncodedPoint;
+
+    let b64 = crate::core::base64_url_safe_no_pad();
+
+    let client_id = ClientId::new("my_client".to_string());
+    let issuer = IssuerUrl::new("https://example.com".to_string()).unwrap();
+    let nonce = Nonce::new("the_nonce".to_string());
+    let access_token = AccessToken::new("the_access_token".to_string());
+    let secret = "the_client_secret".to_string();
+
+    let mock_current_time = AtomicUsize::new(1544932148);
+    let time_fn = || {
+        Timestamp::Seconds(mock_current_time.load(Ordering::Relaxed).into())
+            .to_utc()
+            .unwrap()
+    };
+
+    let id_claims = CoreIdTokenClaims::new(
+        issuer.clone(),
+        vec![Audience::new((*client_id).clone())],
+        Utc.timestamp_opt(1544932149, 0)
+            .single()
+            .expect("valid timestamp"),
+        Utc.timestamp_opt(1544928549, 0)
+            .single()
+            .expect("valid timestamp"),
+        StandardClaims::new(SubjectIdentifier::new("subject".to_string())),
+        Default::default(),
+    )
+    .set_nonce(Some(nonce.clone()));
+
+    // HS256 ID token with an at_hash computed over the access token.
+    let hmac_key = CoreHmacKey::new(secret.clone());
+    let id_token_hs256 = CoreIdToken::new(
+        id_claims,
+        &hmac_key,
+        CoreJwsSigningAlgorithm::HmacSha256,
+        Some(&access_token),
+        None,
+    )
+    .unwrap();
+
+    // The documented flow works with an EMPTY provider JWKS: the confidential verifier derives
+    // the symmetric verification key from the client secret. HS256 requires explicit
+    // configuration in addition to the confidential verifier.
+    let confidential_verifier = CoreIdTokenVerifier::new_confidential_client(
+        client_id.clone(),
+        ClientSecret::new(secret.clone()),
+        issuer.clone(),
+        CoreJsonWebKeySet::new(vec![]),
+    )
+    .set_allowed_algs(vec![CoreJwsSigningAlgorithm::HmacSha256])
+    .set_time_fn(time_fn);
+    let hs256_claims = id_token_hs256
+        .claims(&confidential_verifier, &nonce)
+        .expect("verification should succeed");
+    let expected_access_token_hash = hs256_claims.access_token_hash().unwrap().clone();
+    let verification_key = id_token_hs256
+        .verification_key(&confidential_verifier)
+        .expect("verification key should resolve from the client secret");
+    let actual_access_token_hash = AccessTokenHash::from_token(
+        &access_token,
+        id_token_hs256.signing_alg().unwrap(),
+        &verification_key,
+    )
+    .unwrap();
+    assert_eq!(actual_access_token_hash, expected_access_token_hash);
+
+    // A substituted access token fails the comparison.
+    let substituted_hash = AccessTokenHash::from_token(
+        &AccessToken::new("substituted_access_token".to_string()),
+        id_token_hs256.signing_alg().unwrap(),
+        &verification_key,
+    )
+    .unwrap();
+    assert_ne!(substituted_hash, expected_access_token_hash);
+
+    // A shared-secret algorithm with a verifier that holds no client secret is an error, not a
+    // panic.
+    let public_verifier = CoreIdTokenVerifier::new_public_client(
+        client_id.clone(),
+        issuer.clone(),
+        CoreJsonWebKeySet::new(vec![]),
+    )
+    .set_time_fn(time_fn);
+    match id_token_hs256.verification_key(&public_verifier) {
+        Err(SignatureVerificationError::DisallowedAlg(_)) => {}
+        other => panic!("unexpected result: {:?}", other),
+    }
+
+    // ES256 at_hash still resolves through the provider JWKS via the same documented call.
+    let seed: [u8; 32] = [0x37; 32];
+    let es256_signing_key = p256::ecdsa::SigningKey::from_bytes(&seed.into())
+        .expect("fixture scalar is a valid P-256 secret key");
+    let public_point =
+        p256::PublicKey::from(es256_signing_key.verifying_key()).to_encoded_point(false);
+    let public_bytes = public_point.as_bytes();
+    let es256_key: CoreJsonWebKey = serde_json::from_value(serde_json::json!({
+        "kty": "EC",
+        "kid": "test-es256-key",
+        "crv": "P-256",
+        "x": b64.encode(&public_bytes[1..33]),
+        "y": b64.encode(&public_bytes[33..65]),
+        "use": "sig",
+    }))
+    .expect("deserialization failed");
+
+    let header = "{\"alg\":\"ES256\",\"typ\":\"JWT\",\"kid\":\"test-es256-key\"}";
+    let payload = "{\"iss\":\"https://example.com\",\"aud\":[\"my_client\"],\
+\"sub\":\"subject\",\"exp\":1544932149,\"iat\":1544928549,\"nonce\":\"the_nonce\"}";
+    let signing_input = format!(
+        "{}.{}",
+        b64.encode(header.as_bytes()),
+        b64.encode(payload.as_bytes())
+    );
+    let signature: p256::ecdsa::Signature = es256_signing_key.sign(signing_input.as_bytes());
+    let id_token_es256: CoreIdToken = format!(
+        "{}.{}",
+        signing_input,
+        b64.encode(signature.to_bytes())
+    )
+    .parse()
+    .expect("failed to deserialize");
+
+    let es256_verifier = CoreIdTokenVerifier::new_public_client(
+        client_id,
+        issuer,
+        CoreJsonWebKeySet::new(vec![es256_key.clone()]),
+    )
+    .set_allowed_algs(vec![CoreJwsSigningAlgorithm::EcdsaP256Sha256])
+    .set_time_fn(time_fn);
+    id_token_es256
+        .claims(&es256_verifier, &nonce)
+        .expect("verification should succeed");
+    let es256_verification_key = id_token_es256
+        .verification_key(&es256_verifier)
+        .expect("verification key should resolve from the JWKS");
+    // The resolved key is the provider's ES256 JWK: it hashes exactly like the fixture key.
+    let from_resolved = es256_verification_key
+        .hash_bytes(
+            access_token.secret().as_bytes(),
+            &CoreJwsSigningAlgorithm::EcdsaP256Sha256,
+        )
+        .unwrap();
+    let from_fixture = es256_key
+        .hash_bytes(
+            access_token.secret().as_bytes(),
+            &CoreJwsSigningAlgorithm::EcdsaP256Sha256,
+        )
+        .unwrap();
+    assert_eq!(from_resolved, from_fixture);
+    let es256_at_hash = AccessTokenHash::from_token(
+        &access_token,
+        id_token_es256.signing_alg().unwrap(),
+        &es256_verification_key,
+    )
+    .unwrap();
+    let es256_expected =
+        AccessTokenHash::new(b64.encode(&from_fixture[0..from_fixture.len() / 2]));
+    assert_eq!(es256_at_hash, es256_expected);
 }

@@ -489,6 +489,26 @@ where
             )))
         }
     }
+
+    /// Returns the effective [`JsonWebKey`] for verifying a JWT signed with the given algorithm:
+    /// the client-secret-derived symmetric key for shared-secret algorithms (which requires a
+    /// confidential verifier, i.e., one holding a client secret), or the matching provider key
+    /// from the signature key set otherwise.
+    pub(crate) fn verification_key(
+        &self,
+        key_id: Option<&JsonWebKeyId>,
+        signature_alg: &K::SigningAlgorithm,
+    ) -> Result<K, SignatureVerificationError> {
+        if signature_alg.uses_shared_secret() {
+            if let Some(client_secret) = &self.client_secret {
+                return Ok(K::new_symmetric(client_secret.secret().clone().into_bytes()));
+            }
+            return Err(SignatureVerificationError::DisallowedAlg(
+                "symmetric signatures require a confidential client (client secret)".to_string(),
+            ));
+        }
+        self.signing_key(key_id, signature_alg).cloned()
+    }
 }
 
 /// Trait for verifying ID token nonces.
@@ -865,6 +885,12 @@ where
 }
 
 /// User info verifier.
+///
+/// Verifies a signed JWT user info response: signature (against an explicit algorithm allowlist,
+/// `RS256`-only by default), issuer, and audience, plus the expected subject when one is
+/// configured. Verifying `ES256`/`ES384` responses requires opting in via
+/// [`set_allowed_algs`](Self::set_allowed_algs); `HS256`/`HS384`/`HS512` additionally require a
+/// confidential verifier ([`new_confidential_client`](Self::new_confidential_client)).
 #[derive(Clone)]
 pub struct UserInfoVerifier<'a, JE, K>
 where
@@ -898,6 +924,27 @@ where
         }
     }
 
+    /// Instantiates a user info verifier for a confidential client (i.e., one with a client
+    /// secret).
+    ///
+    /// A confidential verifier is required in order to verify signed user info responses that use
+    /// a shared secret algorithm such as `HS256`, `HS384`, or `HS512`. For these algorithms, the
+    /// client secret is the shared secret.
+    pub fn new_confidential_client(
+        client_id: ClientId,
+        client_secret: ClientSecret,
+        issuer: IssuerUrl,
+        signature_keys: JsonWebKeySet<K>,
+        expected_subject: Option<SubjectIdentifier>,
+    ) -> Self {
+        UserInfoVerifier {
+            jwt_verifier: JwtClaimsVerifier::new(client_id, issuer, signature_keys)
+                .set_client_secret(client_secret),
+            expected_subject,
+            _phantom: PhantomData,
+        }
+    }
+
     pub(crate) fn expected_subject(&self) -> Option<&SubjectIdentifier> {
         self.expected_subject.as_ref()
     }
@@ -911,6 +958,36 @@ where
     /// Specifies whether the audience claim must match this client's client ID.
     pub fn require_audience_match(mut self, aud_required: bool) -> Self {
         self.jwt_verifier = self.jwt_verifier.require_audience_match(aud_required);
+        self
+    }
+
+    /// Specifies which JSON Web Signature algorithms are supported.
+    ///
+    /// The default allowlist contains only `RS256`. Verifying signed user info responses from
+    /// providers that sign with `ES256`, `ES384`, or an `HS*` algorithm requires explicitly
+    /// allowing those algorithms here; `HS*` algorithms additionally require the verifier to
+    /// have been created for a confidential client
+    /// ([`new_confidential_client`](Self::new_confidential_client)).
+    ///
+    /// There is deliberately no method for allowing *any* algorithm. Unlike an ID token, the
+    /// relying party did not request this JWT, so it cannot constrain the algorithm the same
+    /// way; an explicit allowlist is the only supported configuration and defends against
+    /// algorithm-confusion attacks.
+    pub fn set_allowed_algs<I>(mut self, algs: I) -> Self
+    where
+        I: IntoIterator<Item = K::SigningAlgorithm>,
+    {
+        self.jwt_verifier = self.jwt_verifier.set_allowed_algs(algs);
+        self
+    }
+
+    /// Specifies the client secret used to verify signed user info responses that use a shared
+    /// secret algorithm such as `HS256`, `HS384`, or `HS512`.
+    ///
+    /// For these algorithms, the octets of the UTF-8 representation of the client secret are used
+    /// as the key to validate the signature.
+    pub fn set_client_secret(mut self, client_secret: ClientSecret) -> Self {
+        self.jwt_verifier = self.jwt_verifier.set_client_secret(client_secret);
         self
     }
 
