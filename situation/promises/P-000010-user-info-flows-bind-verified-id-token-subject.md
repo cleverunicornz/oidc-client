@@ -41,6 +41,14 @@ authorizes the deltas). Witnesses have not been collected yet; the parent's
 final gate attaches them under `situation/witnesses/P-000010/` and applies the
 oracle to decide the disposition.
 
+Attached at the parent's final gate (2026-09-23, head
+`b96b920f52e0d8b392edcf0b5d752fa570c2b356`):
+situation/witnesses/P-000010/W-000013-user-info-subject-binding.md — Result
+PASS: the fixture legs by the gate lib suite, the tutorial leg by the gate
+doctest run, and the `gitlab` example leg by a retained
+`cargo check --offline --example gitlab --features reqwest-blocking`
+observation at that head.
+
 ## Residual
 
 The tutorials are `no_run` documentation: compilation of the documented call is

@@ -37,6 +37,13 @@ authorizes the deltas). Witnesses have not been collected yet; the parent's fina
 attaches them under `situation/witnesses/P-000012/` and applies the oracle to decide the
 disposition.
 
+Attached at the parent's final gate (2026-09-23, head
+`b96b920f52e0d8b392edcf0b5d752fa570c2b356`):
+situation/witnesses/P-000012/W-000015-content-type-essence-optional-whitespace.md
+— Result PASS: every O-000013 leg is executable and was decided by the gate
+run (`cargo test --all-features --offline`, lib suite 99 passed / 0
+failed).
+
 ## Residual
 
 Only ASCII case variance and SP/HTAB whitespace are exercised; other legal-but-unusual field

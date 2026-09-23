@@ -40,6 +40,13 @@ authorizes the deltas). Witnesses have not been collected yet; the parent's
 final gate attaches them under `situation/witnesses/P-000008/` and applies the
 oracle to decide the disposition.
 
+Attached at the parent's final gate (2026-09-23, head
+`b96b920f52e0d8b392edcf0b5d752fa570c2b356`):
+situation/witnesses/P-000008/W-000011-signed-user-info-verification-policy.md —
+Result PASS: every executable O-000009 leg was decided by the gate run
+(`cargo test --all-features --offline`, lib suite 99 passed / 0 failed) and
+the manual F6 leg by API-surface inspection at that head.
+
 ## Residual
 
 `ES384`, `HS384`, and `HS512` follow the same dispatch as the tested `ES256`

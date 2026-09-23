@@ -47,6 +47,14 @@ confirming the tests defend the contract. No Witness exists yet: witnesses
 are to be collected under `situation/witnesses/P-000013/` by the parent's
 final gate, not by this stream.
 
+Attached at the parent's final gate (2026-09-23, head
+`b96b920f52e0d8b392edcf0b5d752fa570c2b356`):
+situation/witnesses/P-000013/W-000016-jwk-debug-secret-redaction.md —
+Result PASS: every O-000014 leg was decided by the gate run (`cargo test
+--all-features --offline`, lib suite 99 passed / 0 failed, which includes
+the `core::jwk` suite); the stream's focused battery is cited there as
+corroboration.
+
 ## Residual
 
 Assurance is not complete: no Oracle has been applied to a Witness, so this

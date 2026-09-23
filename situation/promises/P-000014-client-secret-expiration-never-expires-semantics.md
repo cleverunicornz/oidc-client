@@ -59,6 +59,13 @@ zero-sentinel check disabled failed exactly
 witnesses are to be collected under `situation/witnesses/P-000014/` by
 the parent's final gate.
 
+Attached at the parent's final gate (2026-09-23, head
+`b96b920f52e0d8b392edcf0b5d752fa570c2b356`):
+situation/witnesses/P-000014/W-000017-client-secret-expiration-semantics.md —
+Result PASS: the registration-suite legs were decided by the gate run and
+the compile leg (P7) by the gate's test-target build plus the stream's
+recorded `cargo check --offline --tests` clean result.
+
 ## Residual
 
 Assurance is not complete: the oracle has not been applied to a witness,

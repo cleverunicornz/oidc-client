@@ -42,6 +42,12 @@ authorizes the deltas). Witnesses have not been collected yet; the parent's
 final gate attaches them under `situation/witnesses/P-000009/` and applies the
 oracle to decide the disposition.
 
+Attached at the parent's final gate (2026-09-23, head
+`b96b920f52e0d8b392edcf0b5d752fa570c2b356`):
+situation/witnesses/P-000009/W-000012-documented-at-hash-flow.md — Result
+PASS: the fixture legs were decided by the gate lib suite and the doctest
+leg by the gate's 7 passed / 2 ignored doctest run under `--all-features`.
+
 ## Residual
 
 `HS384`/`HS512` and `ES384` follow the same dispatch as the tested `HS256` and
