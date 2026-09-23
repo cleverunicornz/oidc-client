@@ -738,6 +738,75 @@ pub trait AdditionalClientRegistrationResponse: Debug + DeserializeOwned + Seria
 pub struct EmptyAdditionalClientRegistrationResponse {}
 impl AdditionalClientRegistrationResponse for EmptyAdditionalClientRegistrationResponse {}
 
+/// The expiration time of a client secret issued by a dynamic client
+/// registration response.
+///
+/// OpenID Connect Dynamic Client Registration 2
+/// ([Client Metadata](https://openid.net/specs/openid-connect-registration-1_0.html#ClientMetadata))
+/// defines the `client_secret_expires_at` JSON number `0` to mean that the
+/// client secret does not expire. This type keeps that sentinel explicit
+/// instead of deserializing it as an already-expired 1970-01-01T00:00:00Z
+/// timestamp:
+///
+/// - [`ClientSecretExpiration::NeverExpires`] deserializes from the numeric
+///   value `0` and serializes back to `0`.
+/// - [`ClientSecretExpiration::ExpiresAt`] deserializes from any other
+///   numeric timestamp (seconds since the Unix epoch, rounded down to the
+///   nearest second, or an RFC 3339 string when the
+///   `accept-rfc3339-timestamps` feature is enabled) and serializes back to
+///   its timestamp in seconds.
+///
+/// An absent `client_secret_expires_at` field deserializes to
+/// [`Option::None`], keeping the three states distinct: absent, never
+/// expires, and expires at a specific time.
+#[derive(Clone, Debug, PartialEq, Eq)]
+pub enum ClientSecretExpiration {
+    /// The client secret does not expire (the numeric JSON value `0`).
+    NeverExpires,
+    /// The client secret expires at the specified time.
+    ExpiresAt(DateTime<Utc>),
+}
+
+impl Serialize for ClientSecretExpiration {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: Serializer,
+    {
+        match self {
+            Self::NeverExpires => serializer.serialize_i64(0),
+            Self::ExpiresAt(expires_at) => Timestamp::from_utc(expires_at).serialize(serializer),
+        }
+    }
+}
+
+impl<'de> Deserialize<'de> for ClientSecretExpiration {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: Deserializer<'de>,
+    {
+        let timestamp = Timestamp::deserialize(deserializer)?;
+
+        // OpenID Connect Dynamic Client Registration 2 defines the numeric
+        // value 0 to mean the client secret does not expire.
+        let never_expires = match &timestamp {
+            Timestamp::Seconds(seconds) => seconds.as_f64() == Some(0.0),
+            #[cfg(feature = "accept-rfc3339-timestamps")]
+            Timestamp::Rfc3339(_) => false,
+        };
+        if never_expires {
+            return Ok(Self::NeverExpires);
+        }
+
+        let expires_at = timestamp.to_utc().map_err(|_| {
+            serde::de::Error::custom(format!(
+                "failed to parse `{}` as UTC datetime (in seconds)",
+                timestamp
+            ))
+        })?;
+        Ok(Self::ExpiresAt(expires_at))
+    }
+}
+
 /// Response to a dynamic client registration request.
 #[serde_as]
 #[skip_serializing_none]
@@ -763,8 +832,7 @@ where
     registration_client_uri: Option<ClientConfigUrl>,
     #[serde_as(as = "Option<Timestamp>")]
     client_id_issued_at: Option<DateTime<Utc>>,
-    #[serde_as(as = "Option<Timestamp>")]
-    client_secret_expires_at: Option<DateTime<Utc>>,
+    client_secret_expires_at: Option<ClientSecretExpiration>,
     #[serde(bound = "AC: AdditionalClientMetadata", flatten)]
     client_metadata: ClientMetadata<AC, AT, CA, G, JE, JK, K, RT, S>,
 
@@ -832,7 +900,7 @@ where
               -> registration_access_token[Option<RegistrationAccessToken>],
             set_registration_client_uri -> registration_client_uri[Option<ClientConfigUrl>],
             set_client_id_issued_at -> client_id_issued_at[Option<DateTime<Utc>>],
-            set_client_secret_expires_at -> client_secret_expires_at[Option<DateTime<Utc>>],
+            set_client_secret_expires_at -> client_secret_expires_at[Option<ClientSecretExpiration>],
         }
     ];
 

@@ -10,6 +10,7 @@ use crate::{
     SectorIdentifierUrl, ToSUrl,
 };
 use crate::{ClientId, RedirectUrl};
+use crate::registration::ClientSecretExpiration;
 
 use chrono::{TimeZone, Utc};
 use itertools::sorted;
@@ -388,10 +389,12 @@ fn test_response_serialization() {
             .expect("valid timestamp")
     );
     assert_eq!(
-        registration_response.client_secret_expires_at().unwrap(),
-        Utc.timestamp_opt(1526545306, 0)
-            .single()
-            .expect("valid timestamp")
+        registration_response.client_secret_expires_at(),
+        Some(&ClientSecretExpiration::ExpiresAt(
+            Utc.timestamp_opt(1526545306, 0)
+                .single()
+                .expect("valid timestamp")
+        )),
     );
     assert_eq!(
         *registration_response.redirect_uris(),
@@ -639,6 +642,147 @@ fn test_response_serialization() {
     assert_eq!(
         registration_response.additional_response,
         deserialized.additional_response,
+    );
+}
+
+#[test]
+fn test_client_secret_expiration_never_expires() {
+    let json_response = r#"{
+            "client_id": "abcdefgh",
+            "client_secret_expires_at": 0,
+            "redirect_uris": ["https://example.com/redirect-1"]
+        }"#;
+
+    let registration_response: CoreClientRegistrationResponse =
+        serde_json::from_str(json_response).unwrap();
+
+    // The numeric value 0 means the client secret does not expire; it must
+    // not surface as an already-expired Unix-epoch timestamp.
+    assert_eq!(
+        registration_response.client_secret_expires_at(),
+        Some(&ClientSecretExpiration::NeverExpires)
+    );
+
+    // Round trip: never-expires serializes back to the numeric sentinel 0.
+    let serialized_json = serde_json::to_string(&registration_response).unwrap();
+    assert!(
+        serialized_json.contains(r#""client_secret_expires_at":0"#),
+        "unexpected serialization: {}",
+        serialized_json
+    );
+    let deserialized: CoreClientRegistrationResponse =
+        serde_json::from_str(&serialized_json).unwrap();
+    assert_eq!(
+        deserialized.client_secret_expires_at(),
+        Some(&ClientSecretExpiration::NeverExpires)
+    );
+}
+
+#[test]
+fn test_client_secret_expiration_expires_at() {
+    let json_response = r#"{
+            "client_id": "abcdefgh",
+            "client_secret_expires_at": 1526545306,
+            "redirect_uris": ["https://example.com/redirect-1"]
+        }"#;
+
+    let registration_response: CoreClientRegistrationResponse =
+        serde_json::from_str(json_response).unwrap();
+
+    // Any other numeric timestamp is a real expiry, keeping the shared
+    // Timestamp adapter's round-down semantics.
+    let expected = ClientSecretExpiration::ExpiresAt(
+        Utc.timestamp_opt(1526545306, 0)
+            .single()
+            .expect("valid timestamp"),
+    );
+    assert_eq!(
+        registration_response.client_secret_expires_at(),
+        Some(&expected)
+    );
+
+    // Round trip: a real expiry serializes back to its timestamp in seconds.
+    let serialized_json = serde_json::to_string(&registration_response).unwrap();
+    assert!(
+        serialized_json.contains(r#""client_secret_expires_at":1526545306"#),
+        "unexpected serialization: {}",
+        serialized_json
+    );
+    let deserialized: CoreClientRegistrationResponse =
+        serde_json::from_str(&serialized_json).unwrap();
+    assert_eq!(deserialized.client_secret_expires_at(), Some(&expected));
+}
+
+#[test]
+fn test_client_secret_expiration_absent() {
+    let json_response = r#"{
+            "client_id": "abcdefgh",
+            "redirect_uris": ["https://example.com/redirect-1"]
+        }"#;
+
+    let registration_response: CoreClientRegistrationResponse =
+        serde_json::from_str(json_response).unwrap();
+
+    // A missing field stays absent: None is distinct from never-expires.
+    assert_eq!(registration_response.client_secret_expires_at(), None);
+
+    // Round trip: an absent expiry is omitted on serialization.
+    let serialized_json = serde_json::to_string(&registration_response).unwrap();
+    assert!(
+        !serialized_json.contains("client_secret_expires_at"),
+        "absent expiry must stay omitted: {}",
+        serialized_json
+    );
+    let deserialized: CoreClientRegistrationResponse =
+        serde_json::from_str(&serialized_json).unwrap();
+    assert_eq!(deserialized.client_secret_expires_at(), None);
+}
+
+#[test]
+fn test_client_secret_expiration_setter() {
+    use crate::registration::{
+        EmptyAdditionalClientMetadata, EmptyAdditionalClientRegistrationResponse,
+    };
+
+    // The setter accepts both states, and a never-expires value is stored as
+    // never-expiring rather than an already-expired epoch timestamp.
+    let registration_response = CoreClientRegistrationResponse::new(
+        ClientId::new("abcdefgh".to_string()),
+        vec![RedirectUrl::new("https://example.com/redirect-1".to_string()).unwrap()],
+        EmptyAdditionalClientMetadata {},
+        EmptyAdditionalClientRegistrationResponse {},
+    )
+    .set_client_secret_expires_at(Some(ClientSecretExpiration::NeverExpires));
+    assert_eq!(
+        registration_response.client_secret_expires_at(),
+        Some(&ClientSecretExpiration::NeverExpires)
+    );
+    let serialized_json = serde_json::to_string(&registration_response).unwrap();
+    assert!(
+        serialized_json.contains(r#""client_secret_expires_at":0"#),
+        "unexpected serialization: {}",
+        serialized_json
+    );
+
+    let registration_response = registration_response
+        .set_client_secret_expires_at(Some(ClientSecretExpiration::ExpiresAt(
+            Utc.timestamp_opt(1526545306, 0)
+                .single()
+                .expect("valid timestamp"),
+        )));
+    assert_eq!(
+        registration_response.client_secret_expires_at(),
+        Some(&ClientSecretExpiration::ExpiresAt(
+            Utc.timestamp_opt(1526545306, 0)
+                .single()
+                .expect("valid timestamp")
+        ))
+    );
+    let serialized_json = serde_json::to_string(&registration_response).unwrap();
+    assert!(
+        serialized_json.contains(r#""client_secret_expires_at":1526545306"#),
+        "unexpected serialization: {}",
+        serialized_json
     );
 }
 
