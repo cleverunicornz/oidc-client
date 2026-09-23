@@ -1,0 +1,7 @@
+Toolchain inventory on the verification host at MSRV proof time.
+
+$ rustup toolchain list; echo exit=$?
+nightly-x86_64-unknown-linux-gnu
+1.96.0-x86_64-unknown-linux-gnu
+1.98.0-x86_64-unknown-linux-gnu (active, default)
+exit=0

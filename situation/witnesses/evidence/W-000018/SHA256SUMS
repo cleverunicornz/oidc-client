@@ -1,0 +1,8 @@
+# Evidence for W-000018 — MSRV compile proof against commit e0860535f99aa50ad3d45befcea7ed1644864cc0 (fix/prepublication-hardening), observed 2026-09-23.
+# The retained logs contain the full verbatim output of the recorded commands.
+
+0a464a4b6b3e97ba3dadf99a02f4993fe40addc852c1d99fe8b562cd7ad62615  msrv-check-1.96.0.log
+b5f513436b5633339f4c1eb72ead2aedc7e5af16ed393dcc4ea67d0d70dd30e6  msrv-check-1.96.0-recheck.log
+2f2ede21addeeaaff10ea8fe34e2582709e2ae31bcca9d9aad9c175701af8f86  msrv-check-1.98.0.log
+585e3643039ade1d2cb4cadb65175bc02eefd577e031aeeef21d2becb76fa44b  msrv-check-nightly-informational.log
+562975a06ae9aa0fd6ef42c29a8bc28bb8f5472292778aca7e16f05d277e5adb  msrv-toolchain-inventory.log
