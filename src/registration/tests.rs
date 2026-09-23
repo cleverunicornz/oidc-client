@@ -641,3 +641,218 @@ fn test_response_serialization() {
         deserialized.additional_response,
     );
 }
+
+#[derive(Debug)]
+struct MockHttpClientError;
+
+impl std::fmt::Display for MockHttpClientError {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        f.write_str("mock http client error")
+    }
+}
+
+impl std::error::Error for MockHttpClientError {}
+
+use std::future::Future;
+
+/// Returns an HTTP client that records each dispatched request and answers with the given
+/// response parts.
+fn recording_client(
+    dispatched: std::rc::Rc<std::cell::RefCell<Vec<crate::HttpRequest>>>,
+    status: http::StatusCode,
+    content_type: &'static str,
+    body: &'static str,
+) -> impl Fn(crate::HttpRequest) -> Result<crate::HttpResponse, MockHttpClientError> {
+    move |request| {
+        dispatched.borrow_mut().push(request);
+        Ok(http::Response::builder()
+            .status(status)
+            .header(http::header::CONTENT_TYPE, content_type)
+            .body(body.as_bytes().to_vec())
+            .unwrap())
+    }
+}
+
+/// Returns an asynchronous HTTP client with the same recording behavior, shaped for the
+/// `AsyncHttpClient` blanket impl.
+fn recording_async_client(
+    dispatched: std::rc::Rc<std::cell::RefCell<Vec<crate::HttpRequest>>>,
+) -> impl Fn(
+    crate::HttpRequest,
+) -> std::pin::Pin<
+    Box<dyn Future<Output = Result<crate::HttpResponse, MockHttpClientError>>>,
+> {
+    move |request| {
+        let dispatched = dispatched.clone();
+        Box::pin(async move {
+            dispatched.borrow_mut().push(request);
+            Ok(http::Response::builder()
+                .status(http::StatusCode::CREATED)
+                .header(http::header::CONTENT_TYPE, "application/json")
+                .body(
+                    "{\"client_id\":\"my_client\",\"redirect_uris\":[\"https://client.example.com/cb\"]}"
+                        .as_bytes()
+                        .to_vec(),
+                )
+                .unwrap())
+        })
+    }
+}
+
+/// A provider-issued initial access token containing a control character fails registration
+/// request preparation without panicking, without echoing the token bytes, and without
+/// dispatching any HTTP call.
+#[test]
+fn test_registration_malformed_initial_access_token_errors_before_dispatch() {
+    use crate::core::CoreClientRegistrationRequest;
+    use crate::registration::{ClientRegistrationError, EmptyAdditionalClientMetadata};
+    use crate::{AccessToken, RegistrationUrl};
+
+    let request = CoreClientRegistrationRequest::new(
+        vec![RedirectUrl::new("https://client.example.com/cb".to_string()).unwrap()],
+        EmptyAdditionalClientMetadata {},
+    )
+    .set_initial_access_token(Some(AccessToken::new("the_access\ntoken".to_string())));
+    let registration_url =
+        RegistrationUrl::new("https://server.example.com/register".to_string()).unwrap();
+
+    let dispatched = std::rc::Rc::new(std::cell::RefCell::new(Vec::new()));
+    let http_client = recording_client(
+        dispatched.clone(),
+        http::StatusCode::CREATED,
+        "application/json",
+        "{}",
+    );
+
+    match request.register(&registration_url, &http_client) {
+        Err(ClientRegistrationError::Other(message)) => {
+            assert!(
+                message.contains("failed to prepare request"),
+                "unexpected error message: {message}"
+            );
+            assert!(
+                !message.contains("the_access"),
+                "error must not echo the access token: {message}"
+            );
+        }
+        other => panic!("expected a request-preparation error, got: {other:?}"),
+    }
+    assert!(
+        dispatched.borrow().is_empty(),
+        "no HTTP call should be dispatched"
+    );
+}
+
+/// The asynchronous registration path surfaces the same preparation failure without
+/// dispatching: request preparation runs before the first await, so polling once with a no-op
+/// waker (no async executor in the dev-dependencies) returns the ready error.
+#[test]
+fn test_registration_async_malformed_initial_access_token_errors_before_dispatch() {
+    use crate::core::CoreClientRegistrationRequest;
+    use crate::registration::{ClientRegistrationError, EmptyAdditionalClientMetadata};
+    use crate::{AccessToken, RegistrationUrl};
+
+    let request = CoreClientRegistrationRequest::new(
+        vec![RedirectUrl::new("https://client.example.com/cb".to_string()).unwrap()],
+        EmptyAdditionalClientMetadata {},
+    )
+    .set_initial_access_token(Some(AccessToken::new("the_access\ntoken".to_string())));
+    let registration_url =
+        RegistrationUrl::new("https://server.example.com/register".to_string()).unwrap();
+
+    let dispatched = std::rc::Rc::new(std::cell::RefCell::new(Vec::new()));
+    let http_client = recording_async_client(dispatched.clone());
+
+    let mut future = Box::pin(request.register_async(&registration_url, &http_client));
+    let mut cx = std::task::Context::from_waker(std::task::Waker::noop());
+    match future.as_mut().poll(&mut cx) {
+        std::task::Poll::Ready(Err(ClientRegistrationError::Other(message))) => {
+            assert!(
+                message.contains("failed to prepare request"),
+                "unexpected error message: {message}"
+            );
+            assert!(
+                !message.contains("the_access"),
+                "error must not echo the access token: {message}"
+            );
+        }
+        other => panic!("expected a ready request-preparation error, got: {other:?}"),
+    }
+    assert!(
+        dispatched.borrow().is_empty(),
+        "no HTTP call should be dispatched"
+    );
+}
+
+/// A valid initial access token still produces the expected `Authorization: Bearer` header on
+/// the dispatched registration request, and the response Content-Type check accepts RFC 7231
+/// optional whitespace and case variance.
+#[test]
+fn test_registration_sends_bearer_header_and_accepts_ows_content_type() {
+    use crate::core::CoreClientRegistrationRequest;
+    use crate::registration::EmptyAdditionalClientMetadata;
+    use crate::{AccessToken, ClientId, RegistrationUrl};
+    use http::header::HeaderValue;
+
+    let request = CoreClientRegistrationRequest::new(
+        vec![RedirectUrl::new("https://client.example.com/cb".to_string()).unwrap()],
+        EmptyAdditionalClientMetadata {},
+    )
+    .set_initial_access_token(Some(AccessToken::new("the_access_token".to_string())));
+    let registration_url =
+        RegistrationUrl::new("https://server.example.com/register".to_string()).unwrap();
+
+    let dispatched = std::rc::Rc::new(std::cell::RefCell::new(Vec::new()));
+    let http_client = recording_client(
+        dispatched.clone(),
+        http::StatusCode::CREATED,
+        "APPLICATION/JSON ; charset=UTF-8",
+        "{\"client_id\":\"my_client\",\"redirect_uris\":[\"https://client.example.com/cb\"]}",
+    );
+
+    let response = request
+        .register(&registration_url, &http_client)
+        .expect("registration should succeed");
+    assert_eq!(*response.client_id(), ClientId::new("my_client".to_string()));
+
+    let dispatched = dispatched.borrow();
+    assert_eq!(dispatched.len(), 1);
+    assert_eq!(
+        dispatched[0].headers().get(http::header::AUTHORIZATION),
+        Some(&HeaderValue::from_static("Bearer the_access_token")),
+    );
+}
+
+/// Registering without an initial access token sends no Authorization header.
+#[test]
+fn test_registration_without_access_token_sends_no_authorization_header() {
+    use crate::core::CoreClientRegistrationRequest;
+    use crate::registration::EmptyAdditionalClientMetadata;
+    use crate::RegistrationUrl;
+
+    let request = CoreClientRegistrationRequest::new(
+        vec![RedirectUrl::new("https://client.example.com/cb".to_string()).unwrap()],
+        EmptyAdditionalClientMetadata {},
+    );
+    let registration_url =
+        RegistrationUrl::new("https://server.example.com/register".to_string()).unwrap();
+
+    let dispatched = std::rc::Rc::new(std::cell::RefCell::new(Vec::new()));
+    let http_client = recording_client(
+        dispatched.clone(),
+        http::StatusCode::CREATED,
+        "application/json",
+        "{\"client_id\":\"my_client\",\"redirect_uris\":[\"https://client.example.com/cb\"]}",
+    );
+
+    request
+        .register(&registration_url, &http_client)
+        .expect("registration should succeed");
+
+    let dispatched = dispatched.borrow();
+    assert_eq!(dispatched.len(), 1);
+    assert!(
+        dispatched[0].headers().get(http::header::AUTHORIZATION).is_none(),
+        "no Authorization header should be sent without an initial access token"
+    );
+}

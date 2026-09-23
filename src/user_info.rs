@@ -188,7 +188,8 @@ where
     }
 
     fn prepare_request(&self) -> Result<HttpRequest, http::Error> {
-        let (auth_header, auth_value) = auth_bearer(&self.access_token);
+        let (auth_header, auth_value) =
+            auth_bearer(&self.access_token).map_err(http::Error::from)?;
         let accept_value = match self.response_type {
             UserInfoResponseType::Jwt => MIME_TYPE_JWT,
             _ => MIME_TYPE_JSON,
@@ -587,8 +588,11 @@ mod tests {
     use crate::{AdditionalClaims, UserInfoClaims};
 
     use serde::{Deserialize, Serialize};
-
     use std::collections::HashMap;
+
+    use std::future::Future;
+
+    use crate::{HttpRequest, HttpResponse};
 
     #[derive(Clone, Debug, Deserialize, PartialEq, Serialize)]
     struct TestClaims {
@@ -754,6 +758,267 @@ mod tests {
                 ),
             )) => {}
             other => panic!("unexpected result: {:?}", other),
+        }
+    }
+
+    /// Error type for the recording mock HTTP clients used in the tests below.
+    #[derive(Debug)]
+    struct MockHttpClientError;
+
+    impl std::fmt::Display for MockHttpClientError {
+        fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+            f.write_str("mock http client error")
+        }
+    }
+
+    impl std::error::Error for MockHttpClientError {}
+
+    /// Returns an HTTP client that records each dispatched request and answers with a JSON
+    /// user info response carrying the given status and Content-Type.
+    fn recording_client(
+        dispatched: std::rc::Rc<std::cell::RefCell<Vec<HttpRequest>>>,
+        status: http::StatusCode,
+        content_type: &'static str,
+    ) -> impl Fn(HttpRequest) -> Result<HttpResponse, MockHttpClientError> {
+        move |request| {
+            dispatched.borrow_mut().push(request);
+            Ok(http::Response::builder()
+                .status(status)
+                .header(http::header::CONTENT_TYPE, content_type)
+                .body("{\"sub\":\"the_subject\"}".as_bytes().to_vec())
+                .unwrap())
+        }
+    }
+
+    /// Returns an asynchronous HTTP client with the same recording behavior, shaped for the
+    /// `AsyncHttpClient` blanket impl.
+    fn recording_async_client(
+        dispatched: std::rc::Rc<std::cell::RefCell<Vec<HttpRequest>>>,
+    ) -> impl Fn(
+        HttpRequest,
+    ) -> std::pin::Pin<
+        Box<dyn Future<Output = Result<HttpResponse, MockHttpClientError>>>,
+    > {
+        move |request| {
+            let dispatched = dispatched.clone();
+            Box::pin(async move {
+                dispatched.borrow_mut().push(request);
+                Ok(http::Response::builder()
+                    .status(http::StatusCode::OK)
+                    .header(http::header::CONTENT_TYPE, "application/json")
+                    .body("{\"sub\":\"the_subject\"}".as_bytes().to_vec())
+                    .unwrap())
+            })
+        }
+    }
+
+    /// A provider-issued access token containing a control character fails request preparation
+    /// through the public path without panicking, without echoing the token bytes, and without
+    /// dispatching any HTTP call.
+    #[test]
+    fn test_user_info_request_malformed_access_token_fails_without_dispatch() {
+        use crate::core::{
+            CoreJweContentEncryptionAlgorithm, CoreJsonWebKey, CoreJsonWebKeySet,
+            CoreUserInfoVerifier,
+        };
+        use crate::{
+            AccessToken, ClientId, EmptyAdditionalClaims, IssuerUrl, SubjectIdentifier,
+            UserInfoError, UserInfoRequest, UserInfoResponseType,
+        };
+
+        let url = crate::UserInfoUrl::new("https://example.com/userinfo".to_string()).unwrap();
+        let request = UserInfoRequest::<CoreJweContentEncryptionAlgorithm, CoreJsonWebKey> {
+            url: &url,
+            access_token: AccessToken::new("the_access\ntoken".to_string()),
+            require_signed_response: false,
+            response_type: UserInfoResponseType::Json,
+            signed_response_verifier: CoreUserInfoVerifier::new(
+                ClientId::new("my_client".to_string()),
+                IssuerUrl::new("https://example.com".to_string()).unwrap(),
+                CoreJsonWebKeySet::new(vec![]),
+                Some(SubjectIdentifier::new("the_subject".to_string())),
+            ),
+        };
+
+        let dispatched = std::rc::Rc::new(std::cell::RefCell::new(Vec::new()));
+        let http_client = recording_client(
+            dispatched.clone(),
+            http::StatusCode::OK,
+            "application/json",
+        );
+
+        match request.request::<EmptyAdditionalClaims, CoreGenderClaim, _>(&http_client) {
+            Err(UserInfoError::Other(message)) => {
+                assert!(
+                    message.contains("failed to prepare request"),
+                    "unexpected error message: {message}"
+                );
+                assert!(
+                    !message.contains("the_access"),
+                    "error must not echo the access token: {message}"
+                );
+            }
+            other => panic!("expected a request-preparation error, got: {other:?}"),
+        }
+        assert!(
+            dispatched.borrow().is_empty(),
+            "no HTTP call should be dispatched"
+        );
+    }
+
+    /// The asynchronous path surfaces the same preparation failure without dispatching: request
+    /// preparation runs before the first await, so polling once with a no-op waker (no async
+    /// executor in the dev-dependencies) returns the ready error.
+    #[test]
+    fn test_user_info_request_async_malformed_access_token_fails_without_dispatch() {
+        use crate::core::{
+            CoreJweContentEncryptionAlgorithm, CoreJsonWebKey, CoreJsonWebKeySet,
+            CoreUserInfoVerifier,
+        };
+        use crate::{
+            AccessToken, ClientId, EmptyAdditionalClaims, IssuerUrl, SubjectIdentifier,
+            UserInfoError, UserInfoRequest, UserInfoResponseType,
+        };
+
+        let url = crate::UserInfoUrl::new("https://example.com/userinfo".to_string()).unwrap();
+        let request = UserInfoRequest::<CoreJweContentEncryptionAlgorithm, CoreJsonWebKey> {
+            url: &url,
+            access_token: AccessToken::new("the_access\ntoken".to_string()),
+            require_signed_response: false,
+            response_type: UserInfoResponseType::Json,
+            signed_response_verifier: CoreUserInfoVerifier::new(
+                ClientId::new("my_client".to_string()),
+                IssuerUrl::new("https://example.com".to_string()).unwrap(),
+                CoreJsonWebKeySet::new(vec![]),
+                Some(SubjectIdentifier::new("the_subject".to_string())),
+            ),
+        };
+
+        let dispatched = std::rc::Rc::new(std::cell::RefCell::new(Vec::new()));
+        let http_client = recording_async_client(dispatched.clone());
+
+        let mut future = Box::pin(
+            request.request_async::<EmptyAdditionalClaims, _, CoreGenderClaim>(&http_client),
+        );
+        let mut cx = std::task::Context::from_waker(std::task::Waker::noop());
+        match future.as_mut().poll(&mut cx) {
+            std::task::Poll::Ready(Err(UserInfoError::Other(message))) => {
+                assert!(
+                    message.contains("failed to prepare request"),
+                    "unexpected error message: {message}"
+                );
+                assert!(
+                    !message.contains("the_access"),
+                    "error must not echo the access token: {message}"
+                );
+            }
+            other => panic!("expected a ready request-preparation error, got: {other:?}"),
+        }
+        assert!(
+            dispatched.borrow().is_empty(),
+            "no HTTP call should be dispatched"
+        );
+    }
+
+    /// A valid access token still produces the expected `Authorization: Bearer` header on the
+    /// dispatched request, and the JSON response parses into claims.
+    #[test]
+    fn test_user_info_request_sends_bearer_header() {
+        use crate::core::{
+            CoreJweContentEncryptionAlgorithm, CoreJsonWebKey, CoreJsonWebKeySet,
+            CoreUserInfoVerifier,
+        };
+        use crate::{
+            AccessToken, ClientId, EmptyAdditionalClaims, IssuerUrl, SubjectIdentifier,
+            UserInfoRequest, UserInfoResponseType,
+        };
+        use http::header::HeaderValue;
+
+        let sub = SubjectIdentifier::new("the_subject".to_string());
+        let url = crate::UserInfoUrl::new("https://example.com/userinfo".to_string()).unwrap();
+        let request = UserInfoRequest::<CoreJweContentEncryptionAlgorithm, CoreJsonWebKey> {
+            url: &url,
+            access_token: AccessToken::new("the_access_token".to_string()),
+            require_signed_response: false,
+            response_type: UserInfoResponseType::Json,
+            signed_response_verifier: CoreUserInfoVerifier::new(
+                ClientId::new("my_client".to_string()),
+                IssuerUrl::new("https://example.com".to_string()).unwrap(),
+                CoreJsonWebKeySet::new(vec![]),
+                Some(sub.clone()),
+            ),
+        };
+
+        let dispatched = std::rc::Rc::new(std::cell::RefCell::new(Vec::new()));
+        let http_client = recording_client(
+            dispatched.clone(),
+            http::StatusCode::OK,
+            "application/json",
+        );
+
+        let claims = request
+            .request::<EmptyAdditionalClaims, CoreGenderClaim, _>(&http_client)
+            .expect("user info request should succeed");
+        assert_eq!(*claims.subject(), sub);
+
+        let dispatched = dispatched.borrow();
+        assert_eq!(dispatched.len(), 1);
+        assert_eq!(
+            dispatched[0].headers().get(http::header::AUTHORIZATION),
+            Some(&HeaderValue::from_static("Bearer the_access_token")),
+        );
+    }
+
+    /// Content-Type routing accepts RFC 7231 optional whitespace and case variance: an
+    /// OWS-bearing JSON Content-Type parses JSON claims, and an OWS-bearing JWT Content-Type
+    /// routes to JWT verification (an invalid JWT body then fails parsing, not Content-Type
+    /// matching).
+    #[test]
+    fn test_user_info_response_routes_on_content_type_with_optional_whitespace() {
+        use crate::core::{
+            CoreJweContentEncryptionAlgorithm, CoreJsonWebKey, CoreJsonWebKeySet,
+            CoreUserInfoVerifier,
+        };
+        use crate::{
+            AccessToken, ClientId, EmptyAdditionalClaims, IssuerUrl, SubjectIdentifier,
+            UserInfoError, UserInfoRequest, UserInfoResponseType,
+        };
+
+        let sub = SubjectIdentifier::new("the_subject".to_string());
+        let url = crate::UserInfoUrl::new("https://example.com/userinfo".to_string()).unwrap();
+        let make_request = || UserInfoRequest::<CoreJweContentEncryptionAlgorithm, CoreJsonWebKey> {
+            url: &url,
+            access_token: AccessToken::new("the_access_token".to_string()),
+            require_signed_response: false,
+            response_type: UserInfoResponseType::Json,
+            signed_response_verifier: CoreUserInfoVerifier::new(
+                ClientId::new("my_client".to_string()),
+                IssuerUrl::new("https://example.com".to_string()).unwrap(),
+                CoreJsonWebKeySet::new(vec![]),
+                Some(sub.clone()),
+            ),
+        };
+        let response = |content_type: &'static str, body: &'static str| {
+            http::Response::builder()
+                .status(http::StatusCode::OK)
+                .header(http::header::CONTENT_TYPE, content_type)
+                .body(body.as_bytes().to_vec())
+                .unwrap()
+        };
+
+        let claims = make_request()
+            .user_info_response::<EmptyAdditionalClaims, CoreGenderClaim, crate::reqwest::Error>(
+                response("APPLICATION/JSON ; charset=utf-8", "{\"sub\":\"the_subject\"}"),
+            )
+            .expect("JSON response with OWS-bearing Content-Type should parse");
+        assert_eq!(*claims.subject(), sub);
+
+        match make_request()
+            .user_info_response::<EmptyAdditionalClaims, CoreGenderClaim, crate::reqwest::Error>(
+                response("application/jwt\t", "not-a-jwt"),
+            ) {
+            Err(UserInfoError::Parse(_)) => {}
+            other => panic!("expected the JWT route to fail parsing, got: {other:?}"),
         }
     }
 }

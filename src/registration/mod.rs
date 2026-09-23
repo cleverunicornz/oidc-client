@@ -592,7 +592,13 @@ where
             .map_err(ClientRegistrationError::Serialize)?
             .into_bytes();
 
-        let auth_header_opt = self.initial_access_token().map(auth_bearer);
+        let auth_header_opt = self
+            .initial_access_token()
+            .map(auth_bearer)
+            .transpose()
+            .map_err(|err| {
+                ClientRegistrationError::Other(format!("failed to prepare request: {err}"))
+            })?;
 
         let mut request = http::Request::builder()
             .uri(registration_endpoint.to_string())
