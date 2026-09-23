@@ -501,7 +501,9 @@ where
     ) -> Result<K, SignatureVerificationError> {
         if signature_alg.uses_shared_secret() {
             if let Some(client_secret) = &self.client_secret {
-                return Ok(K::new_symmetric(client_secret.secret().clone().into_bytes()));
+                return Ok(K::new_symmetric(
+                    client_secret.secret().clone().into_bytes(),
+                ));
             }
             return Err(SignatureVerificationError::DisallowedAlg(
                 "symmetric signatures require a confidential client (client secret)".to_string(),

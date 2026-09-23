@@ -4,11 +4,11 @@ use crate::jwt::{JsonWebTokenError, JsonWebTokenJsonPayloadSerde};
 use crate::verification::UserInfoVerifier;
 use crate::{
     AccessToken, AdditionalClaims, AddressClaim, AsyncHttpClient, Audience, AudiencesClaim,
-    AuthDisplay, AuthPrompt, ClaimsVerificationError, Client, ClientSecret, EndUserBirthday, EndUserEmail,
-    EndUserFamilyName, EndUserGivenName, EndUserMiddleName, EndUserName, EndUserNickname,
-    EndUserPhoneNumber, EndUserPictureUrl, EndUserProfileUrl, EndUserTimezone, EndUserUsername,
-    EndUserWebsiteUrl, EndpointState, ErrorResponse, GenderClaim, HttpRequest, HttpResponse,
-    IssuerClaim, IssuerUrl, JsonWebKey, JsonWebToken, JweContentEncryptionAlgorithm,
+    AuthDisplay, AuthPrompt, ClaimsVerificationError, Client, ClientSecret, EndUserBirthday,
+    EndUserEmail, EndUserFamilyName, EndUserGivenName, EndUserMiddleName, EndUserName,
+    EndUserNickname, EndUserPhoneNumber, EndUserPictureUrl, EndUserProfileUrl, EndUserTimezone,
+    EndUserUsername, EndUserWebsiteUrl, EndpointState, ErrorResponse, GenderClaim, HttpRequest,
+    HttpResponse, IssuerClaim, IssuerUrl, JsonWebKey, JsonWebToken, JweContentEncryptionAlgorithm,
     JwsSigningAlgorithm, LanguageTag, LocalizedClaim, PrivateSigningKey, RevocableToken,
     SignatureVerificationError, StandardClaims, SubjectIdentifier, SyncHttpClient,
     TokenIntrospectionResponse, TokenResponse,
@@ -313,7 +313,9 @@ where
     ///
     /// This option has no effect on unsigned JSON responses.
     pub fn set_client_secret(mut self, client_secret: ClientSecret) -> Self {
-        self.signed_response_verifier = self.signed_response_verifier.set_client_secret(client_secret);
+        self.signed_response_verifier = self
+            .signed_response_verifier
+            .set_client_secret(client_secret);
         self
     }
 
@@ -667,13 +669,13 @@ mod tests {
     #[test]
     fn test_user_info_request_signed_response_policy() {
         use crate::core::{
-            CoreHmacKey, CoreJweContentEncryptionAlgorithm, CoreJwsSigningAlgorithm,
-            CoreJsonWebKey, CoreJsonWebKeySet, CoreUserInfoVerifier,
+            CoreHmacKey, CoreJsonWebKey, CoreJsonWebKeySet, CoreJweContentEncryptionAlgorithm,
+            CoreJwsSigningAlgorithm, CoreUserInfoVerifier,
         };
         use crate::{
-            AccessToken, ClaimsVerificationError, ClientId, ClientSecret,
-            EmptyAdditionalClaims, IssuerUrl, PrivateSigningKey, SignatureVerificationError,
-            SubjectIdentifier, UserInfoError, UserInfoRequest, UserInfoResponseType,
+            AccessToken, ClaimsVerificationError, ClientId, ClientSecret, EmptyAdditionalClaims,
+            IssuerUrl, PrivateSigningKey, SignatureVerificationError, SubjectIdentifier,
+            UserInfoError, UserInfoRequest, UserInfoResponseType,
         };
         use base64::Engine;
 
@@ -818,7 +820,7 @@ mod tests {
     #[test]
     fn test_user_info_request_malformed_access_token_fails_without_dispatch() {
         use crate::core::{
-            CoreJweContentEncryptionAlgorithm, CoreJsonWebKey, CoreJsonWebKeySet,
+            CoreJsonWebKey, CoreJsonWebKeySet, CoreJweContentEncryptionAlgorithm,
             CoreUserInfoVerifier,
         };
         use crate::{
@@ -841,11 +843,8 @@ mod tests {
         };
 
         let dispatched = std::rc::Rc::new(std::cell::RefCell::new(Vec::new()));
-        let http_client = recording_client(
-            dispatched.clone(),
-            http::StatusCode::OK,
-            "application/json",
-        );
+        let http_client =
+            recording_client(dispatched.clone(), http::StatusCode::OK, "application/json");
 
         match request.request::<EmptyAdditionalClaims, CoreGenderClaim, _>(&http_client) {
             Err(UserInfoError::Other(message)) => {
@@ -872,7 +871,7 @@ mod tests {
     #[test]
     fn test_user_info_request_async_malformed_access_token_fails_without_dispatch() {
         use crate::core::{
-            CoreJweContentEncryptionAlgorithm, CoreJsonWebKey, CoreJsonWebKeySet,
+            CoreJsonWebKey, CoreJsonWebKeySet, CoreJweContentEncryptionAlgorithm,
             CoreUserInfoVerifier,
         };
         use crate::{
@@ -925,7 +924,7 @@ mod tests {
     #[test]
     fn test_user_info_request_sends_bearer_header() {
         use crate::core::{
-            CoreJweContentEncryptionAlgorithm, CoreJsonWebKey, CoreJsonWebKeySet,
+            CoreJsonWebKey, CoreJsonWebKeySet, CoreJweContentEncryptionAlgorithm,
             CoreUserInfoVerifier,
         };
         use crate::{
@@ -950,11 +949,8 @@ mod tests {
         };
 
         let dispatched = std::rc::Rc::new(std::cell::RefCell::new(Vec::new()));
-        let http_client = recording_client(
-            dispatched.clone(),
-            http::StatusCode::OK,
-            "application/json",
-        );
+        let http_client =
+            recording_client(dispatched.clone(), http::StatusCode::OK, "application/json");
 
         let claims = request
             .request::<EmptyAdditionalClaims, CoreGenderClaim, _>(&http_client)
@@ -976,7 +972,7 @@ mod tests {
     #[test]
     fn test_user_info_response_routes_on_content_type_with_optional_whitespace() {
         use crate::core::{
-            CoreJweContentEncryptionAlgorithm, CoreJsonWebKey, CoreJsonWebKeySet,
+            CoreJsonWebKey, CoreJsonWebKeySet, CoreJweContentEncryptionAlgorithm,
             CoreUserInfoVerifier,
         };
         use crate::{
@@ -1008,7 +1004,10 @@ mod tests {
 
         let claims = make_request()
             .user_info_response::<EmptyAdditionalClaims, CoreGenderClaim, crate::reqwest::Error>(
-                response("APPLICATION/JSON ; charset=utf-8", "{\"sub\":\"the_subject\"}"),
+                response(
+                    "APPLICATION/JSON ; charset=utf-8",
+                    "{\"sub\":\"the_subject\"}",
+                ),
             )
             .expect("JSON response with OWS-bearing Content-Type should parse");
         assert_eq!(*claims.subject(), sub);

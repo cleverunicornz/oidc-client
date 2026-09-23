@@ -4,13 +4,13 @@ use crate::core::{
     CoreJwsSigningAlgorithm, CoreResponseType, CoreSubjectIdentifierType,
 };
 use crate::jwt::tests::TEST_RSA_PUB_KEY;
+use crate::registration::ClientSecretExpiration;
 use crate::{
     AuthenticationContextClass, ClientConfigUrl, ClientContactEmail, ClientName, ClientUrl,
     JsonWebKeySet, JsonWebKeySetUrl, LanguageTag, LogoUrl, PolicyUrl, RequestUrl, ResponseTypes,
     SectorIdentifierUrl, ToSUrl,
 };
 use crate::{ClientId, RedirectUrl};
-use crate::registration::ClientSecretExpiration;
 
 use chrono::{TimeZone, Utc};
 use itertools::sorted;
@@ -764,12 +764,13 @@ fn test_client_secret_expiration_setter() {
         serialized_json
     );
 
-    let registration_response = registration_response
-        .set_client_secret_expires_at(Some(ClientSecretExpiration::ExpiresAt(
+    let registration_response = registration_response.set_client_secret_expires_at(Some(
+        ClientSecretExpiration::ExpiresAt(
             Utc.timestamp_opt(1526545306, 0)
                 .single()
                 .expect("valid timestamp"),
-        )));
+        ),
+    ));
     assert_eq!(
         registration_response.client_secret_expires_at(),
         Some(&ClientSecretExpiration::ExpiresAt(
@@ -823,9 +824,8 @@ fn recording_async_client(
     dispatched: std::rc::Rc<std::cell::RefCell<Vec<crate::HttpRequest>>>,
 ) -> impl Fn(
     crate::HttpRequest,
-) -> std::pin::Pin<
-    Box<dyn Future<Output = Result<crate::HttpResponse, MockHttpClientError>>>,
-> {
+)
+    -> std::pin::Pin<Box<dyn Future<Output = Result<crate::HttpResponse, MockHttpClientError>>>> {
     move |request| {
         let dispatched = dispatched.clone();
         Box::pin(async move {
@@ -957,7 +957,10 @@ fn test_registration_sends_bearer_header_and_accepts_ows_content_type() {
     let response = request
         .register(&registration_url, &http_client)
         .expect("registration should succeed");
-    assert_eq!(*response.client_id(), ClientId::new("my_client".to_string()));
+    assert_eq!(
+        *response.client_id(),
+        ClientId::new("my_client".to_string())
+    );
 
     let dispatched = dispatched.borrow();
     assert_eq!(dispatched.len(), 1);
@@ -996,7 +999,10 @@ fn test_registration_without_access_token_sends_no_authorization_header() {
     let dispatched = dispatched.borrow();
     assert_eq!(dispatched.len(), 1);
     assert!(
-        dispatched[0].headers().get(http::header::AUTHORIZATION).is_none(),
+        dispatched[0]
+            .headers()
+            .get(http::header::AUTHORIZATION)
+            .is_none(),
         "no Authorization header should be sent without an initial access token"
     );
 }

@@ -1,7 +1,7 @@
 use crate::AccessToken;
 
 use http::header::{
-    HeaderMap, HeaderName, HeaderValue, AUTHORIZATION, CONTENT_TYPE, InvalidHeaderValue,
+    HeaderMap, HeaderName, HeaderValue, InvalidHeaderValue, AUTHORIZATION, CONTENT_TYPE,
 };
 
 pub const MIME_TYPE_JSON: &str = "application/json";
@@ -116,9 +116,8 @@ mod tests {
 
     #[test]
     fn test_auth_bearer_builds_authorization_header() {
-        let (name, auth_value) =
-            auth_bearer(&AccessToken::new("the_access_token".to_string()))
-                .expect("valid access token should build the Authorization header");
+        let (name, auth_value) = auth_bearer(&AccessToken::new("the_access_token".to_string()))
+            .expect("valid access token should build the Authorization header");
         assert_eq!(name, AUTHORIZATION);
         assert_eq!(auth_value, "Bearer the_access_token");
     }

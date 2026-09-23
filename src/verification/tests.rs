@@ -1562,9 +1562,9 @@ fn test_user_info_signed_response_es256() {
 
     let valid_payload = "{\"iss\":\"https://example.com\",\"aud\":[\"my_client\"],\
 \"sub\":\"the_subject\",\"name\":\"Jane Doe\"}";
-    let user_info_jwt: CoreUserInfoJsonWebToken = serde_json::from_value(serde_json::Value::String(
-        sign_es256(&signing_key, valid_payload),
-    ))
+    let user_info_jwt: CoreUserInfoJsonWebToken = serde_json::from_value(
+        serde_json::Value::String(sign_es256(&signing_key, valid_payload)),
+    )
     .expect("failed to deserialize");
 
     // ES256 is accepted only once explicitly allowed.
@@ -1607,24 +1607,20 @@ fn test_user_info_signed_response_es256() {
         'A'
     };
     tampered_signature.replace_range(0..1, &replacement.to_string());
-    let tampered: CoreUserInfoJsonWebToken =
-        serde_json::from_value(serde_json::Value::String(format!(
-            "{}.{}",
-            signing_input, tampered_signature
-        )))
-        .expect("failed to deserialize");
+    let tampered: CoreUserInfoJsonWebToken = serde_json::from_value(serde_json::Value::String(
+        format!("{}.{}", signing_input, tampered_signature),
+    ))
+    .expect("failed to deserialize");
     match tampered.claims(&verifier) {
         Err(ClaimsVerificationError::SignatureVerification(_)) => {}
         other => panic!("unexpected result: {:?}", other),
     }
 
     // Signature by the wrong key is rejected.
-    let wrong_key: CoreUserInfoJsonWebToken =
-        serde_json::from_value(serde_json::Value::String(sign_es256(
-            &other_signing_key,
-            valid_payload,
-        )))
-        .expect("failed to deserialize");
+    let wrong_key: CoreUserInfoJsonWebToken = serde_json::from_value(serde_json::Value::String(
+        sign_es256(&other_signing_key, valid_payload),
+    ))
+    .expect("failed to deserialize");
     match wrong_key.claims(&verifier) {
         Err(ClaimsVerificationError::SignatureVerification(_)) => {}
         other => panic!("unexpected result: {:?}", other),
@@ -1701,13 +1697,9 @@ fn test_user_info_signed_response_hs256() {
 
     // HS256 additionally requires a confidential verifier: a public verifier rejects the
     // response even when HS256 is explicitly allowed.
-    let public_verifier = CoreUserInfoVerifier::new(
-        client_id,
-        issuer,
-        CoreJsonWebKeySet::new(vec![]),
-        Some(sub),
-    )
-    .set_allowed_algs(vec![CoreJwsSigningAlgorithm::HmacSha256]);
+    let public_verifier =
+        CoreUserInfoVerifier::new(client_id, issuer, CoreJsonWebKeySet::new(vec![]), Some(sub))
+            .set_allowed_algs(vec![CoreJwsSigningAlgorithm::HmacSha256]);
     match user_info_jwt.claims(&public_verifier) {
         Err(ClaimsVerificationError::SignatureVerification(
             SignatureVerificationError::DisallowedAlg(_),
@@ -1904,13 +1896,10 @@ fn test_id_token_verification_key_at_hash() {
         b64.encode(payload.as_bytes())
     );
     let signature: p256::ecdsa::Signature = es256_signing_key.sign(signing_input.as_bytes());
-    let id_token_es256: CoreIdToken = format!(
-        "{}.{}",
-        signing_input,
-        b64.encode(signature.to_bytes())
-    )
-    .parse()
-    .expect("failed to deserialize");
+    let id_token_es256: CoreIdToken =
+        format!("{}.{}", signing_input, b64.encode(signature.to_bytes()))
+            .parse()
+            .expect("failed to deserialize");
 
     let es256_verifier = CoreIdTokenVerifier::new_public_client(
         client_id,
@@ -1945,7 +1934,6 @@ fn test_id_token_verification_key_at_hash() {
         &es256_verification_key,
     )
     .unwrap();
-    let es256_expected =
-        AccessTokenHash::new(b64.encode(&from_fixture[0..from_fixture.len() / 2]));
+    let es256_expected = AccessTokenHash::new(b64.encode(&from_fixture[0..from_fixture.len() / 2]));
     assert_eq!(es256_at_hash, es256_expected);
 }

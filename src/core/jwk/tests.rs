@@ -262,8 +262,7 @@ fn test_core_jwks_debug_redacts_symmetric_secret() {
         }}]}}",
         BASE64_URL_SAFE_NO_PAD.encode(DEBUG_CANARY_SECRET),
     );
-    let jwks: CoreJsonWebKeySet =
-        serde_json::from_str(&jwks_json).expect("deserialization failed");
+    let jwks: CoreJsonWebKeySet = serde_json::from_str(&jwks_json).expect("deserialization failed");
     let debug = format!("{:?}", jwks);
 
     assert!(!debug.contains(DEBUG_CANARY_PRINTABLE));
