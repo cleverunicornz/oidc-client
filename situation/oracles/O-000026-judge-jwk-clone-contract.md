@@ -89,7 +89,7 @@ fixture. The universal `d`/`k` formatter decisions remain manual because
 | P7 | Derived RSA verification key has no private material. | `src/core/jwk/tests.rs::test_core_jwk_rsa_verification_key_debug_has_no_private_material` |
 | P8 | Clones compare equal, carrying `k`/`d` exactly. | `src/core/jwk/tests.rs::test_core_jwk_clone_preserves_secret_fields_and_redaction` (`assert_eq!` on both clones) |
 | P9 | Clone serde export is identical and carries the secrets. | same fixture (`to_string` equality plus base64url canary `contains` assertions) |
-| P10 | Clone `Debug` stays redacted and identical in both formats. | same fixture (compact/pretty byte identity; redaction markers and printable/decimal/base64url canary absence) |
+| P10 | Clone `Debug` stays redacted and identical in both formats. | Clone fixture (compact/pretty byte identity and checked redaction canaries); manual — P1/P2's universal `CoreJsonWebKey::fmt` decision covers the symmetric-pretty and EC-compact renderings |
 | P11 | Cloned key verifies HS256 and rejects tampering. | same fixture (`verify_signature` success and `CryptoError` match) |
 | F1 | No actual private field reaches the formatter. | manual — same structural `CoreJsonWebKey::fmt` decision as P1/P2 |
 | F2 | Representative material never leaks. | P3/P4 fixtures |
@@ -97,7 +97,7 @@ fixture. The universal `d`/`k` formatter decisions remain manual because
 | F4 | Rendering shape remains correct. | P6/P7 fixtures |
 | F5 | Unequal clones fail the Clone equality leg. | Clone fixture (negation of P8's `assert_eq!`s) |
 | F6 | Divergent or secret-dropping clone export fails the serde leg. | Clone fixture (negation of P9's assertions) |
-| F7 | Leaking or divergent clone `Debug` fails the rendering leg. | Clone fixture (negation of P10's assertions) |
+| F7 | Leaking or divergent clone `Debug` fails the rendering leg. | Clone fixture (negation of P10's checked assertions); manual — the P1/P2 universal formatter decision covers the unchecked renderings |
 | F8 | Lost verification capability or accepted tampering fails the Clone behavior leg. | Clone fixture (negation of P11's assertions) |
 
 ## References
