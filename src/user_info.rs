@@ -697,7 +697,7 @@ mod tests {
             );
             let hmac_key = CoreHmacKey::new(secret);
             let signature = hmac_key
-                .sign(&alg, signing_input.as_bytes())
+                .sign(alg, signing_input.as_bytes())
                 .expect("HS signing should succeed");
             format!("{}.{}", signing_input, b64.encode(signature))
         };
