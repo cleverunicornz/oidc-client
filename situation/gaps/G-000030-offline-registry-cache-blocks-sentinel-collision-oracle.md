@@ -39,6 +39,16 @@ Observed 2026-09-24 at head
   crates.io index. This later environment-specific recurrence does not alter
   W-000034's successful observation at `d35d70a7e570ea1cbf9e0abf8f34d61f3035a1ba`
   or this Gap's retained State and Resolution.
+- Validator observation for closure run
+  `20260924T111724Z-295cb33dbeb3b837300c31b0b1a17517095f2393` at fixed
+  reviewed head `bbd8b169c9010aeb7d9f2288b19b670a405b526c` (2026-09-24):
+  the exact O-000025 fixture command, `cargo test --offline --lib --quiet --
+  test_id_token_verification_key_at_hash_rsa_pss_eddsa`, exited `101` before
+  compilation with `no matching package named base64 found` in the offline
+  crates.io index. This later environment-specific recurrence does not alter
+  W-000035's retained successful observation at
+  `48761b267c479b38918e4a139ed5c8fd530f2236` or this Gap's recorded State and
+  Resolution.
 
 ## Impact
 
