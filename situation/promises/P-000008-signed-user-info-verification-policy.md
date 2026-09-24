@@ -32,20 +32,20 @@ situation/oracles/O-000009-judge-signed-user-info-verification-policy.md
 
 ## State evidence
 
-State `implemented` cites the Stream A pre-publication-hardening commit on
-branch `fix/prepublication-hardening` that carries this record together with
-the implementation and the focused tests named by the oracle
-(situation/decisions/D-000013-prepublication-hardening-maintenance-deltas-user-info-surface.md
-authorizes the deltas). Witnesses have not been collected yet; the parent's
-final gate attaches them under `situation/witnesses/P-000008/` and applies the
-oracle to decide the disposition.
+State `implemented` cites implementation commit
+`78529bc948824f2dc3f6eb2270b2e9c5aa98876c`, which adds the scoped
+UserInfo code and tests identified by O-000009. The Promise, Oracle, and
+Witness records were attached retrospectively in
+`9c4013a9d93a93e65084b3475022c43059e64fc2`; that is consistent with an
+implementation record created after the behavior landed.
 
-Attached at the parent's final gate (2026-09-23, head
-`b96b920f52e0d8b392edcf0b5d752fa570c2b356`):
-situation/witnesses/P-000008/W-000011-signed-user-info-verification-policy.md —
-Result PASS: every executable O-000009 leg was decided by the gate run
-(`cargo test --all-features --offline`, lib suite 99 passed / 0 failed) and
-the manual F6 leg by API-surface inspection at that head.
+situation/witnesses/P-000008/W-000011-signed-user-info-verification-policy.md
+is a PASS observation from the parent's final gate at
+`b96b920f52e0d8b392edcf0b5d752fa570c2b356` and decides each named
+O-000009 leg. The state remains `implemented`, not `assured`: the named
+executions cover ES256 and HS256 representatives, while ES384, HS384,
+HS512, and `Client::user_info` confidential routing lack independently
+recorded coverage. Those limits remain in Residual.
 
 ## Residual
 
