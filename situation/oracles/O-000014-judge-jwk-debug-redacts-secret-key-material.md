@@ -73,3 +73,9 @@ situation/witnesses/P-000013/W-000016-jwk-debug-secret-redaction.md records
 a PASS disposition of these fixed-fixture rules at gate head
 `b96b920f52e0d8b392edcf0b5d752fa570c2b356`. Its result is bounded to the
 named oracle legs; this oracle does not record results.
+
+## References
+
+- Superseded for P-000013's complete declared Scope by
+  situation/oracles/O-000023-judge-jwk-debug-redaction-complete-scope.md.
+  W-000016 remains an observation of this historical, narrower rule.

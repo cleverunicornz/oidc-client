@@ -28,7 +28,7 @@ own `Debug` and are outside this promise, as are secrets held outside
 
 ## Oracle
 
-situation/oracles/O-000014-judge-jwk-debug-redacts-secret-key-material.md
+situation/oracles/O-000023-judge-jwk-debug-redaction-complete-scope.md
 
 ## State evidence
 
@@ -42,18 +42,21 @@ not used as a current implementation coordinate. The Promise, Oracle, and
 Witness records were attached retrospectively in
 `9c4013a9d93a93e65084b3475022c43059e64fc2`.
 
-situation/witnesses/P-000013/W-000016-jwk-debug-secret-redaction.md is a
-PASS observation from the parent's final gate at
-`b96b920f52e0d8b392edcf0b5d752fa570c2b356` and decides each named
-O-000014 leg. The state remains `implemented`, not `assured`: the oracle
-observes fixed canary encodings but has no structural manual leg deciding the
-universal no-disclosure clause across every possible `d`/`k` value.
+situation/oracles/O-000023-judge-jwk-debug-redaction-complete-scope.md
+supersedes O-000014 for this Promise's complete Scope. Its first successor
+observation,
+situation/witnesses/P-000013/W-000025-jwk-debug-complete-scope-incomplete.md,
+is INVALID: it preserves the absence of the structural observation deciding
+universal `d`/`k` redaction. The state therefore remains `implemented`, not
+`assured`. W-000016 remains the PASS observation of the historical, narrower
+O-000014 rule.
 
 ## Residual
 
-The PASS witness covers its named fixed-fixture legs but does not assure the
-universal no-disclosure wording beyond those observations. The promise does
-not cover `Display`, serde output (the intentional export path), other
+No assurance is claimed until O-000023 has a valid witness for every declared
+Scope clause. W-000025 makes the missing structural universal-redaction
+observation visible; that evidence boundary does not narrow this Promise. It
+does not cover `Display`, serde output (the intentional export path), other
 `Debug` sources that reach key bytes without `CoreJsonWebKey`'s `Debug`,
 signing, JWE, ES512/P-521, or ID-token claim validation.
 
