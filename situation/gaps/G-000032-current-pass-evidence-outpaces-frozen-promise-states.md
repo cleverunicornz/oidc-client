@@ -79,22 +79,22 @@ claim these Promises as assured from the new Witnesses alone.
   justify a Promise State transition; this observation adds no automatic
   remedy.
 
-- Closer reconciliation observation for closure run
+- Corrected closer reconciliation observation for closure run
   `20260924T125359Z-021faa52ab84b38324b49b36cef7dad45c18aa38` at reviewed
-  head `8a328d05b7702788e84b139d0204b30c3941c413` (2026-09-24):
+  head `79b53c748dd4c9ae88002b993513f5f591b69fb9` (2026-09-24):
   `situation/witnesses/P-000009/W-000037-at-hash-complete-scope-successor-pass.md`
-  records a PASS under O-000025 at reachable head
-  `c5260aeb4a426f7881c8261ef2101d5a30710c29`, with one Oracle-legs row for
-  P1–P16 and F1–F5. `situation/witnesses/P-000013/W-000038-jwk-debug-complete-scope-successor-pass.md`
+  retains a successful focused test and a verified evidence manifest at
+  `c5260aeb4a426f7881c8261ef2101d5a30710c29`, but it is INVALID under
+  O-000025: the ES256 and ES384 token payloads lack embedded `at_hash`, so
+  P4, P5, P14, and F3 are not decided. `situation/witnesses/P-000013/W-000038-jwk-debug-complete-scope-successor-pass.md`
   records a PASS under O-000026 at that same head, with one row for P1–P11 and
   F1–F8. Both retained evidence manifests verify with `sha256sum -c SHA256SUMS`
   from their respective evidence directories. These are each their successor
   Oracle's own observation, not a composition with an earlier Witness.
-- This later observation replaces only the prior statement that neither
-  successor has a valid complete-scope PASS Witness. The frozen Promise
-  `State` and `Oracle` sections remain as recorded; this addendum neither
-  changes this Gap's State or Resolution nor selects a canonical-state
-  reconciliation mechanism.
+- This correction restores the prior statement that P-000009 lacks a valid
+  complete-scope PASS Witness. The frozen Promise `State` and `Oracle` sections
+  remain as recorded; this correction neither changes this Gap's State or
+  Resolution nor selects a canonical-state reconciliation mechanism.
 - Validator observation for closure run
   `20260924T125359Z-021faa52ab84b38324b49b36cef7dad45c18aa38` at fixed
   reviewed head `79b53c748dd4c9ae88002b993513f5f591b69fb9` (2026-09-24):
@@ -124,11 +124,12 @@ unresolved.
   Gap's unresolved state-record mechanism remains. No consumer may treat
   either Promise as assured.
 
-- Closer impact addendum (2026-09-24): complete-scope successor Witness
-  coverage is now retained for both affected lineages. The outstanding concern
-  is the frozen Promise-state and forward-link reconciliation mechanism, not
-  the prior absence of successor-Witness coverage. This addendum leaves the
-  Gap's State and Resolution unchanged.
+- Corrected closer impact addendum (2026-09-24): W-000038 retains complete-scope
+  successor coverage for P-000013, but W-000037 is INVALID and leaves P-000009
+  without adequate complete-scope successor evidence. P-000009 remains
+  unassured on both evidence-sufficiency and frozen-state grounds; P-000013
+  remains unassured on the frozen-state reconciliation ground. This correction
+  leaves the Gap's State and Resolution unchanged.
 - Validator impact addendum (2026-09-24): W-000038 retains complete-scope
   successor coverage for P-000013, but W-000037 does not yet retain adequate
   complete-scope evidence for P-000009. P-000009 therefore remains unassured
