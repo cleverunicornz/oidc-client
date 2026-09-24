@@ -1775,7 +1775,8 @@ fn test_user_info_subject_binding() {
 }
 
 /// The documented `at_hash` flow resolves the effective verification key for both shared-secret
-/// (client-secret-derived) and asymmetric (JWKS) ID tokens.
+/// (client-secret-derived) and asymmetric (JWKS) ID tokens; asymmetric legs also reject a
+/// nonmatching provider JWK and a substituted access token.
 #[test]
 fn test_id_token_verification_key_at_hash() {
     use base64::Engine;
@@ -1902,8 +1903,8 @@ fn test_id_token_verification_key_at_hash() {
             .expect("failed to deserialize");
 
     let es256_verifier = CoreIdTokenVerifier::new_public_client(
-        client_id,
-        issuer,
+        client_id.clone(),
+        issuer.clone(),
         CoreJsonWebKeySet::new(vec![es256_key.clone()]),
     )
     .set_allowed_algs(vec![CoreJwsSigningAlgorithm::EcdsaP256Sha256])
@@ -1936,6 +1937,51 @@ fn test_id_token_verification_key_at_hash() {
     .unwrap();
     let es256_expected = AccessTokenHash::new(b64.encode(&from_fixture[0..from_fixture.len() / 2]));
     assert_eq!(es256_at_hash, es256_expected);
+
+    // A substituted access token fails the comparison for the ES256 flow too.
+    let es256_substituted_hash = AccessTokenHash::from_token(
+        &AccessToken::new("substituted_access_token".to_string()),
+        id_token_es256.signing_alg().unwrap(),
+        &es256_verification_key,
+    )
+    .unwrap();
+    assert_ne!(es256_substituted_hash, es256_expected);
+
+    // A JWKS holding only a nonmatching P-256 key rejects the documented flow: claims
+    // verification and key resolution fail with `NoMatchingKey` rather than resolving the wrong
+    // provider key.
+    let nonmatching_seed: [u8; 32] = [0x73; 32];
+    let nonmatching_signing_key = p256::ecdsa::SigningKey::from_bytes(&nonmatching_seed.into())
+        .expect("fixture scalar is a valid P-256 secret key");
+    let nonmatching_public_point =
+        p256::PublicKey::from(nonmatching_signing_key.verifying_key()).to_encoded_point(false);
+    let nonmatching_public_bytes = nonmatching_public_point.as_bytes();
+    let nonmatching_es256_key: CoreJsonWebKey = serde_json::from_value(serde_json::json!({
+        "kty": "EC",
+        "kid": "nonmatching-es256-key",
+        "crv": "P-256",
+        "x": b64.encode(&nonmatching_public_bytes[1..33]),
+        "y": b64.encode(&nonmatching_public_bytes[33..65]),
+        "use": "sig",
+    }))
+    .expect("deserialization failed");
+    let nonmatching_es256_verifier = CoreIdTokenVerifier::new_public_client(
+        client_id,
+        issuer,
+        CoreJsonWebKeySet::new(vec![nonmatching_es256_key]),
+    )
+    .set_allowed_algs(vec![CoreJwsSigningAlgorithm::EcdsaP256Sha256])
+    .set_time_fn(time_fn);
+    match id_token_es256.claims(&nonmatching_es256_verifier, &nonce) {
+        Err(ClaimsVerificationError::SignatureVerification(
+            SignatureVerificationError::NoMatchingKey,
+        )) => {}
+        other => panic!("unexpected result: {:?}", other),
+    }
+    match id_token_es256.verification_key(&nonmatching_es256_verifier) {
+        Err(SignatureVerificationError::NoMatchingKey) => {}
+        other => panic!("unexpected result: {:?}", other),
+    }
 }
 
 /// Signed user info responses are accepted only for explicitly allowed algorithms; the default
@@ -2288,7 +2334,8 @@ fn test_id_token_verification_key_at_hash_hs384_hs512() {
 }
 
 /// The documented `at_hash` flow resolves the matching P-384 provider JWK for ES384 ID tokens
-/// and reproduces the access-token hash.
+/// and reproduces the access-token hash; a nonmatching P-384 JWK and a substituted access token
+/// both fail the documented flow.
 #[test]
 fn test_id_token_verification_key_at_hash_es384() {
     use base64::Engine;
@@ -2341,8 +2388,8 @@ fn test_id_token_verification_key_at_hash_es384() {
             .expect("failed to deserialize");
 
     let es384_verifier = CoreIdTokenVerifier::new_public_client(
-        client_id,
-        issuer,
+        client_id.clone(),
+        issuer.clone(),
         CoreJsonWebKeySet::new(vec![es384_key.clone()]),
     )
     .set_allowed_algs(vec![CoreJwsSigningAlgorithm::EcdsaP384Sha384])
@@ -2375,13 +2422,59 @@ fn test_id_token_verification_key_at_hash_es384() {
     .unwrap();
     let es384_expected = AccessTokenHash::new(b64.encode(&from_fixture[0..from_fixture.len() / 2]));
     assert_eq!(es384_at_hash, es384_expected);
+
+    // A substituted access token fails the comparison.
+    let substituted_hash = AccessTokenHash::from_token(
+        &AccessToken::new("substituted_access_token".to_string()),
+        id_token_es384.signing_alg().unwrap(),
+        &es384_verification_key,
+    )
+    .unwrap();
+    assert_ne!(substituted_hash, es384_expected);
+
+    // A JWKS holding only a nonmatching P-384 key rejects the documented flow: claims
+    // verification and key resolution fail with `NoMatchingKey` rather than resolving the wrong
+    // provider key.
+    let nonmatching_seed: [u8; 48] = [0xb3; 48];
+    let nonmatching_signing_key = p384::ecdsa::SigningKey::from_bytes(&nonmatching_seed.into())
+        .expect("fixture scalar is a valid P-384 secret key");
+    let nonmatching_public_point =
+        p384::PublicKey::from(nonmatching_signing_key.verifying_key()).to_encoded_point(false);
+    let nonmatching_public_bytes = nonmatching_public_point.as_bytes();
+    let nonmatching_es384_key: CoreJsonWebKey = serde_json::from_value(serde_json::json!({
+        "kty": "EC",
+        "kid": "nonmatching-es384-key",
+        "crv": "P-384",
+        "x": b64.encode(&nonmatching_public_bytes[1..49]),
+        "y": b64.encode(&nonmatching_public_bytes[49..97]),
+        "use": "sig",
+    }))
+    .expect("deserialization failed");
+    let nonmatching_es384_verifier = CoreIdTokenVerifier::new_public_client(
+        client_id,
+        issuer,
+        CoreJsonWebKeySet::new(vec![nonmatching_es384_key]),
+    )
+    .set_allowed_algs(vec![CoreJwsSigningAlgorithm::EcdsaP384Sha384])
+    .set_time_fn(time_fn);
+    match id_token_es384.claims(&nonmatching_es384_verifier, &nonce) {
+        Err(ClaimsVerificationError::SignatureVerification(
+            SignatureVerificationError::NoMatchingKey,
+        )) => {}
+        other => panic!("unexpected result: {:?}", other),
+    }
+    match id_token_es384.verification_key(&nonmatching_es384_verifier) {
+        Err(SignatureVerificationError::NoMatchingKey) => {}
+        other => panic!("unexpected result: {:?}", other),
+    }
 }
 
 /// The documented `at_hash` flow resolves the matching provider JWK for the remaining asymmetric
 /// signature families: RSA PKCS#1 v1.5 (`RS256`/`RS384`/`RS512`), RSA-PSS (`PS256`/`PS384`/
 /// `PS512`), and EdDSA (Ed25519) ID tokens verify through a public verifier against the provider
 /// JWKS, `IdToken::verification_key` resolves that JWK, and `AccessTokenHash::from_token` over
-/// the resolved key reproduces the embedded at_hash.
+/// the resolved key reproduces the embedded at_hash. A JWKS holding only a nonmatching key of
+/// the same family and a substituted access token both fail the documented flow.
 #[test]
 fn test_id_token_verification_key_at_hash_rsa_pss_eddsa() {
     // Test-only Ed25519 signing key, mirroring TEST_ED25519_KEY in src/core/jwk/tests.rs (that
@@ -2393,6 +2486,41 @@ fn test_id_token_verification_key_at_hash_rsa_pss_eddsa() {
         -----END PRIVATE KEY-----\
         ";
 
+    // Unrelated test-only keys backing the nonmatching-JWK negatives: distinct from the matching
+    // fixture keys above, each published under its own `kid`.
+    const NONMATCHING_RSA_PRIV_KEY: &str = "-----BEGIN RSA PRIVATE KEY-----\n\
+         MIIEpAIBAAKCAQEAuhzlUcnNXD/hO8o6CCl7/YBswuynF4LX2RuQtCa2ufy6nKst\n\
+         Yzkg4g9GZSjt0Gkm43h//PjAuvIBW5xdQXCAcH0qXwPqa/ggtuFIXTZnbNhLA3J3\n\
+         Sc2f0GsscEUpb9nJsqnVWOeGK4uXx2aVgvgJyeSbnEKgg9+jSmOJ5TGhc4Rqrh9a\n\
+         lnPfY25EpuDjgH+Qtgw+tAxE7hFvIhopWvS+oodkSS1xA/TKOyv2+sZG8oR+RXep\n\
+         f7mcFHr+VSaoldqvV2Nn14QO1vB9YHtpjOy2jayFVKxbA72LssZKiTP4dMt/hsyU\n\
+         Fp8aP8BcZn02i0Fa1SyBaqv2eMFCQkeo0Bwk2QIDAQABAoIBACZeZKx65Rp6lO2l\n\
+         oFckbkpx2npJHZ2MPQGmXCu3u34Wa0Z3R9En6u6P5ZxfVr/bncfRhNlbUyh3Ue5Y\n\
+         CyW9ks0eEMkr3n1J1zy8rxWAbMwUv0pDo/IUMTlfjvbKW2OSy7FIsBI3EQMTMURL\n\
+         ktFAX4w+1BHf7oWhamGgqcIVfEp7DPbC8thLsTCX3s727j3KjpIrdk9X+iEHZXp4\n\
+         RSIcMXwXxLJIKcod6czL5DX2syFvp8SoWh801pg/5zPG2nWwaQ9jQqAe7qO1I3Kd\n\
+         Bwl5j+f/Z46LIvBu2g2b7EnWKVVdgbcd6uMyzI+m6hHvXU1dofHceoGs0Zw3cEdO\n\
+         V0w7DX0CgYEA55OkzQG7cEJLsIeCvr4DMjzICmNmHu5Ka8J6HLqzV1yOyr3+QXWi\n\
+         QDUNrrOa8n+qYiplS9BGzvM3lT4qJ8336pjNOoljmuUSxSnKJakM+Soii6Ylyue/\n\
+         8FmXHydmgD0gUFINnHSaa9734ukGKagy0uyA//jypaz1khi874jaNzsCgYEAzb3F\n\
+         KCtOIRkef01lbzqPYq9q9j8i1UhWIhcKwBb5d6N46pmpsvh9tARhhub+SjIJXG05\n\
+         1nvzJ9R/Whbj+wBB1UBos+HZnNcipdH/DSkAjLiRzyBn9BqERtCSs+dMYHw0dSrc\n\
+         wLOqFCL8eMq5jTlAEqIey1sJnByf94EplljkGvsCgYA+jrvuRZGE+ePIhFLlhB8I\n\
+         6zJ+2+syX9zqz1Z9fFIGP5KzYi/VLxntjmdr0kkBSUuVyS4kFNeMAFf7kReCOTnH\n\
+         vg9yyLqHlWpEqM1a7xf6F0/Nucxry78mBo20dMhTzC92gzP6F+W/TjRYr+piRnW0\n\
+         VP9kJrQl3VtZZCVl7+pDEQKBgQCAMNehOapKkR4hb5XeAfzJHkdk+t23SoTwZK78\n\
+         FNSHKMH0Wp4TtySLf5dMuKyEijyu7Bd3fm94x7w5471U7UoXlzQlsHkochtSek+S\n\
+         YZPIGlAvYB+lRshYXyipE1rRW1JMFtLI9qjoNwxcLuQCDEPR2FWbmzOXo3ZAfqfs\n\
+         16H49QKBgQCi7FDkmkFrUZPJjLFPqFU8l5x8/vIzW4umDUVS7yBCM+v3V8h0b0qr\n\
+         XNIR/YfT7rlmKqNCt7E2KYSLiDC/8OsXepuhZ6pKLouzvxWc+hCzzBmvnhdZbW9E\n\
+         olvMPY3KwNQERyE7CktNBb7c69WNwU73HA/HvqvPqDRh/0Q71bSJKQ==\n\
+         -----END RSA PRIVATE KEY-----";
+    const NONMATCHING_ED25519_KEY: &str = "\
+        -----BEGIN PRIVATE KEY-----\n\
+        MC4CAQAwBQYDK2VwBCIEIKAzupGZ7RQcWKmceKBSpS6RL4E18GRZ8JMcrVR39H3a\n\
+        -----END PRIVATE KEY-----\
+        ";
+
     // Test-fixture plumbing that names every input explicitly for the seven
     // algorithm-family legs; a parameter struct would obscure the table rows.
     #[allow(clippy::too_many_arguments)]
@@ -2400,6 +2528,7 @@ fn test_id_token_verification_key_at_hash_rsa_pss_eddsa() {
         signing_key: &S,
         alg: CoreJwsSigningAlgorithm,
         verification_key: CoreJsonWebKey,
+        nonmatching_key: &CoreJsonWebKey,
         id_claims: &CoreIdTokenClaims,
         access_token: &AccessToken,
         nonce: &Nonce,
@@ -2470,6 +2599,27 @@ fn test_id_token_verification_key_at_hash_rsa_pss_eddsa() {
         )
         .unwrap();
         assert_ne!(substituted_hash, expected_access_token_hash);
+
+        // A JWKS holding only a nonmatching key of the same family rejects the documented flow:
+        // claims verification and key resolution fail with `NoMatchingKey` rather than resolving
+        // the wrong provider key.
+        let nonmatching_verifier = CoreIdTokenVerifier::new_public_client(
+            client_id.clone(),
+            issuer.clone(),
+            CoreJsonWebKeySet::new(vec![nonmatching_key.clone()]),
+        )
+        .set_allowed_algs(vec![alg.clone()])
+        .set_time_fn(time_fn);
+        match id_token.claims(&nonmatching_verifier, nonce) {
+            Err(ClaimsVerificationError::SignatureVerification(
+                SignatureVerificationError::NoMatchingKey,
+            )) => {}
+            other => panic!("unexpected result: {:?}", other),
+        }
+        match id_token.verification_key(&nonmatching_verifier) {
+            Err(SignatureVerificationError::NoMatchingKey) => {}
+            other => panic!("unexpected result: {:?}", other),
+        }
     }
 
     let client_id = ClientId::new("my_client".to_string());
@@ -2501,6 +2651,15 @@ fn test_id_token_verification_key_at_hash_rsa_pss_eddsa() {
     )
     .expect("key parsing failed");
     let rsa_verification_key = rsa_priv_key.as_verification_key();
+
+    // The nonmatching RSA key publishes its JWK under a different `kid`, so resolving the token's
+    // key against a JWKS holding only that key must fail for every RSA family.
+    let rsa_nonmatching_priv_key = CoreRsaPrivateSigningKey::from_pem(
+        NONMATCHING_RSA_PRIV_KEY,
+        Some(JsonWebKeyId::new("nonmatching-rsa-key".to_string())),
+    )
+    .expect("key parsing failed");
+    let rsa_nonmatching_verification_key = rsa_nonmatching_priv_key.as_verification_key();
     for alg in [
         CoreJwsSigningAlgorithm::RsaSsaPkcs1V15Sha256,
         CoreJwsSigningAlgorithm::RsaSsaPkcs1V15Sha384,
@@ -2513,6 +2672,7 @@ fn test_id_token_verification_key_at_hash_rsa_pss_eddsa() {
             &rsa_priv_key,
             alg,
             rsa_verification_key.clone(),
+            &rsa_nonmatching_verification_key,
             &id_claims,
             &access_token,
             &nonce,
@@ -2528,10 +2688,18 @@ fn test_id_token_verification_key_at_hash_rsa_pss_eddsa() {
         Some(JsonWebKeyId::new("test-eddsa-key".to_string())),
     )
     .expect("key parsing failed");
+
+    // The nonmatching Ed25519 key backs the EdDSA nonmatching-JWK negative the same way.
+    let eddsa_nonmatching_priv_key = CoreEdDsaPrivateSigningKey::from_ed25519_pem(
+        NONMATCHING_ED25519_KEY,
+        Some(JsonWebKeyId::new("nonmatching-eddsa-key".to_string())),
+    )
+    .expect("key parsing failed");
     assert_jwks_resolved_at_hash(
         &eddsa_priv_key,
         CoreJwsSigningAlgorithm::EdDsa,
         eddsa_priv_key.as_verification_key(),
+        &eddsa_nonmatching_priv_key.as_verification_key(),
         &id_claims,
         &access_token,
         &nonce,
