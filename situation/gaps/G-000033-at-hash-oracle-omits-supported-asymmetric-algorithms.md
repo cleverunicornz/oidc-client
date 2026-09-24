@@ -2,7 +2,7 @@
 
 ## State
 
-open
+closed
 
 ## Gap
 
@@ -92,9 +92,26 @@ supplemental fixture result is not that evidence.
   omit the claim named by O-000025 P4/P5/P14/F3. This additive observation
   leaves the Gap's State and Resolution unchanged.
 
+- Closer reconciliation observation for closure run
+  `20260924T150525Z-6e0be04d714572b064af694546e26e90067b8f69` at admitted
+  reviewed head `6e0be04d714572b064af694546e26e90067b8f69` (2026-09-24):
+  `c650c9dc1dfbe156523230dc86e52c72cf1a952d` repairs the ES256/ES384 fixture
+  payloads to embed their `at_hash` claims, and W-000039 records a PASS at that
+  repaired head under O-000025. Its Oracle-legs table has one row for P1–P16
+  and F1–F5; the two retained log digests listed in
+  `situation/witnesses/evidence/W-000039/SHA256SUMS` validate with
+  `sha256sum -c SHA256SUMS` from that directory. This settles the missing
+  complete-scope PASS evidence only; P-000009 remains `implemented`, and
+  G-000032 retains the separate canonical-state reconciliation concern.
+
 ## Resolution
 
-none
+closed — situation/witnesses/P-000009/W-000039-at-hash-complete-scope-successor-pass.md
+records a PASS at `c650c9dc1dfbe156523230dc86e52c72cf1a952d` under
+situation/oracles/O-000025-judge-documented-at-hash-rsa-pss-eddsa-families.md
+with a row deciding every listed Pass and Fail leg. It supplies the
+one-head complete-scope evidence this Gap lacked; G-000032 separately retains
+the frozen canonical-state reconciliation concern.
 
 ## References
 
@@ -106,3 +123,4 @@ none
 - situation/oracles/O-000025-judge-documented-at-hash-rsa-pss-eddsa-families.md
 - situation/witnesses/P-000009/W-000035-at-hash-rsa-pss-eddsa-oracle-leg-pass.md
 - situation/witnesses/P-000009/W-000037-at-hash-complete-scope-successor-pass.md
+- situation/witnesses/P-000009/W-000039-at-hash-complete-scope-successor-pass.md
