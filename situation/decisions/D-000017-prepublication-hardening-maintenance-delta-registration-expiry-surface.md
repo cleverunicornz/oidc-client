@@ -58,10 +58,10 @@ public-API break is acceptable pre-publication.
    other: `src/registration/mod.rs` (the public `ClientSecretExpiration`
    enum — `NeverExpires` / `ExpiresAt(DateTime<Utc>)` — with manual
    `Serialize`/`Deserialize` impls scoped to this type: numeric `0` →
-   `NeverExpires`; a timestamp that does not resolve to the epoch second →
-   `ExpiresAt` through the shared `Timestamp` adapter's floor-rounding;
-   `NeverExpires` → numeric `0`; and a colliding epoch form is rejected under
-   D-000018; the response field type becomes
+   `NeverExpires`; a supported timestamp that resolves to a Unix epoch second
+   other than `0` → `ExpiresAt` through the shared `Timestamp` adapter's
+   floor-rounding; `NeverExpires` → numeric `0`; and a colliding epoch form is
+   rejected under D-000018; the response field type becomes
    `Option<ClientSecretExpiration>`; getter and setter migrated),
    `src/registration/tests.rs` (migrated real-timestamp assertion; four
    new focused tests), and no change to `tests/rp_certification_dynamic.rs`
