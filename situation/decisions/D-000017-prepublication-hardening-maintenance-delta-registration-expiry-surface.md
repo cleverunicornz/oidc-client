@@ -125,11 +125,12 @@ signatures) and now match on `ClientSecretExpiration` variants; numeric
 serialization round-trips with numeric-`0` senders. New public API:
 `ClientSecretExpiration` (variants `NeverExpires`, `ExpiresAt`).
 situation/promises/P-000014-client-secret-expiration-never-expires-semantics.md
-and situation/oracles/O-000015-judge-client-secret-expiration-semantics.md
-carry the witnessed three-state core; P-000014 is `assured` by
-situation/witnesses/P-000014/W-000017-client-secret-expiration-semantics.md
-at `b96b920f52e0d8b392edcf0b5d752fa570c2b356`. The complementary
-epoch-collision rule is selected by D-000018 and carried by P-000016/O-000017.
+and situation/oracles/O-000024-judge-client-secret-expiration-complete-scope.md
+carry the complete declared registration-expiry contract. P-000014 remains
+`implemented`, not `assured`: W-000017 is the historical PASS observation of
+the narrower O-000015 three-state core, while W-000026 retains the current
+complete-scope observation as INVALID. The complementary epoch-collision rule
+is selected by D-000018 and carried by P-000016/O-000017.
 
 ## Revisit when
 

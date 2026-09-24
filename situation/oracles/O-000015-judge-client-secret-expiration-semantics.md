@@ -79,3 +79,9 @@ situation/witnesses/P-000014/W-000017-client-secret-expiration-semantics.md
 records a PASS disposition of these rules at gate head
 `b96b920f52e0d8b392edcf0b5d752fa570c2b356`. This oracle does not record
 results.
+
+## References
+
+- Superseded for P-000014's complete declared Scope by
+  situation/oracles/O-000024-judge-client-secret-expiration-complete-scope.md.
+  W-000017 remains an observation of this historical, narrower rule.
