@@ -52,10 +52,12 @@ and must not be edited, so this decision provides the classification home.
   assured EC verification contracts the corrected doc must match.
 - situation/decisions/D-000004-import-fidelity-rules-for-the-openidconnect-4-0-1-import.md
   — the import-fidelity regime this decision scopes for one surface.
-- Focused validation at implementing commit `cdfe1ea`:
+- Focused validation was reported at stream-worktree head `cdfe1ea`:
   `cargo test --offline --lib core::jwk` → 26 passed, 0 failed;
   `cargo check --offline` clean; a falsification run with the pre-fix derived
-  `Debug` restored failed exactly the four new redaction tests.
+  `Debug` restored failed exactly the four new redaction tests. That head is
+  unresolvable on this branch; G-000029 retains the provenance concern, while
+  the landed implementation is commit `5ab6d7b`.
 
 ## Decision
 
@@ -134,6 +136,8 @@ unsupported) no longer holds.
 
 ## Provenance
 
-Recorded 2026-09-23 by Stream C of the pre-publication hardening batch,
-against implementing commit `cdfe1ea` on branch
-`fix/prepublication-hardening`.
+Recorded 2026-09-23 by Stream C of the pre-publication hardening batch. The
+stream reported worktree head `cdfe1ea`, but the reachable branch commit
+carrying the implementation is `5ab6d7b`; see
+situation/gaps/G-000029-stream-head-shas-unresolvable-on-branch.md for the
+unresolved provenance boundary.
