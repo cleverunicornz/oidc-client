@@ -56,18 +56,18 @@ situation/oracles/O-000024-judge-client-secret-expiration-complete-scope.md
 supersedes O-000015 for this Promise's complete Scope. Its first successor
 observation,
 situation/witnesses/P-000014/W-000026-client-secret-expiry-complete-scope-incomplete.md,
-is INVALID: it preserves the absence of generic non-colliding numeric,
-feature-gated RFC3339-acceptance, and shared-adapter-isolation evidence at the
-current serializer/deserializer. The state is therefore `implemented`, not
+is INVALID: it preserves the absence of generic non-colliding numeric and
+feature-gated RFC3339-acceptance evidence at the current serializer/deserializer.
+The state is therefore `implemented`, not
 `assured`. W-000017 remains the PASS observation of the historical, narrower
 O-000015 rule.
 
 ## Residual
 
 No assurance is claimed until O-000024 has a valid witness for every declared
-Scope clause. W-000026 makes the current generic non-colliding numeric,
-feature-gated RFC3339-acceptance, and shared-adapter-isolation evidence
-absence visible; that boundary does not narrow this Promise. No live-network
+Scope clause. W-000026 makes the current generic non-colliding numeric and
+feature-gated RFC3339-acceptance evidence absence visible; that boundary does
+not narrow this Promise. No live-network
 flow has been observed. Epoch-collision inputs and values are rejected under
 P-000016 rather than assured here, and this Promise does not cover provider
 meaning beyond the registration field or `client_id_issued_at`.

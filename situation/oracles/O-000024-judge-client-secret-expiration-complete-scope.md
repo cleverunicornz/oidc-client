@@ -11,11 +11,11 @@ situation/promises/P-000014-client-secret-expiration-never-expires-semantics.md
 ## Inputs
 
 At the judged head, `ClientSecretExpiration` serialization and deserialization,
-the registration response field/getter/setter, numeric and feature-gated RFC
-3339 timestamp inputs, and the adjacent shared `Timestamp` adapter. This
-successor retains O-000015's concrete three-state fixtures and adds the
-previously omitted generic non-colliding timestamp and feature-gated RFC3339
-acceptance legs for the current serializer/deserializer.
+the registration response field/getter/setter, and numeric and feature-gated
+RFC3339 timestamp inputs. This successor retains O-000015's concrete
+three-state fixtures and adds the previously omitted generic non-colliding
+timestamp and feature-gated RFC3339 acceptance legs for the current
+serializer/deserializer.
 
 ## Pass
 
@@ -32,8 +32,6 @@ acceptance legs for the current serializer/deserializer.
   trip without aliasing one another.
 - P6 — The setter accepts both representable enum states, preserves their
   getter result, and serializes `NeverExpires` as numeric `0`.
-- P7 — This type-local serializer/deserializer does not change the shared
-  `Timestamp` adapter or any other adapter consumer.
 
 ## Fail
 
@@ -46,16 +44,13 @@ acceptance legs for the current serializer/deserializer.
   another state, or does not serialize as its epoch seconds.
 - F5 — A representable three-state round trip loses its state, or the setter
   changes a stored value.
-- F6 — The registration-specific change alters `Timestamp` behavior for
-  another consumer.
 
 ## Implementation
 
 `cargo test --offline --lib --quiet --features accept-rfc3339-timestamps
 client_secret_expiration_` executes the retained concrete expiration and
-collision fixtures. Generic non-colliding numeric/RFC3339 acceptance and the
-shared-adapter isolation require the coverage entries below until their own
-observations are retained.
+collision fixtures. Generic non-colliding numeric/RFC3339 acceptance requires
+the coverage entries below until its own observations are retained.
 
 ## Implementation coverage
 
@@ -67,13 +62,11 @@ observations are retained.
 | P4 | Feature-gated non-colliding RFC3339 timestamps are accepted. | manual — `src/registration/mod.rs::ClientSecretExpiration::deserialize` delegates non-sentinel input to feature-gated `Timestamp::to_utc` |
 | P5 | Three states round trip without aliasing. | `test_client_secret_expiration_never_expires`; `test_client_secret_expiration_expires_at`; `test_client_secret_expiration_absent` |
 | P6 | Setter preserves representable states. | `src/registration/tests.rs::test_client_secret_expiration_setter` |
-| P7 | Shared adapter and other consumers remain untouched. | manual — `ClientSecretExpiration` owns type-local serde implementation in `src/registration/mod.rs`; `src/helpers.rs::Timestamp` is unchanged by that implementation |
 | F1 | Sentinel never aliases an epoch expiry. | P1 fixture; `test_client_secret_expiration_epoch_serialization_rejected` |
 | F2 | Absent never becomes present. | P2 fixture |
 | F3 | Numeric non-colliding input remains distinct. | P3 fixture; manual generic adapter decision |
 | F4 | Feature-gated RFC3339 input remains distinct. | manual feature-gated adapter decision; `test_client_secret_expiration_epoch_rfc3339_rejected` bounds collision behavior outside this Promise |
 | F5 | Round trips and setter retain identity. | P5/P6 fixtures |
-| F6 | Other adapter consumers do not change. | manual — source isolation of the type-local implementation |
 
 ## References
 

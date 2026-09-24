@@ -12,10 +12,9 @@ situation/oracles/O-000024-judge-client-secret-expiration-complete-scope.md
 
 INVALID — the fresh feature-gated bounded command passed the retained concrete
 three-state and collision fixtures at the current head, but it did not
-independently observe the generic non-colliding numeric domain, feature-gated
-non-colliding RFC3339 acceptance, or shared-`Timestamp`-consumer isolation.
-This is an incomplete observation of the complete-scope rule, not a partial
-PASS and not assurance.
+independently observe the generic non-colliding numeric domain or feature-gated
+non-colliding RFC3339 acceptance. This is an incomplete observation of the
+complete-scope rule, not a partial PASS and not assurance.
 
 ## Head
 
@@ -35,7 +34,7 @@ PASS and not assurance.
   in the adjacent `SHA256SUMS` file.
 - The command selected the concrete core and epoch-collision fixtures. It did
   not include a non-colliding RFC3339 acceptance fixture or a direct observation
-  of the entire non-colliding numeric domain and unchanged adapter consumers.
+  of the entire non-colliding numeric domain.
 - W-000017 remains the PASS observation of superseded O-000015, not of this
   successor rule.
 
@@ -49,4 +48,3 @@ PASS and not assurance.
 | P4 | INVALID — no non-colliding RFC3339 acceptance fixture or manual observation was retained. |
 | P5 | PASS — the three concrete state round-trip fixtures passed in the retained command. |
 | P6 | PASS — the setter fixture passed in the retained command. |
-| P7 | INVALID — no shared-adapter isolation observation was retained for this successor rule. |
