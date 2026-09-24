@@ -2,26 +2,26 @@
 
 ## State
 
-closed
+open
 
 ## Gap
 
 P-000009 promises one documented `at_hash` verification path for shared-secret
-and asymmetric signature algorithms as categories, but O-000019's asymmetric
-Pass and Fail legs judge only ES256 and ES384. The Oracle does not decide that
-path for the other supported asymmetric families (RS256/384/512,
-PS256/384/512, and EdDSA). W-000028 is therefore listed-leg PASS evidence
-rather than complete-Promise evidence; earlier current-interval W-000028 and
-G-000032 wording had characterized it as complete-scope evidence.
+and asymmetric signature algorithms as categories. O-000019's asymmetric Pass
+and Fail legs judge only ES256 and ES384, so it does not decide that path for
+the other supported asymmetric families (RS256/384/512, PS256/384/512, and
+EdDSA). A complete-scope successor now states every Promise clause, but no
+valid retained PASS Witness decides that successor at one head.
 
 ## Relevance
 
-The reviewed DELTA adds W-000028 as a current listed-leg PASS observation. The
-correction removes its complete-scope representation, but neither a successor
-Oracle nor a valid Witness decides the omitted asymmetric families. The Oracle
-contract requires the Oracle to decide every explicit Promise clause within
-Scope; passing every listed O-000019 leg cannot establish the broader
-asymmetric-algorithm clause that those legs omit.
+The reviewed DELTA adds W-000028 as a current listed-leg PASS observation.
+O-000025 was initially written as a supplemental, non-superseding rule for
+the omitted asymmetric families. This correction makes O-000025 the
+complete-scope successor of O-000019, but W-000035 remains only a retained
+supplemental fixture observation and is INVALID for the corrected successor.
+The repository must not compose W-000028 and W-000035, which observe different
+rules and heads, into complete-Promise evidence.
 
 ## Evidence
 
@@ -30,67 +30,37 @@ asymmetric-algorithm clause that those legs omit.
   signature algorithms" and says that, for asymmetric algorithms (with ES256
   given as an example), the path resolves the matching provider JWK.
 - `situation/oracles/O-000019-judge-documented-at-hash-flow-complete-scope.md`
-  names ES256 in P4, ES384 in P5, and those two algorithms only in F2. It has no
-  Pass or Fail leg for the supported RSA, RSA-PSS, or EdDSA paths.
+  names ES256 in P4, ES384 in P5, and those two algorithms only in F2. It has
+  no Pass or Fail leg for the supported RSA, RSA-PSS, or EdDSA paths.
 - `situation/witnesses/P-000009/W-000028-documented-at-hash-oracle-leg-pass.md`
   executes ES256 and ES384 and supplies structural evidence for those same EC
   paths, but supplies no Oracle leg deciding RS256/384/512, PS256/384/512, or
   EdDSA through `IdToken::verification_key` and `AccessTokenHash::from_token`.
-- `src/core/mod.rs` (`CoreJwsSigningAlgorithm`) and `src/core/jwk/mod.rs`
-  (`CoreJsonWebKey::verify_signature` and `hash_bytes`) expose verification and
-  access-token hashing for the omitted asymmetric families; they are not
-  hypothetical algorithms outside the crate's supported surface.
-- Validator observation for closure run
-  `20260924T094258Z-50bf95f61913526682a3550d07fa6b1d96d78935` at fixed
-  reviewed head `8e61dc268952aa7f434cd164f7d0569a31113530` (2026-09-24).
-
-- Closer reconciliation for closure run
-  `20260924T111724Z-295cb33dbeb3b837300c31b0b1a17517095f2393` reviewed the
-  admitted DELTA
-  `7f1025e1b91c0f367f05528e7efb93846d437a81..295cb33dbeb3b837300c31b0b1a17517095f2393`.
-  O-000025 declares Pass and Fail legs for RS256/384/512, PS256/384/512, and
-  EdDSA; W-000035 records PASS for every one of those legs at
-  `48761b267c479b38918e4a139ed5c8fd530f2236`, with retained, checksum-verified
-  fixture evidence.
-
-- Validator observation for closure run
-  `20260924T111724Z-295cb33dbeb3b837300c31b0b1a17517095f2393` at fixed
-  reviewed head `bbd8b169c9010aeb7d9f2288b19b670a405b526c` (2026-09-24):
-  O-000025 says that it judges only the asymmetric families omitted by
-  O-000019 and that neither Oracle supersedes the other. The Oracle contract
-  requires an Oracle to collectively decide every explicit clause of its
-  Promise inside the declared Scope; it defines no composition of two
-  individually incomplete Oracles as a complete judgment rule. W-000035 is
-  PASS evidence for every leg O-000025 lists, but O-000025 does not itself
-  decide P-000009's shared-secret, ES256/ES384, `signing_key`, or
-  documentation clauses. This additive observation leaves the Gap's recorded
-  State and Resolution unchanged.
+- At reviewed head `bbd8b169c9010aeb7d9f2288b19b670a405b526c`, O-000025
+  expressly judged only the formerly omitted asymmetric families and did not
+  supersede O-000019. Its retained W-000035 fixture run passed those listed
+  supplemental legs at `48761b267c479b38918e4a139ed5c8fd530f2236`.
+- The validator docket for closure run
+  `20260924T111724Z-295cb33dbeb3b837300c31b0b1a17517095f2393` identifies that
+  partial, non-superseding record as an Oracle-contract failure:
+  https://github.com/cleverunicornz/oidc-client/pull/4#issuecomment-5813485966.
+- This forward correction makes O-000025 a self-contained complete-scope
+  successor and classifies W-000035 as INVALID because it omits the
+  successor's shared-secret, ES256/ES384, `signing_key`, and tutorial legs.
+  No retained witness presently decides every successor leg at one head.
 
 ## Impact
 
-W-000028 retains evidence that every leg actually listed by O-000019 passed,
-but O-000019 is not sufficient to judge P-000009's complete declared Scope.
-P-000009 remains `implemented` and unassured until a sufficient successor
-Oracle has a valid Witness. G-000032 now distinguishes this listed-leg PASS
-from sufficient complete-Promise coverage; this Gap remains open because the
-omitted paths are not yet decided.
-
-- Closer reconciliation closes the omitted-family concern: O-000025 and
-  W-000035 now decide the previously omitted supported asymmetric families.
-  P-000009's frozen canonical `implemented` State is a distinct reconciliation
-  concern retained by G-000032.
-
-- Validator observation: because O-000025 is expressly partial and
-  non-superseding, its listed-leg PASS Witness does not settle the
-  complete-Promise Oracle-sufficiency absence recorded here. The validation
-  docket reports that failed obligation separately from this observation.
+O-000019 is insufficient to judge P-000009's complete declared Scope.
+O-000025 now supplies a valid complete-scope judgment rule, but W-000035 is
+not adequate PASS evidence for it. P-000009 remains `implemented` and
+unassured while G-000032 is unresolved. This Gap remains open until a valid
+complete-scope successor Witness supplies adequate PASS evidence; the retained
+supplemental fixture result is not that evidence.
 
 ## Resolution
 
-closed — O-000025 and W-000035 supply implemented-Oracle and PASS-Witness
-evidence for every previously omitted RSA, RSA-PSS, and EdDSA family at
-`48761b267c479b38918e4a139ed5c8fd530f2236`. P-000009's frozen canonical State
-remains a separate concern in G-000032.
+none
 
 ## References
 

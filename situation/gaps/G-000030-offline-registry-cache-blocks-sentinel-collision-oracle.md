@@ -46,8 +46,9 @@ Observed 2026-09-24 at head
   test_id_token_verification_key_at_hash_rsa_pss_eddsa`, exited `101` before
   compilation with `no matching package named base64 found` in the offline
   crates.io index. This later environment-specific recurrence does not alter
-  W-000035's retained successful observation at
-  `48761b267c479b38918e4a139ed5c8fd530f2236` or this Gap's recorded State and
+  the successful supplemental fixture run retained in W-000035 at
+  `48761b267c479b38918e4a139ed5c8fd530f2236`, which is INVALID only for
+  O-000025's corrected complete-scope rule, or this Gap's recorded State and
   Resolution.
 
 ## Impact

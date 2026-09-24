@@ -1,4 +1,4 @@
-# W-000035 — at_hash RSA/RSA-PSS/EdDSA Oracle-leg observation passes
+# W-000035 — at_hash complete-scope successor observation is invalid
 
 ## Promise
 
@@ -10,15 +10,15 @@ situation/oracles/O-000025-judge-documented-at-hash-rsa-pss-eddsa-families.md
 
 ## Result
 
-PASS — every O-000025 leg is decided at this head. The fixture executes all
-seven judged families (RS256/384/512, PS256/384/512, EdDSA) through the same
-documented helper, and every iteration asserts signature verification, JWKS
-resolution through `IdToken::verification_key`, resolved-key/fixture-key hash
-equivalence, `AccessTokenHash::from_token` reproduction of the embedded
-`at_hash`, and the substituted-token negative. Together with W-000028 (the
-observation of O-000019's listed legs), this supplies recorded PASS coverage
-for P-000009's named clauses. P-000009's frozen canonical State remains
-`implemented`, as retained by G-000032; this Witness does not change it.
+INVALID — the retained run at this head meaningfully decides the supplemental
+RS256/384/512, PS256/384/512, and EdDSA fixture legs, but O-000025 is now the
+self-contained complete-scope successor of O-000019. This run did not decide
+the successor's shared-secret, ES256/ES384, `signing_key`, or tutorial legs.
+A PASS witness that omits an Oracle leg is INVALID, not partial PASS. The
+table identifies every unobserved or incomplete successor leg without
+composing this observation with W-000028 or an observation at another head.
+P-000009 remains `implemented` and unassured; G-000033 and G-000032 remain
+open.
 
 ## Head
 
@@ -34,38 +34,47 @@ All commands ran offline (cargo/rustc 1.98.0, Linux) at the head above; result
 lines are verbatim. Logs are sanitized (no machine-local paths) and digested:
 
 - `situation/witnesses/evidence/W-000035/cargo-test-at-hash-rsa-pss-eddsa-fixture.log`
-  retains `cargo test --offline --lib --quiet -- test_id_token_verification_key_at_hash_rsa_pss_eddsa`
-  (`exit=0`): `test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured;
-  111 filtered out; finished in 0.14s`. SHA-256
+  retains `cargo test --offline --lib --quiet --
+  test_id_token_verification_key_at_hash_rsa_pss_eddsa` (`exit=0`): `test
+  result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 111 filtered out;
+  finished in 0.14s`. SHA-256
   `ddbfe0051704ee4deb9a266af9a85552522e72e2248af504e51eb5711589c65e`.
 - `situation/witnesses/evidence/W-000035/cargo-test-at-hash-filter-battery.log`
-  retains the shared battery `cargo test --offline --lib --quiet --
-  id_token_verification_key_at_hash` (`exit=0`): `test result: ok. 4 passed;
-  0 failed; 0 ignored; 0 measured; 108 filtered out; finished in 0.14s`,
-  corroborating that the battery now selects four fixtures — the three
-  O-000019 fixtures plus this oracle's. SHA-256
-  `f7621df30b08f91e012dd6f6531b9a38270ec38b2da8d23fb288106348f79f9b`.
+  retains the shared `cargo test --offline --lib --quiet --
+  id_token_verification_key_at_hash` battery (`exit=0`): `test result: ok. 4
+  passed; 0 failed; 0 ignored; 0 measured; 108 filtered out; finished in
+  0.14s`. It corroborates fixture selection but was not an application of
+  O-000025's corrected complete-scope rule.
 - Digests are recorded in the adjacent `SHA256SUMS` and were re-verified with
   `sha256sum -c` after writing.
 - Structural citations were inspected at this head; line numbers refer to the
   files at `48761b267c479b38918e4a139ed5c8fd530f2236`.
 - Non-claims: no live-provider run; cargo-deny and the full gate are deferred
-  to PR CI. This Witness observes one Promise under one Oracle at one head; it
-  does not change P-000009's frozen canonical `implemented` State, retained by
-  G-000032.
+  to PR CI. This retained observation neither supplies a complete-scope PASS
+  nor changes P-000009's frozen canonical `implemented` State.
 
 ## Oracle legs
 
 | Leg | Evidence |
 |---|---|
-| P1 | PASS — the fixture's `RsaSsaPkcs1V15Sha256` iteration: `CoreIdToken::new(..., Some(access_token), None)` embeds the `at_hash` (`src/verification/tests.rs` lines 2421-2428); `id_token.claims(&verifier, nonce)` succeeds against the public client verifier whose JWKS publishes the RSA JWK with the algorithm allowed (lines 2430-2439); `IdToken::verification_key` resolves the JWK from the JWKS (lines 2443-2445); resolved-key and fixture-key `hash_bytes` agree (lines 2449-2455); `AccessTokenHash::from_token` over the resolved key equals the embedded hash (lines 2457-2463). |
-| P2 | PASS — same fixture and helper, `RsaSsaPkcs1V15Sha384` iteration of the algorithm loop (lines 2504-2523). |
-| P3 | PASS — same fixture, `RsaSsaPkcs1V15Sha512` iteration (lines 2504-2523). |
-| P4 | PASS — same fixture, `RsaSsaPssSha256` iteration (lines 2504-2523); the PSS variants sign through the same `CoreRsaPrivateSigningKey` fixture (lines 2496-2503). |
-| P5 | PASS — same fixture, `RsaSsaPssSha384` iteration (lines 2504-2523). |
-| P6 | PASS — same fixture, `RsaSsaPssSha512` iteration (lines 2504-2523). |
-| P7 | PASS — `EdDsa` iteration signs with `CoreEdDsaPrivateSigningKey::from_ed25519_pem` and publishes its OKP verification JWK (lines 2525-2541); the helper's verification, resolution, hash-equivalence, and reproduction assertions run unchanged. |
-| P8 | PASS (negative executed) — every iteration computes `AccessTokenHash::from_token` over `AccessToken::new("substituted_access_token")` and `assert_ne!`s it against the embedded hash (lines 2465-2472), seven times across the seven iterations. |
-| F1 | PASS (negative executed and structural) — executed: `IdToken::verification_key(&verifier).expect(...)` (`src/verification/tests.rs` lines 2443-2445) and `assert_eq!(from_resolved, from_fixture)` (lines 2449-2455) fail the fixture on any resolution failure or hash divergence; structural: `CoreJsonWebKey::hash_bytes` hashes only the supplied token bytes per family SHA (`src/core/jwk/mod.rs` lines 381-422) and ignores asymmetric key material, so hash reproduction alone does not distinguish keys — the nonmatching-JWK negative is carried by the same documented flow's signature verification, which every iteration runs first: `id_token.claims(&verifier, nonce)` succeeds only when the verifier's JWKS holds the matching key (lines 2437-2440). |
-| F2 | PASS (negative executed) — `assert_eq!(actual_access_token_hash, expected_access_token_hash)` (lines 2457-2463) fails any family whose documented call fails to reproduce the embedded `at_hash`; all seven pass. |
-| F3 | PASS (negative executed) — P8's `assert_ne!` (lines 2465-2472) fails any family in which the substituted token compares equal; all seven pass. |
+| P1 | Not observed — the retained supplemental fixture does not exercise the HS256 confidential-verifier path. |
+| P2 | Not observed — the retained supplemental fixture does not exercise the HS384 confidential-verifier path. |
+| P3 | Not observed — the retained supplemental fixture does not exercise the HS512 confidential-verifier path. |
+| P4 | Not observed — the retained supplemental fixture does not exercise the ES256 provider-JWK path. |
+| P5 | Not observed — the retained supplemental fixture does not exercise the ES384 provider-JWK path. |
+| P6 | Observed — the `RsaSsaPkcs1V15Sha256` iteration signs, verifies through the public verifier's matching JWK, resolves it with `IdToken::verification_key`, and reproduces the embedded `at_hash` (`src/verification/tests.rs` lines 2421-2463, 2504-2523). |
+| P7 | Observed — same helper and `RsaSsaPkcs1V15Sha384` iteration (lines 2421-2463, 2504-2523). |
+| P8 | Observed — same helper and `RsaSsaPkcs1V15Sha512` iteration (lines 2421-2463, 2504-2523). |
+| P9 | Observed — same helper and `RsaSsaPssSha256` iteration (lines 2421-2463, 2504-2523). |
+| P10 | Observed — same helper and `RsaSsaPssSha384` iteration (lines 2421-2463, 2504-2523). |
+| P11 | Observed — same helper and `RsaSsaPssSha512` iteration (lines 2421-2463, 2504-2523). |
+| P12 | Observed — the Ed25519 signing key and `EdDsa` iteration use the same helper (lines 2525-2541). |
+| P13 | Not observed — the retained supplemental fixture has no missing-client-secret decision for HS256, HS384, or HS512. |
+| P14 | Incomplete — substituted-token inequality is observed for P6 through P12 (lines 2465-2472), but not for the HS256/384/512 or ES256/ES384 legs required by the successor. |
+| P15 | Not observed — no retained decision inspects `IdToken::signing_key`'s borrowed JWKS-only scope. |
+| P16 | Not observed — no retained tutorial compilation applies the successor's documentation leg. |
+| F1 | Not observed — the retained supplemental fixture has no missing-client-secret negative for HS256, HS384, or HS512. |
+| F2 | Incomplete — matching-JWK resolution and hash reproduction are observed for P6 through P12, but no ES256/ES384 successor-family decision is observed here. |
+| F3 | Incomplete — the substituted-token negative is observed only for P6 through P12; the successor requires every named family. |
+| F4 | Not observed — no retained tutorial compilation applies the successor's documentation failure leg. |
+| F5 | Not observed — no retained decision inspects `IdToken::signing_key`'s borrowed JWKS-only scope. |
