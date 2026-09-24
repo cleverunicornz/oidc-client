@@ -33,27 +33,27 @@ situation/oracles/O-000011-judge-user-info-subject-binding.md
 
 ## State evidence
 
-State `implemented` cites the Stream A pre-publication-hardening commit on
-branch `fix/prepublication-hardening` that carries this record together with
-the implementation and the focused test named by the oracle
-(situation/decisions/D-000013-prepublication-hardening-maintenance-deltas-user-info-surface.md
-authorizes the deltas). Witnesses have not been collected yet; the parent's
-final gate attaches them under `situation/witnesses/P-000010/` and applies the
-oracle to decide the disposition.
+State `implemented` cites implementation commit
+`78529bc948824f2dc3f6eb2270b2e9c5aa98876c`, which adds the bound tutorial
+and example calls and the focused subject-binding fixture. The Promise,
+Oracle, and Witness records were attached retrospectively in
+`9c4013a9d93a93e65084b3475022c43059e64fc2`.
 
-Attached at the parent's final gate (2026-09-23, head
-`b96b920f52e0d8b392edcf0b5d752fa570c2b356`):
-situation/witnesses/P-000010/W-000013-user-info-subject-binding.md — Result
-PASS: the fixture legs by the gate lib suite, the tutorial leg by the gate
-doctest run, and the `gitlab` example leg by a retained
-`cargo check --offline --example gitlab --features reqwest-blocking`
-observation at that head.
+situation/witnesses/P-000010/W-000013-user-info-subject-binding.md is a PASS
+observation from the parent's final gate at
+`b96b920f52e0d8b392edcf0b5d752fa570c2b356` and decides the named
+O-000011 legs. The state remains `implemented`, not `assured`: O-000011 and
+W-000013 do not decide the separately stated `None` expected-subject skip
+behavior. That missing local coverage is visible as a closure repair
+obligation, not evidence that the behavior fails.
 
 ## Residual
 
 The tutorials are `no_run` documentation: compilation of the documented call is
 exercised, not its execution against a live provider. The asynchronous tutorial
-contains no user info call and therefore demonstrates no binding.
+contains no user info call and therefore demonstrates no binding. The unbound
+`None` expected-subject mode has no O-000011/W-000013 leg and remains
+unassured until a dedicated local lineage decides it.
 
 ## References
 
