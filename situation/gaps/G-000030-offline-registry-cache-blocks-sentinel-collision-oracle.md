@@ -58,7 +58,7 @@ Observed 2026-09-24 at head
   id_token_verification_key_at_hash`, exited `101` before compilation because
   the offline crates.io index has no `base64` package entry. This later
   environment-specific recurrence decides no O-000025 leg and does not alter
-  W-000037's retained successful observation at
+  W-000037's retained INVALID observation at
   `c5260aeb4a426f7881c8261ef2101d5a30710c29` or this Gap's State and
   Resolution.
 
