@@ -107,6 +107,19 @@ claim these Promises as assured from the new Witnesses alone.
   supply a complete-scope PASS at this head. This observation does not
   dispute W-000038's independently complete O-000026 coverage.
 
+- Closer reconciliation observation for closure run
+  `20260924T150525Z-6e0be04d714572b064af694546e26e90067b8f69` at admitted
+  reviewed head `6e0be04d714572b064af694546e26e90067b8f69` (2026-09-24):
+  `c650c9dc1dfbe156523230dc86e52c72cf1a952d:src/verification/tests.rs`
+  repairs the ES256/ES384 hand-signed fixture payloads to embed their
+  `at_hash` claims and compares the documented `AccessTokenHash::from_token`
+  result and substituted-token result with `claims.access_token_hash()`.
+  W-000039 observes that repaired source head as PASS under O-000025 with one
+  Oracle-legs row for P1–P16 and F1–F5. Its two log-file checksums in
+  `situation/witnesses/evidence/W-000039/SHA256SUMS` validate with
+  `sha256sum -c SHA256SUMS` from that directory. This is the successor
+  Oracle's own one-head evidence, not a composition with earlier Witnesses.
+
 ## Impact
 
 For the six lineages whose Oracles are sufficient, complete-Promise PASS
@@ -137,6 +150,13 @@ unresolved.
   unassured on the frozen-state reconciliation ground recorded here. This
   additive observation leaves the Gap's State and Resolution unchanged.
 
+- Closer impact addendum (2026-09-24): W-000039 removes the complete-scope
+  PASS-evidence deficiency for P-000009 and closes G-000033. P-000009
+  nevertheless remains `implemented`: its frozen State and Oracle sections
+  preserve the historical O-000019 pointer. This Gap remains open for that
+  canonical-state reconciliation mechanism, not for a missing O-000025
+  complete-scope PASS Witness.
+
 ## Resolution
 
 none
@@ -162,3 +182,4 @@ none
 - situation/gaps/G-000034-jwk-redaction-oracle-omits-clone-contract.md
 - situation/witnesses/P-000009/W-000037-at-hash-complete-scope-successor-pass.md
 - situation/witnesses/P-000013/W-000038-jwk-debug-complete-scope-successor-pass.md
+- situation/witnesses/P-000009/W-000039-at-hash-complete-scope-successor-pass.md
