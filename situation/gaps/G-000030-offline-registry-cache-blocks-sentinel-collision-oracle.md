@@ -2,7 +2,7 @@
 
 ## State
 
-open
+closed
 
 ## Gap
 
@@ -40,7 +40,12 @@ outside this Gap's scope.
 
 ## Resolution
 
-none
+closed — W-000034 records the exact predeclared O-000017 command succeeding
+offline at `d35d70a7e570ea1cbf9e0abf8f34d61f3035a1ba`: all ten selected
+fixtures pass, so the previously missing `base64` index entry did not block
+dependency resolution or execution on that observation. This resolves the
+execution-environment absence only; W-000034 retains the separate behavior
+judgment.
 
 ## References
 
