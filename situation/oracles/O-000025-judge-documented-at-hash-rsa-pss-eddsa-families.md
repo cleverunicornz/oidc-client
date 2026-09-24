@@ -81,8 +81,8 @@ leg set above inside one fixture iteration of the shared helper.
   scope, and documentation legs by O-000019, the remaining supported
   asymmetric families by this oracle. Neither supersedes the other.
 - situation/gaps/G-000033-at-hash-oracle-omits-supported-asymmetric-algorithms.md
-  — this oracle and its witness supply the evidence that settles the gap's
-  omitted asymmetric-family decisions; State and Resolution transitions
-  remain with the closure corrector.
+  — closed by this Oracle and W-000035, which decide its omitted-family
+  concern. P-000009's frozen canonical State remains an independent
+  reconciliation concern in G-000032.
 - situation/witnesses/P-000009/W-000028-documented-at-hash-oracle-leg-pass.md
   remains the observation of O-000019's listed legs.
