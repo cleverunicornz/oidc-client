@@ -2,7 +2,7 @@
 
 ## State
 
-open
+closed
 
 ## Gap
 
@@ -36,6 +36,15 @@ does not supply the missing predeclared Oracle leg or a corresponding Witness ro
   `20260924T094258Z-50bf95f61913526682a3550d07fa6b1d96d78935` at fixed
   reviewed head `8e61dc268952aa7f434cd164f7d0569a31113530` (2026-09-24).
 
+- Closer reconciliation for closure run
+  `20260924T111724Z-295cb33dbeb3b837300c31b0b1a17517095f2393` reviewed the
+  admitted DELTA
+  `7f1025e1b91c0f367f05528e7efb93846d437a81..295cb33dbeb3b837300c31b0b1a17517095f2393`.
+  O-000026 declares Pass and Fail legs for the unchanged `Clone` clause, and
+  W-000036 records PASS for every one of those legs at
+  `48761b267c479b38918e4a139ed5c8fd530f2236`, with retained,
+  checksum-verified fixture evidence.
+
 ## Impact
 
 O-000023 does not collectively decide every explicit clause of P-000013, so
@@ -44,9 +53,17 @@ that Promise. P-000013 remains `implemented` and unassured until a successor
 Oracle has a valid Witness; G-000032 now distinguishes this listed-leg PASS
 from sufficient complete-Promise coverage.
 
+- Closer reconciliation closes the omitted-Clone concern: O-000026 and
+  W-000036 now decide the previously absent `Clone` clause. P-000013's frozen
+  canonical `implemented` State is a distinct reconciliation concern retained
+  by G-000032.
+
 ## Resolution
 
-none
+closed — O-000026 and W-000036 supply implemented-Oracle and PASS-Witness
+evidence for P-000013's previously omitted `Clone` clause at
+`48761b267c479b38918e4a139ed5c8fd530f2236`. P-000013's frozen canonical State
+remains a separate concern in G-000032.
 
 ## References
 
@@ -55,3 +72,5 @@ none
 - situation/witnesses/P-000013/W-000032-jwk-debug-redaction-oracle-leg-pass.md
 - situation/gaps/G-000032-current-pass-evidence-outpaces-frozen-promise-states.md
 - situation/oracles/AGENTS.md
+- situation/oracles/O-000026-judge-jwk-clone-contract.md
+- situation/witnesses/P-000013/W-000036-jwk-clone-contract-oracle-leg-pass.md
