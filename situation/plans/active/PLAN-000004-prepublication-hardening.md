@@ -14,6 +14,7 @@ None.
 - situation/promises/P-000013-jwk-debug-redacts-secret-key-material.md
 - situation/promises/P-000014-client-secret-expiration-never-expires-semantics.md
 - situation/promises/P-000015-fresh-resolution-compiles-at-declared-floor.md
+- situation/promises/P-000016-client-secret-expiration-rejects-never-expires-sentinel-collisions.md
 
 ## Dependencies
 
@@ -26,22 +27,21 @@ None.
   authorizes the HTTP-header-surface deltas carried by P-000011 and
   P-000012.
 - situation/decisions/D-000016-msrv-baseline-is-compilation-proven.md
-  promotes P-000015, assured by its stream-recorded witness
+  establishes P-000015, whose scope is witnessed by
   situation/witnesses/P-000015/W-000018-msrv-1-96-compile-proof.md.
 - situation/decisions/D-000017-prepublication-hardening-maintenance-delta-registration-expiry-surface.md
   authorizes the registration-expiry delta carried by P-000014.
-- P-000008 through P-000014 are ordered after the parent's 2026-09-23 gate
-  run at `b96b920f52e0d8b392edcf0b5d752fa570c2b356`, whose witnesses
-  W-000011–W-000017 are attached; the disposition of each promise remains
-  the parent's.
+- situation/decisions/D-000018-reject-client-secret-expiration-never-expires-sentinel-collisions.md
+  selects the complementary epoch-collision behavior carried by P-000016.
+- W-000011 through W-000017 retain the parent-gate observations for P-000008
+  through P-000014; W-000018 retains P-000015's fresh-resolution proof; and
+  W-000019 records the blocked O-000017 attempt for P-000016.
 
 ## Completion
 
-Completes when P-000008, P-000009, P-000010, P-000011, P-000012, P-000013,
-P-000014, and P-000015 each reach the state their named oracle's verdict on
-the attached witnesses supports (expected `assured`, with the recorded
-residuals), and when the pull-request CI gate run URL for branch
-`fix/prepublication-hardening` is recorded as evidence under
-situation/promises/P-000005-configured-ci-gate-route.md at the time the
-parent opens the pull request — that recording is the remaining step and is
-not yet done.
+Completes when every listed Promise has a state justified by its named Oracle
+and retained Witnesses; a Promise is `assured` only when that evidence covers
+its complete declared Scope, and remaining limits stay explicit in its
+Residual or a linked Gap. A current-branch successful P-000005 configured-gate
+run URL must be retained in its own witness before any current gate claim cites
+it.
