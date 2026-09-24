@@ -49,6 +49,16 @@ into complete-Promise evidence.
   non-secret-field, and derived-RSA legs. No retained witness presently
   decides every successor leg at one head.
 
+- Closer reconciliation observation for closure run
+  `20260924T125359Z-021faa52ab84b38324b49b36cef7dad45c18aa38` at reviewed
+  head `8a328d05b7702788e84b139d0204b30c3941c413` (2026-09-24):
+  `situation/witnesses/P-000013/W-000038-jwk-debug-complete-scope-successor-pass.md`
+  records a self-contained PASS under O-000026 at reachable head
+  `c5260aeb4a426f7881c8261ef2101d5a30710c29`. Its Oracle-legs table supplies
+  one row for each P1–P11 and F1–F8, and its retained evidence manifest
+  verifies with `sha256sum -c SHA256SUMS` from its evidence directory. This
+  observation is not composed with W-000032 or W-000036.
+
 ## Impact
 
 O-000023 is insufficient to judge P-000013's complete declared Scope.
@@ -57,6 +67,13 @@ not adequate PASS evidence for it. P-000013 remains `implemented` and
 unassured while G-000032 is unresolved. This Gap remains open until a valid
 complete-scope successor Witness supplies adequate PASS evidence; the retained
 Clone fixture result is not that evidence.
+
+- Closer impact addendum (2026-09-24): the absence of a valid retained
+  complete-scope successor PASS Witness no longer describes the available
+  evidence. O-000023's historical Clone omission and the frozen canonical
+  `implemented` Promise State remain recorded; this additive observation leaves
+  this Gap's State and Resolution unchanged while
+  G-000032 retains the state-reconciliation concern.
 
 ## Resolution
 
@@ -71,3 +88,4 @@ none
 - situation/oracles/AGENTS.md
 - situation/oracles/O-000026-judge-jwk-clone-contract.md
 - situation/witnesses/P-000013/W-000036-jwk-clone-contract-oracle-leg-pass.md
+- situation/witnesses/P-000013/W-000038-jwk-debug-complete-scope-successor-pass.md
