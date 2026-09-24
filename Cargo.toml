@@ -2,13 +2,14 @@
 name = "oidc-client"
 version = "4.1.0"
 authors = ["David A. Ramos <ramos@cs.stanford.edu>"]
-description = "OpenID Connect library"
+description = "OpenID Connect relying-party library — maintained continuation of openidconnect"
 keywords = ["openid", "oidc", "oauth2", "authentication", "auth"]
 license = "MIT"
 repository = "https://github.com/cleverunicornz/oidc-client"
 edition = "2021"
 readme = "README.md"
 rust-version = "1.96"
+exclude = ["/situation", "/.github", "/AGENTS.md", "/README.upstream.md", "/deny.toml"]
 
 [package.metadata.docs.rs]
 all-features = true
