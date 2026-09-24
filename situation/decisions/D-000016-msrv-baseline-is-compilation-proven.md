@@ -138,8 +138,11 @@ witness under P-000015/O-000016.
 
 ## Provenance
 
-Recorded 2026-09-23 by Stream E of the pre-publication hardening branch
-`fix/prepublication-hardening` (worktree head
-e0860535f99aa50ad3d45befcea7ed1644864cc0 carries the manifest, README,
-and lock-removal deltas; the compilation proof battery was run against
-that commit the same day).
+Recorded 2026-09-23 by Stream E of the pre-publication hardening branch. The
+stream reported worktree head
+`e0860535f99aa50ad3d45befcea7ed1644864cc0`, which is unresolvable on the
+branch; the reachable manifest/README/lock-removal commit is
+`609899a1b9f14d40e6bc63dfce9f760d7e96ec6e`. W-000018 re-anchored the
+compilation proof at
+`f80568881fccd9e32ad99f593b39b6e54f9fa59a`; G-000029 retains the original
+provenance boundary.
