@@ -50,6 +50,13 @@ fallback.
   empty components: "control/"`. The corrector proceeded with the relayed
   docket and bounded direct reads; this additive observation does not change
   the Gap's State or Resolution.
+- Validator observation for closure run
+  `20260924T063914Z-cd10a6d6107e401ba795c255cfb2bc4df2b7e8e2` at fixed
+  reviewed head `731f85ed1be41e8b6a937bea7bcb68b6c60991ec` (2026-09-24):
+  semantic-index status discovery and a changed-work concept search both
+  returned the same unsafe-`control/`-path rejection. Validation continued
+  with the exact substantive diff, exact search, and direct reads; this
+  additive observation leaves the Gap's State and Resolution unchanged.
 
 ## Impact
 
