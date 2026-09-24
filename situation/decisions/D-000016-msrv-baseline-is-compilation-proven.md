@@ -23,20 +23,17 @@ nor the lock survives contact with the toolchains that actually exist.
 
 ## Evidence
 
-- Fresh offline resolution at worktree head 1d47ff9 (no `Cargo.lock`
-  present; resolution from the local crates.io index cache) selected
+- Fresh offline resolution at worktree head `1d47ff9` (no `Cargo.lock`
+  present; resolution from the available crates.io index cache) selected
   `serde_with 3.23.0`, `ed25519-dalek 2.2.0`, and `base64ct 1.8.3`. Each
-  crate's own published manifest declares `rust-version = "1.88"`,
-  `"1.81"`, and `"1.85"` respectively (read from
-  `~/.cargo/registry/src/index.crates.io-*/<crate>/Cargo.toml`). The
-  resolved graph's floor therefore exceeds 1.65 and no fresh resolution
-  can compile under 1.65's gate.
+  crate's published manifest declares `rust-version = "1.88"`, `"1.81"`,
+  and `"1.85"` respectively. The resolved graph's floor therefore exceeds
+  1.65 and no fresh resolution can compile under 1.65's gate.
 - `Cargo-1.65.lock`'s root package entry is `openidconnect 4.0.1`
-  (verified verbatim); it does not name `oidc-client` at all. A probe
-  copying it to `Cargo.lock` alongside this manifest and running
-  `cargo +1.96.0 check --offline --locked` fails with the verbatim
-  error: `error: cannot update the lock file /tmp/lockprobe/Cargo.lock
-  because --locked was passed to prevent this` — the lock cannot back a
+  (verified verbatim); it does not name `oidc-client` at all. A probe copying
+  it to `Cargo.lock` alongside this manifest and running
+  `cargo +1.96.0 check --offline --locked` failed because Cargo could not
+  update the lock while `--locked` was passed; the lock cannot back a
   `--locked` build of this crate.
 - Locally installed rustup toolchains: `1.96.0`,
   `1.98.0` (active, default), `nightly` (1.100.0-nightly,
