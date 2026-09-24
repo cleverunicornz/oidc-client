@@ -44,13 +44,13 @@ is produced by the focused command
 
 ## Fail
 
-Any of: numeric `0` deserializing to an `ExpiresAt` (epoch) value or an
-error; a real timestamp deserializing to `NeverExpires`, `None`, or the
-wrong instant; an absent field deserializing to anything but `None` or
-serializing the field; any round trip losing the state; a stored
-`NeverExpires` reading back as expired; `NeverExpires` serializing to any
-form other than numeric `0`; any pre-existing registration test failing;
-or `cargo check --offline --tests` failing.
+- F1: Any of: numeric `0` deserializing to an `ExpiresAt` (epoch) value or an
+  error; a real timestamp deserializing to `NeverExpires`, `None`, or the
+  wrong instant; an absent field deserializing to anything but `None` or
+  serializing the field; any round trip losing the state; a stored
+  `NeverExpires` reading back as expired; `NeverExpires` serializing to any
+  form other than numeric `0`; any pre-existing registration test failing; or
+  `cargo check --offline --tests` failing.
 
 ## Implementation
 
@@ -70,6 +70,7 @@ pre-existing registration tests in `src/registration/tests.rs`, run by
 | P5 | Setter stores both states; `NeverExpires` never reads as expired | `src/registration/tests.rs::test_client_secret_expiration_setter` |
 | P6 | Pre-existing registration tests pass unchanged | `test_response_serialization`, `test_metadata_serialization`, `test_metadata_serialization_minimal`, and the wave-2 lanes (`test_registration_*`) run by the focused command |
 | P7 | Ignored live test compiles | `cargo check --offline --tests` |
+| F1 | Any listed three-state, non-regression, or compile failure is observed. | the P1–P7 coverage rows above |
 
 ## Rules note
 
