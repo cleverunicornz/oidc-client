@@ -29,7 +29,7 @@ P-000008), nor flows outside the documented surfaces.
 
 ## Oracle
 
-situation/oracles/O-000011-judge-user-info-subject-binding.md
+situation/oracles/O-000020-judge-user-info-subject-binding-complete-scope.md
 
 ## State evidence
 
@@ -39,21 +39,22 @@ and example calls and the focused subject-binding fixture. The Promise,
 Oracle, and Witness records were attached retrospectively in
 `9c4013a9d93a93e65084b3475022c43059e64fc2`.
 
-situation/witnesses/P-000010/W-000013-user-info-subject-binding.md is a PASS
-observation from the parent's final gate at
-`b96b920f52e0d8b392edcf0b5d752fa570c2b356` and decides the named
-O-000011 legs. The state remains `implemented`, not `assured`: O-000011 and
-W-000013 do not decide the separately stated `None` expected-subject skip
-behavior. That missing local coverage is visible as a closure repair
-obligation, not evidence that the behavior fails.
+situation/oracles/O-000020-judge-user-info-subject-binding-complete-scope.md
+supersedes O-000011 for this Promise's complete Scope. Its first successor
+observation,
+situation/witnesses/P-000010/W-000022-user-info-subject-binding-complete-scope-incomplete.md,
+is INVALID: it preserves the absence of independent `None` expected-subject
+and documentation-leg evidence. The state therefore remains `implemented`,
+not `assured`. W-000013 remains the PASS observation of the historical,
+narrower O-000011 rule.
 
 ## Residual
 
-The tutorials are `no_run` documentation: compilation of the documented call is
-exercised, not its execution against a live provider. The asynchronous tutorial
-contains no user info call and therefore demonstrates no binding. The unbound
-`None` expected-subject mode has no O-000011/W-000013 leg and remains
-unassured until a dedicated local lineage decides it.
+No assurance is claimed until O-000020 has a valid witness for every declared
+Scope clause. W-000022 makes the `None` expected-subject and documentation
+compile legs visible; that evidence boundary does not narrow this Promise.
+The tutorials remain `no_run` documentation, and the asynchronous tutorial
+contains no user info call.
 
 ## References
 

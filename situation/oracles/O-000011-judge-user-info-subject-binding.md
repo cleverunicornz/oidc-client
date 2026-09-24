@@ -51,3 +51,9 @@ reqwest-blocking` execute the P5 leg.
 | P4 | Mismatched signed subject rejected after signature verification. | `src/verification/tests.rs::test_user_info_subject_binding` |
 | P5 | Documented flows compile with the bound subject. | `cargo test --offline --doc --features reqwest-blocking` |
 | F1 | Mismatch yields InvalidSubject and nothing else. | `src/verification/tests.rs::test_user_info_subject_binding` |
+
+## References
+
+- Superseded for P-000010's complete declared Scope by
+  situation/oracles/O-000020-judge-user-info-subject-binding-complete-scope.md.
+  W-000013 remains an observation of this historical, narrower rule.
