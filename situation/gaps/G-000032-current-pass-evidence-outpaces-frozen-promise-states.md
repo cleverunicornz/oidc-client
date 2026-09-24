@@ -71,6 +71,13 @@ claim these Promises as assured from the new Witnesses alone.
   listed leg. The retained evidence manifests for W-000035 and W-000036
   verified during this reconciliation.
 
+- The frozen `## Oracle` sections of P-000009 and P-000013 still name only
+  O-000019 and O-000023, respectively; the supplemental O-000025 and O-000026
+  records point back through their `## Judges` sections. The prior-checkpoint
+  immutability boundary prevents adding the missing forward links. Whether that
+  inverse-linked, composite Oracle coverage can justify a later Promise State
+  transition remains unresolved; this observation adds no automatic remedy.
+
 ## Impact
 
 For the six lineages whose Oracles are sufficient, complete-Promise PASS
