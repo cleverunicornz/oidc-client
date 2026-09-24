@@ -1,0 +1,6 @@
+Corroboration at the final manifest: forces a fresh rustc invocation on the crate.
+
+$ touch src/lib.rs && cargo +1.96.0 check --offline --all-features
+    Checking oidc-client v4.1.0 (/data/interactive-dev1-ovh-canary/omp-worktrees/t12b9d252d/m)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.30s
+exit=0

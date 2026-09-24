@@ -2,7 +2,7 @@
 
 ## State
 
-implemented
+assured
 
 ## Promise
 
@@ -29,10 +29,13 @@ situation/oracles/O-000016-judge-fresh-resolution-compiles-at-declared-floor.md
 
 ## State evidence
 
-`implemented` — the manifest declares `rust-version = "1.96"` and the
-proof battery was recorded at commit
-e0860535f99aa50ad3d45befcea7ed1644864cc0 on branch
-`fix/prepublication-hardening` (W-000018).
+`assured` — O-000016 passed on W-000018's 2026-09-24 battery at
+reachable head f80568881fccd9e32ad99f593b39b6e54f9fa59a on branch
+`fix/prepublication-hardening` (P1: both verified-set toolchains exit 0
+on both fresh-resolution commands; P2: the declared 1.96 floor equals
+the oldest installed stable); the original 2026-09-23 battery at
+e0860535f99aa50ad3d45befcea7ed1644864cc0 (unresolvable on the branch,
+G-000029) is retained in W-000018 as history.
 
 ## Residual
 

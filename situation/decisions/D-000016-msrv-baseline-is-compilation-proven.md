@@ -43,8 +43,12 @@ nor the lock survives contact with the toolchains that actually exist.
   commit-date 2026-09-19). Installing additional toolchains locally is
   prohibited by fleet policy; missing capabilities are requested, not
   installed.
-- Compilation proof at commit e0860535f99aa50ad3d45befcea7ed1644864cc0
+- Compilation proof at commit f80568881fccd9e32ad99f593b39b6e54f9fa59a
   (situation/witnesses/P-000015/W-000018-msrv-1-96-compile-proof.md):
+  the battery was re-executed at this reachable head after the
+  originally cited stream-worktree head
+  e0860535f99aa50ad3d45befcea7ed1644864cc0 proved unresolvable on the
+  branch (situation/gaps/G-000029-stream-head-shas-unresolvable-on-branch.md);
   fresh-resolution `cargo check --offline` and
   `cargo check --offline --all-features` exit 0 on 1.96.0 and on 1.98.0;
   a forced rustc re-invocation on the crate confirms 1.96.0 compiles the

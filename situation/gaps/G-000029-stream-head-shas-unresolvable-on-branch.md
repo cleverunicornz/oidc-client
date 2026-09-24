@@ -50,6 +50,16 @@ Observed 2026-09-23 at head `b96b920f52e0d8b392edcf0b5d752fa570c2b356`
   they are content-addressed by `SHA256SUMS` digests rather than by commit
   identifiers.
 
+Observed 2026-09-24 at head f80568881fccd9e32ad99f593b39b6e54f9fa59a
+(clean worktree), during the CodeRabbit-response forward commit on the
+open pull request: the MSRV proof chain (W-000018, D-000016, P-000015)
+was re-anchored by re-executing the full battery at this reachable head
+with every command exit 0 (new `*-at-f805688.log` evidence digested in
+situation/witnesses/evidence/W-000018/SHA256SUMS); the
+e0860535f99aa50ad3d45befcea7ed1644864cc0 observation remains as labeled
+history in W-000018. This addendum leaves State and Resolution
+unchanged and does not adjudicate the interpretation above.
+
 ## Impact
 
 A reader following the citation discipline cannot resolve `cdfe1ea` or
