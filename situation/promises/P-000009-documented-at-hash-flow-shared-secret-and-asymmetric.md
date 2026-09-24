@@ -34,19 +34,18 @@ situation/oracles/O-000010-judge-documented-at-hash-flow.md
 
 ## State evidence
 
-State `implemented` cites the Stream A pre-publication-hardening commit on
-branch `fix/prepublication-hardening` that carries this record together with
-the implementation and the focused test named by the oracle
-(situation/decisions/D-000013-prepublication-hardening-maintenance-deltas-user-info-surface.md
-authorizes the deltas). Witnesses have not been collected yet; the parent's
-final gate attaches them under `situation/witnesses/P-000009/` and applies the
-oracle to decide the disposition.
+State `implemented` cites implementation commit
+`78529bc948824f2dc3f6eb2270b2e9c5aa98876c`, which adds
+`IdToken::verification_key`, the tutorial migration, and the focused fixture
+test named by O-000010. The Promise, Oracle, and Witness records were
+attached retrospectively in `9c4013a9d93a93e65084b3475022c43059e64fc2`.
 
-Attached at the parent's final gate (2026-09-23, head
-`b96b920f52e0d8b392edcf0b5d752fa570c2b356`):
-situation/witnesses/P-000009/W-000012-documented-at-hash-flow.md — Result
-PASS: the fixture legs were decided by the gate lib suite and the doctest
-leg by the gate's 7 passed / 2 ignored doctest run under `--all-features`.
+situation/witnesses/P-000009/W-000012-documented-at-hash-flow.md is a PASS
+observation from the parent's final gate at
+`b96b920f52e0d8b392edcf0b5d752fa570c2b356` and decides every named
+O-000010 leg. The state remains `implemented`, not `assured`: the named
+fixtures cover HS256 and ES256, while HS384, HS512, and ES384 lack
+independently recorded coverage. Those limits remain in Residual.
 
 ## Residual
 
