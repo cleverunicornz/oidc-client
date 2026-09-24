@@ -1,0 +1,18 @@
+$ cargo test --offline --doc --features reqwest-blocking
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.05s
+   Doc-tests oidc_client
+
+running 9 tests
+test src/lib.rs - (line 87) ... ignored
+test src/lib.rs - (line 95) ... ignored
+test src/lib.rs - (line 377) - compile ... ok
+test src/lib.rs - (line 418) - compile ... ok
+test src/lib.rs - (line 285) - compile ... ok
+test src/lib.rs - (line 134) - compile ... ok
+test src/lib.rs - (line 510) - compile ... ok
+test src/jwt/mod.rs - jwt::NormalizedJsonWebTokenType (line 61) ... ok
+test src/client.rs - client::Client (line 33) ... ok
+
+test result: ok. 7 passed; 0 failed; 2 ignored; 0 measured; 0 filtered out; finished in 0.18s
+
+exit=0
