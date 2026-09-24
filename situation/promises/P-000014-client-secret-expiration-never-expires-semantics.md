@@ -2,7 +2,7 @@
 
 ## State
 
-implemented
+assured
 
 ## Promise
 
@@ -43,21 +43,19 @@ situation/oracles/O-000015-judge-client-secret-expiration-semantics.md
 
 ## State evidence
 
-State `implemented` cites the Stream D implementing commit of the
+The Stream D implementing commit of the
 pre-publication hardening batch on branch `fix/prepublication-hardening`
 (code and records land in the same commit). It introduces the
 `ClientSecretExpiration` enum with type-scoped serde, migrates the field,
 getter, setter, and test expectations, and adds four focused tests to
-`src/registration/tests.rs`. Focused results at that state:
+`src/registration/tests.rs`. Focused results at that commit:
 `cargo test --offline --lib registration` → 11 passed, 0 failed;
 `cargo check --offline --tests` clean (including the `#[ignore]`d
 `tests/rp_certification_dynamic.rs`, which compiles unchanged through the
 getter and derived `Debug`); the four new tests also pass under
 `--features accept-rfc3339-timestamps`. A falsification run with the
 zero-sentinel check disabled failed exactly
-`test_client_secret_expiration_never_expires`. No Witness exists yet:
-witnesses are to be collected under `situation/witnesses/P-000014/` by
-the parent's final gate.
+`test_client_secret_expiration_never_expires`.
 
 Attached at the parent's final gate (2026-09-23, head
 `b96b920f52e0d8b392edcf0b5d752fa570c2b356`):
@@ -68,12 +66,17 @@ recorded `cargo check --offline --tests` clean result.
 
 ## Residual
 
-Assurance is not complete: the oracle has not been applied to a witness,
-so this promise is not `assured` and is not yet invariant behavior under
-the supersession rule. The promise does not cover wire forms other than
-those `helpers::Timestamp` already accepts (numeric seconds; RFC 3339
-strings under the feature), does not constrain what a provider means by
-`0`, and does not cover `client_id_issued_at`.
+Assurance is complete: the oracle was applied to witness
+situation/witnesses/P-000014/W-000017-client-secret-expiration-semantics.md
+(PASS at gate head `b96b920f52e0d8b392edcf0b5d752fa570c2b356`), so this
+promise is `assured` and is invariant behavior under the supersession
+rule. The witness exercised no live-network flow — the `#[ignore]`d
+certification tests compiled but never ran — so live-provider behavior
+(how real providers send or interpret the `0` sentinel) remains
+unobserved. The promise does not cover wire forms other than those
+`helpers::Timestamp` already accepts (numeric seconds; RFC 3339 strings
+under the feature), does not constrain what a provider means by `0`,
+and does not cover `client_id_issued_at`.
 
 ## References
 

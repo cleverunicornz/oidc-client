@@ -971,10 +971,9 @@ where
     /// have been created for a confidential client
     /// ([`new_confidential_client`](Self::new_confidential_client)).
     ///
-    /// There is deliberately no method for allowing *any* algorithm. Unlike an ID token, the
-    /// relying party did not request this JWT, so it cannot constrain the algorithm the same
-    /// way; an explicit allowlist is the only supported configuration and defends against
-    /// algorithm-confusion attacks.
+    /// There is deliberately no method for allowing *any* algorithm. Configure the allowlist to
+    /// match the client's registered `userinfo_signed_response_alg`; an explicit allowlist is
+    /// the only supported configuration and defends against algorithm-confusion attacks.
     pub fn set_allowed_algs<I>(mut self, algs: I) -> Self
     where
         I: IntoIterator<Item = K::SigningAlgorithm>,

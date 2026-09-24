@@ -124,9 +124,8 @@ CI resolve fresh. The RUSTSEC-2025-0056 rationale in `deny.toml` claims
 fresh resolution after this change still selects backtrace 0.3.71 →
 miniz_oxide 0.7.4 → adler 1.0.2, so the advisory path it disposes of
 remains present and that record stays factually accurate. The true
-dependency-graph floor (somewhere at or below 1.88 by the declared
-minimums, unproven) and the absence of an MSRV-pinned CI job are
-recorded in
+lower dependency-graph floor (unproven below the compilation-verified
+1.96) and the absence of an MSRV-pinned CI job are recorded in
 situation/gaps/G-000026-true-msrv-floor-unproven-and-no-msrv-ci-job.md.
 
 ## Revisit when

@@ -787,6 +787,71 @@ fn test_client_secret_expiration_setter() {
     );
 }
 
+#[test]
+fn test_client_secret_expiration_epoch_serialization_rejected() {
+    // The whole-second timestamp 0 is the never-expires sentinel, so an
+    // ExpiresAt value resolving to the epoch second cannot be serialized.
+    let epoch = ClientSecretExpiration::ExpiresAt(
+        Utc.timestamp_opt(0, 0).single().expect("valid timestamp"),
+    );
+    let err = serde_json::to_string(&epoch).unwrap_err();
+    assert!(
+        err.to_string().contains("never-expires sentinel"),
+        "unexpected error: {}",
+        err
+    );
+    assert!(serde_json::to_value(&epoch).is_err());
+}
+
+#[test]
+fn test_client_secret_expiration_sub_second_serialization_rejected() {
+    // A sub-second epoch value floors into the sentinel second and must not
+    // serialize as the numeric sentinel 0.
+    let sub_second = ClientSecretExpiration::ExpiresAt(
+        Utc.timestamp_opt(0, 999_999_999)
+            .single()
+            .expect("valid timestamp"),
+    );
+    let err = serde_json::to_string(&sub_second).unwrap_err();
+    assert!(
+        err.to_string().contains("never-expires sentinel"),
+        "unexpected error: {}",
+        err
+    );
+    assert!(serde_json::to_value(&sub_second).is_err());
+}
+
+#[test]
+fn test_client_secret_expiration_fractional_epoch_rejected() {
+    // Fractional numeric inputs in (0, 1) floor into the sentinel second at
+    // deserialization and are rejected there rather than entering the type.
+    for json in ["0.5", "0.999"] {
+        let err = serde_json::from_str::<ClientSecretExpiration>(json).unwrap_err();
+        assert!(
+            err.to_string().contains("never-expires sentinel"),
+            "unexpected error for {}: {}",
+            json,
+            err
+        );
+    }
+}
+
+#[cfg(feature = "accept-rfc3339-timestamps")]
+#[test]
+fn test_client_secret_expiration_epoch_rfc3339_rejected() {
+    // RFC 3339 strings resolving to the epoch second, with or without a
+    // sub-second part, collide with the sentinel and are rejected.
+    for json in ["\"1970-01-01T00:00:00Z\"", "\"1970-01-01T00:00:00.999Z\""] {
+        let err = serde_json::from_str::<ClientSecretExpiration>(json).unwrap_err();
+        assert!(
+            err.to_string().contains("never-expires sentinel"),
+            "unexpected error for {}: {}",
+            json,
+            err
+        );
+    }
+}
+
 #[derive(Debug)]
 struct MockHttpClientError;
 

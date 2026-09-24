@@ -58,10 +58,12 @@ defects unless authorized.
    the parent session. D-000004 itself remains unchanged and authoritative for
    all other imported bytes.
 2. `UserInfoVerifier` and `UserInfoRequest` expose no allow-any-algorithm
-   method. The relying party did not request the user info JWT's algorithm the
-   way it requests the ID-token algorithm during registration, so an explicit
-   allowlist is the only supported configuration and defends against algorithm
-   confusion. (`IdTokenVerifier::allow_any_alg` is untouched.)
+   method. An explicit allowlist — matched by the consumer to the
+   `userinfo_signed_response_alg` the client registers, the same
+   registration-time algorithm agreement the ID token gets via
+   `id_token_signed_response_alg`, and defaulting to RS256-only — is the only
+   supported configuration and defends against algorithm confusion.
+   (`IdTokenVerifier::allow_any_alg` is untouched.)
 3. The `at_hash` API shape is an owned-key resolution method:
    `IdToken::verification_key(&self, verifier: &IdTokenVerifier<'_, K>) ->
    Result<K, SignatureVerificationError>`, which derives the symmetric key via
@@ -116,3 +118,8 @@ without registration-time algorithm agreement.
 Recorded 2026-09-23 by Stream A (UserInfoPolicy) of the pre-publication
 hardening batch; the `src/client.rs` accessor was authorized mid-flight by the
 parent session and is disclosed here and in the stream's report.
+
+Corrected 2026-09-24 in place by forward commit under the open-PR correction
+rule (root AGENTS.md:71-73), fixing §2's misstatement that the relying party
+cannot request the UserInfo algorithm at registration (review comment
+4087728803); the explicit-allowlist rationale is unchanged.

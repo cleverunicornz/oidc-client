@@ -125,8 +125,11 @@ serialization round-trips with numeric-`0` senders. New public API:
 `ClientSecretExpiration` (variants `NeverExpires`, `ExpiresAt`).
 situation/promises/P-000014-client-secret-expiration-never-expires-semantics.md
 and situation/oracles/O-000015-judge-client-secret-expiration-semantics.md
-carry the behavior; the promise is `implemented`, not `assured`, until
-the oracle passes on witnesses collected at the parent's final gate.
+carry the behavior; the promise is `assured` — the oracle passed on
+witness
+situation/witnesses/P-000014/W-000017-client-secret-expiration-semantics.md
+collected at the parent's final gate (2026-09-23, head
+`b96b920f52e0d8b392edcf0b5d752fa570c2b356`).
 
 ## Revisit when
 

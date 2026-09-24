@@ -759,6 +759,13 @@ impl AdditionalClientRegistrationResponse for EmptyAdditionalClientRegistrationR
 /// An absent `client_secret_expires_at` field deserializes to
 /// [`Option::None`], keeping the three states distinct: absent, never
 /// expires, and expires at a specific time.
+///
+/// A whole-second timestamp of `0` is also the
+/// [`ClientSecretExpiration::NeverExpires`] sentinel, so
+/// [`ClientSecretExpiration::ExpiresAt`] values that resolve to the Unix epoch
+/// second are rejected at deserialization (the numeric value `0` still means
+/// [`ClientSecretExpiration::NeverExpires`]) and at serialization. Use
+/// [`ClientSecretExpiration::NeverExpires`] for a non-expiring secret.
 #[derive(Clone, Debug, PartialEq, Eq)]
 pub enum ClientSecretExpiration {
     /// The client secret does not expire (the numeric JSON value `0`).
@@ -774,7 +781,15 @@ impl Serialize for ClientSecretExpiration {
     {
         match self {
             Self::NeverExpires => serializer.serialize_i64(0),
-            Self::ExpiresAt(expires_at) => Timestamp::from_utc(expires_at).serialize(serializer),
+            Self::ExpiresAt(expires_at) => {
+                if expires_at.timestamp() == 0 {
+                    return Err(serde::ser::Error::custom(
+                        "client secret expiration serializes to the numeric 0 never-expires \
+                         sentinel; use ClientSecretExpiration::NeverExpires instead",
+                    ));
+                }
+                Timestamp::from_utc(expires_at).serialize(serializer)
+            }
         }
     }
 }
@@ -803,6 +818,13 @@ impl<'de> Deserialize<'de> for ClientSecretExpiration {
                 timestamp
             ))
         })?;
+        if expires_at.timestamp() == 0 {
+            return Err(serde::de::Error::custom(format!(
+                "`{}` resolves to the epoch second, which collides with the numeric 0 \
+                 never-expires sentinel and cannot round-trip as an expiry",
+                timestamp
+            )));
+        }
         Ok(Self::ExpiresAt(expires_at))
     }
 }

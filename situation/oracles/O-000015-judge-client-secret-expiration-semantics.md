@@ -73,6 +73,8 @@ pre-existing registration tests in `src/registration/tests.rs`, run by
 
 ## Rules note
 
-Witnesses do not exist yet; they are to be collected under
-`situation/witnesses/P-000014/` by the parent's final gate. This oracle
-does not record results.
+Witnesses are collected under `situation/witnesses/P-000014/`:
+situation/witnesses/P-000014/W-000017-client-secret-expiration-semantics.md
+records a PASS disposition of these rules at gate head
+`b96b920f52e0d8b392edcf0b5d752fa570c2b356`. This oracle does not record
+results.
