@@ -34,8 +34,13 @@ situation/oracles/O-000017-judge-client-secret-expiration-sentinel-collisions.md
 State `implemented` cites correction commit
 `f80568881fccd9e32ad99f593b39b6e54f9fa59a`, which adds the type-local
 rejection branches and the focused epoch-collision tests in
-`src/registration/tests.rs`. D-000018 selects this behavior. No witness has
-been collected under this oracle yet.
+`src/registration/tests.rs`. D-000018 selects this behavior.
+
+situation/witnesses/P-000016/W-000019-client-secret-expiration-sentinel-collision-oracle-blocked.md
+is a BLOCKED observation at
+`226ef0be1a7da6969d7840b80a426500b6e27df5`: the predeclared offline command
+could not resolve `base64`, so no O-000017 leg was decided. The state remains
+`implemented` and carries no assurance claim.
 
 ## Residual
 
@@ -46,6 +51,8 @@ any `helpers::Timestamp` consumer outside `ClientSecretExpiration`.
 ## References
 
 - situation/decisions/D-000018-reject-client-secret-expiration-never-expires-sentinel-collisions.md
+- situation/oracles/O-000017-judge-client-secret-expiration-sentinel-collisions.md
+- situation/witnesses/P-000016/W-000019-client-secret-expiration-sentinel-collision-oracle-blocked.md
 - situation/promises/P-000014-client-secret-expiration-never-expires-semantics.md
 - src/registration/mod.rs (`ClientSecretExpiration`)
 - src/registration/tests.rs::test_client_secret_expiration_epoch_serialization_rejected
