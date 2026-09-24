@@ -30,6 +30,15 @@ Observed 2026-09-24 at head
   retains the BLOCKED observation. Its sanitized command output is committed at
   `situation/witnesses/evidence/W-000019/cargo-test-client-secret-expiration.log`
   with the SHA-256 recorded in the adjacent `SHA256SUMS` file.
+- Validator observation for closure run
+  `20260924T094258Z-50bf95f61913526682a3550d07fa6b1d96d78935` at fixed
+  reviewed head `8e61dc268952aa7f434cd164f7d0569a31113530` (2026-09-24):
+  the exact O-000017 command, `cargo test --offline --lib --features
+  accept-rfc3339-timestamps client_secret_expiration_`, exited `101` before
+  compilation with `no matching package named base64 found` in the offline
+  crates.io index. This later environment-specific recurrence does not alter
+  W-000034's successful observation at `d35d70a7e570ea1cbf9e0abf8f34d61f3035a1ba`
+  or this Gap's retained State and Resolution.
 
 ## Impact
 
