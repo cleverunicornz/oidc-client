@@ -88,9 +88,10 @@ remains limited to historical stream-worktree provenance.
 
 ## Resolution
 
-none — the affected records are immutable outside a forward commit on the
-open pull request, which is separately assigned work; this run records the
-concern only.
+none — the original stream-worktree objects remain unavailable. The closer's
+2026-09-24 forward corrections make the active P-000013/D-000014 and
+D-000016 coordinates reachable, but they do not resolve the historical
+observations or supply their raw provenance.
 
 ## References
 
