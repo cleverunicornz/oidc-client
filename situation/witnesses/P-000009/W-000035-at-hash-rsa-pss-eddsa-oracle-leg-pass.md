@@ -16,9 +16,9 @@ documented helper, and every iteration asserts signature verification, JWKS
 resolution through `IdToken::verification_key`, resolved-key/fixture-key hash
 equivalence, `AccessTokenHash::from_token` reproduction of the embedded
 `at_hash`, and the substituted-token negative. Together with W-000028 (the
-observation of O-000019's listed legs), O-000019 plus O-000025 now have
-passing observations covering P-000009's Scope at this head; promise state
-transitions remain with the closure corrector.
+observation of O-000019's listed legs), this supplies recorded PASS coverage
+for P-000009's named clauses. P-000009's frozen canonical State remains
+`implemented`, as retained by G-000032; this Witness does not change it.
 
 ## Head
 
