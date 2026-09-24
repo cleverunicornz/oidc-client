@@ -60,23 +60,24 @@ claim these Promises as assured from the new Witnesses alone.
   `situation/AGENTS.md` states both that a Promise state records disposition
   and that post-checkpoint records are immutable.
 
-- Closer observation for closure run
-  `20260924T111724Z-295cb33dbeb3b837300c31b0b1a17517095f2393` at opening
-  checkpoint `c9e07d9eb28282fd56ffbcce87cc33f4093a3f9b` (2026-09-24): the
-  admitted DELTA adds O-000025/W-000035 for P-000009's formerly omitted
-  RSA, RSA-PSS, and EdDSA families, and O-000026/W-000036 for P-000013's
-  formerly omitted `Clone` clause. Each new implemented Oracle has coverage
-  for every listed Pass and Fail leg; each corresponding Witness is PASS at
-  `48761b267c479b38918e4a139ed5c8fd530f2236` with one Oracle-legs row per
-  listed leg. The retained evidence manifests for W-000035 and W-000036
-  verified during this reconciliation.
+- Corrector correction for closure run
+  `20260924T111724Z-295cb33dbeb3b837300c31b0b1a17517095f2393` published
+  O-000025 in `857eb25` and O-000026 in `b75e2ea` as self-contained
+  complete-scope successors of O-000019 and O-000023. Each has coverage for
+  every listed Pass and Fail leg. W-000035 and W-000036 retain successful
+  supplemental fixture runs at `48761b267c479b38918e4a139ed5c8fd530f2236`,
+  but each is `INVALID` against its corrected successor because it omits
+  independently required full-scope legs. Their retained evidence manifests
+  remain available; neither record supplies current complete-scope PASS
+  evidence.
 
 - The frozen `## Oracle` sections of P-000009 and P-000013 still name only
-  O-000019 and O-000023, respectively; the supplemental O-000025 and O-000026
-  records point back through their `## Judges` sections. The prior-checkpoint
-  immutability boundary prevents adding the missing forward links. Whether that
-  inverse-linked, composite Oracle coverage can justify a later Promise State
-  transition remains unresolved; this observation adds no automatic remedy.
+  O-000019 and O-000023, respectively. O-000025 and O-000026 explicitly
+  supersede those partial rules, but the prior-checkpoint immutability boundary
+  prevents adding forward links to the Promise records. Neither corrected
+  successor has a valid complete-scope PASS Witness, so no current record can
+  justify a Promise State transition; this observation adds no automatic
+  remedy.
 
 ## Impact
 
@@ -89,11 +90,11 @@ canonical State remains `implemented`; rewriting that State would violate the
 record-immutability boundary. The appropriate reconciliation mechanism remains
 unresolved.
 
-- The new records settle the specific omitted-clause concerns in G-000033 and
-  G-000034, so P-000009 and P-000013 now have supplemental recorded
-  Oracle/Witness evidence beyond W-000028 and W-000032. Their frozen canonical
-  Promise States still say `implemented`; this Gap's unresolved state-record
-  mechanism remains, and no consumer may treat either Promise as assured.
+- The corrected successor rules make the complete evidence requirement visible,
+  but their INVALID retained Witnesses do not settle G-000033 or G-000034.
+  Those Gaps remain open, P-000009 and P-000013 remain `implemented`, and this
+  Gap's unresolved state-record mechanism remains. No consumer may treat
+  either Promise as assured.
 
 ## Resolution
 
