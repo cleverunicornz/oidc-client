@@ -79,6 +79,23 @@ claim these Promises as assured from the new Witnesses alone.
   justify a Promise State transition; this observation adds no automatic
   remedy.
 
+- Closer reconciliation observation for closure run
+  `20260924T125359Z-021faa52ab84b38324b49b36cef7dad45c18aa38` at reviewed
+  head `8a328d05b7702788e84b139d0204b30c3941c413` (2026-09-24):
+  `situation/witnesses/P-000009/W-000037-at-hash-complete-scope-successor-pass.md`
+  records a PASS under O-000025 at reachable head
+  `c5260aeb4a426f7881c8261ef2101d5a30710c29`, with one Oracle-legs row for
+  P1–P16 and F1–F5. `situation/witnesses/P-000013/W-000038-jwk-debug-complete-scope-successor-pass.md`
+  records a PASS under O-000026 at that same head, with one row for P1–P11 and
+  F1–F8. Both retained evidence manifests verify with `sha256sum -c SHA256SUMS`
+  from their respective evidence directories. These are each their successor
+  Oracle's own observation, not a composition with an earlier Witness.
+- This later observation replaces only the prior statement that neither
+  successor has a valid complete-scope PASS Witness. The frozen Promise
+  `State` and `Oracle` sections remain as recorded; this addendum neither
+  changes this Gap's State or Resolution nor selects a canonical-state
+  reconciliation mechanism.
+
 ## Impact
 
 For the six lineages whose Oracles are sufficient, complete-Promise PASS
@@ -95,6 +112,12 @@ unresolved.
   Those Gaps remain open, P-000009 and P-000013 remain `implemented`, and this
   Gap's unresolved state-record mechanism remains. No consumer may treat
   either Promise as assured.
+
+- Closer impact addendum (2026-09-24): complete-scope successor Witness
+  coverage is now retained for both affected lineages. The outstanding concern
+  is the frozen Promise-state and forward-link reconciliation mechanism, not
+  the prior absence of successor-Witness coverage. This addendum leaves the
+  Gap's State and Resolution unchanged.
 
 ## Resolution
 
@@ -119,3 +142,5 @@ none
 - situation/witnesses/P-000013/W-000036-jwk-clone-contract-oracle-leg-pass.md
 - situation/gaps/G-000033-at-hash-oracle-omits-supported-asymmetric-algorithms.md
 - situation/gaps/G-000034-jwk-redaction-oracle-omits-clone-contract.md
+- situation/witnesses/P-000009/W-000037-at-hash-complete-scope-successor-pass.md
+- situation/witnesses/P-000013/W-000038-jwk-debug-complete-scope-successor-pass.md
