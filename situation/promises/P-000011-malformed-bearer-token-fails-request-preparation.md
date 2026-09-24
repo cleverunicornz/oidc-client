@@ -33,21 +33,18 @@ situation/oracles/O-000012-judge-malformed-bearer-token-fails-request-preparatio
 
 ## State evidence
 
-State `implemented` cites the Stream B pre-publication-hardening commit on branch
-`fix/prepublication-hardening` that carries this record together with the implementation and
-the focused tests named by the oracle
-(situation/decisions/D-000015-prepublication-hardening-maintenance-deltas-http-header-surface.md
-authorizes the deltas). Witnesses have not been collected yet; the parent's final gate
-attaches them under `situation/witnesses/P-000011/` and applies the oracle to decide the
-disposition.
+State `implemented` cites implementation commit
+`60c11639afc4d0b7504d7338c1a810f8c38eee30`, which changes
+`auth_bearer`, its two consumers, and the focused tests named by O-000012.
+The Promise, Oracle, and Witness records were attached retrospectively in
+`9c4013a9d93a93e65084b3475022c43059e64fc2`.
 
-Attached at the parent's final gate (2026-09-23, head
-`b96b920f52e0d8b392edcf0b5d752fa570c2b356`):
 situation/witnesses/P-000011/W-000014-malformed-bearer-token-preparation-errors.md
-— Result PASS: every executable O-000012 leg was decided by the gate run
-(`cargo test --all-features --offline`, lib suite 99 passed / 0 failed) and
-the manual F4 leg by inspection of `src/http_utils.rs::auth_bearer` at that
-head.
+is a PASS observation from the parent's final gate at
+`b96b920f52e0d8b392edcf0b5d752fa570c2b356` and decides each named
+O-000012 leg. The state remains `implemented`, not `assured`: the failure
+paths are observed asynchronously, but valid-token asynchronous dispatch has
+no independently recorded coverage. That limit remains in Residual.
 
 ## Residual
 
