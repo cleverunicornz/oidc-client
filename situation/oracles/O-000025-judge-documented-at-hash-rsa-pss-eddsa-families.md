@@ -101,7 +101,7 @@ coverage table.
 | P15 | Borrowed `signing_key` remains JWKS-only. | manual — `src/id_token/mod.rs::IdToken::signing_key` documentation and implementation |
 | P16 | Both tutorials compile against the documented owned-key flow. | `cargo test --offline --doc --features reqwest-blocking` |
 | F1 | Shared-secret key resolution does not fall back or accept no secret. | `test_id_token_verification_key_at_hash` for HS256; manual — inspect the common `uses_shared_secret()` branch for HS384/HS512 |
-| F2 | Asymmetric key resolution and hash fidelity reject nonmatching keys. | `test_id_token_verification_key_at_hash`, `test_id_token_verification_key_at_hash_es384`, and `test_id_token_verification_key_at_hash_rsa_pss_eddsa`; manual — exercise a nonmatching key for each named asymmetric family |
+| F2 | Asymmetric key resolution and hash fidelity reject nonmatching keys. | manual — exercise a nonmatching provider JWK for every named asymmetric family; the matching-flow fixtures in P4 through P12 do not decide this negative |
 | F3 | A substituted token does not compare equal in any named family. | same coverage as P14 |
 | F4 | Documented owned-key flow continues to compile. | `cargo test --offline --doc --features reqwest-blocking` |
 | F5 | `signing_key` scope remains unchanged. | manual — `src/id_token/mod.rs::IdToken::signing_key` |
