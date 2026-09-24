@@ -60,6 +60,17 @@ e0860535f99aa50ad3d45befcea7ed1644864cc0 observation remains as labeled
 history in W-000018. This addendum leaves State and Resolution
 unchanged and does not adjudicate the interpretation above.
 
+Observed 2026-09-24 during closer reconciliation at head
+`2567dceefc1623f9b2bbfa553fd41201df7f2b1c`:
+
+- P-000013 and D-000014 now name reachable implementation commit `5ab6d7b`
+  while retaining `cdfe1ea` only as the unresolvable stream-worktree
+  observation; D-000016 names reachable manifest commit `609899a1` and
+  W-000018's re-anchored proof at `f8056888`.
+- This addendum corrects active repository coordinates without claiming that
+  the original stream-head observations become resolvable or that their
+  unretained raw output gains provenance.
+
 ## Impact
 
 A reader following the citation discipline cannot resolve `cdfe1ea` or
@@ -70,6 +81,10 @@ every O-000014 leg was re-executed at `b96b920f52e0d8b392edcf0b5d752fa570c2b356`
 by the parent's gate run (witnessed by
 situation/witnesses/P-000013/W-000016-jwk-debug-secret-redaction.md), and
 W-000018's evidence logs are retained with digests.
+
+Closer impact addendum (2026-09-24): current behavioral state evidence now
+uses the reachable commits and retained W-000018 evidence above. The open Gap
+remains limited to historical stream-worktree provenance.
 
 ## Resolution
 
