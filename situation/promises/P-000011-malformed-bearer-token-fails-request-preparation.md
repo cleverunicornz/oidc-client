@@ -29,7 +29,7 @@ HTTP client behavior after a well-formed request has been prepared.
 
 ## Oracle
 
-situation/oracles/O-000012-judge-malformed-bearer-token-fails-request-preparation.md
+situation/oracles/O-000021-judge-malformed-bearer-token-complete-scope.md
 
 ## State evidence
 
@@ -39,20 +39,23 @@ State `implemented` cites implementation commit
 The Promise, Oracle, and Witness records were attached retrospectively in
 `9c4013a9d93a93e65084b3475022c43059e64fc2`.
 
-situation/witnesses/P-000011/W-000014-malformed-bearer-token-preparation-errors.md
-is a PASS observation from the parent's final gate at
-`b96b920f52e0d8b392edcf0b5d752fa570c2b356` and decides each named
-O-000012 leg. The state remains `implemented`, not `assured`: the failure
-paths are observed asynchronously, but valid-token asynchronous dispatch has
-no independently recorded coverage. That limit remains in Residual.
+situation/oracles/O-000021-judge-malformed-bearer-token-complete-scope.md
+supersedes O-000012 for this Promise's complete Scope. Its first successor
+observation,
+situation/witnesses/P-000011/W-000023-malformed-bearer-complete-scope-incomplete.md,
+is INVALID: it preserves the absence of valid synchronous-header, tokenless,
+and valid asynchronous-dispatch evidence. The state therefore remains
+`implemented`, not `assured`. W-000014 remains the PASS observation of the
+historical, narrower O-000012 rule.
 
 ## Residual
 
-The asynchronous happy paths are not separately exercised; the async tests cover the
-malformed-token failure (where preparation must precede dispatch) and both async paths
-funnel through the same `prepare_request` / `prepare_registration` the synchronous tests
-exercise. Invalidity classes beyond `HeaderValue` parsing (for example an empty bearer
-token) are valid header constructions and are not treated as errors.
+No assurance is claimed until O-000021 has a valid witness for every declared
+Scope clause. W-000023 makes the valid synchronous-header, tokenless, and
+valid asynchronous-dispatch legs visible; that evidence boundary does not
+narrow this Promise. Invalidity classes beyond `HeaderValue` parsing (for
+example an empty bearer token) are valid header constructions and are not
+treated as errors.
 
 ## References
 

@@ -62,3 +62,9 @@ executable legs.
 | F3 | No echo (failure direction). | the same tests as P4 |
 | F4 | No silent credential stripping or omission. | manual (code inspection of `src/http_utils.rs::auth_bearer`: the construction error maps to `Err`; no replacement or omission path exists) |
 | F5 | Bearer header exactness both directions. | the same tests as P5 and P6 |
+
+## References
+
+- Superseded for P-000011's complete declared Scope by
+  situation/oracles/O-000021-judge-malformed-bearer-token-complete-scope.md.
+  W-000014 remains an observation of this historical, narrower rule.
