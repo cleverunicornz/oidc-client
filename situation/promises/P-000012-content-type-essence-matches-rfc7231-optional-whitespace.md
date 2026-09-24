@@ -25,7 +25,7 @@ parsing (only the essence is compared) and header transport fidelity below the
 
 ## Oracle
 
-situation/oracles/O-000013-judge-content-type-essence-matching.md
+situation/oracles/O-000022-judge-content-type-essence-complete-scope.md
 
 ## State evidence
 
@@ -35,18 +35,22 @@ essence comparison and adds the focused consumer-path tests named by
 O-000013. The Promise, Oracle, and Witness records were attached
 retrospectively in `9c4013a9d93a93e65084b3475022c43059e64fc2`.
 
-situation/witnesses/P-000012/W-000015-content-type-essence-optional-whitespace.md
-is a PASS observation from the parent's final gate at
-`b96b920f52e0d8b392edcf0b5d752fa570c2b356` and decides each named
-O-000013 leg. The state remains `implemented`, not `assured`: the named
-fixtures cover the listed case and OWS forms, not every legal-but-unusual
-field-value padding retained in Residual.
+situation/oracles/O-000022-judge-content-type-essence-complete-scope.md
+supersedes O-000013 for this Promise's complete Scope. Its first successor
+observation,
+situation/witnesses/P-000012/W-000024-content-type-complete-scope-incomplete.md,
+is INVALID: it preserves the absence of a structural observation deciding
+universal legal SP/HTAB OWS handling. The state therefore remains
+`implemented`, not `assured`. W-000015 remains the PASS observation of the
+historical, narrower O-000013 rule.
 
 ## Residual
 
-Only ASCII case variance and SP/HTAB whitespace are exercised; other legal-but-unusual field
-value paddings are not. The allocation-free implementation (no lowercased copies) is an
-implementation property, not a separately judged behavior.
+No assurance is claimed until O-000022 has a valid witness for every declared
+Scope clause. W-000024 makes the missing universal legal-OWS observation
+visible; that evidence boundary does not narrow this Promise. The
+allocation-free implementation is an implementation property, not a separately
+judged behavior.
 
 ## References
 

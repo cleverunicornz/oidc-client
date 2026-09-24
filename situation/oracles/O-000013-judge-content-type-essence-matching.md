@@ -56,3 +56,9 @@ legs.
 | F1 | Legal variants must not be rejected. | the P1 test (any rejection fails the test) |
 | F2 | Lookalikes must not be accepted. | the P2 and P3 tests |
 | F3 | Routing must not misroute. | the P5 test |
+
+## References
+
+- Superseded for P-000012's complete declared Scope by
+  situation/oracles/O-000022-judge-content-type-essence-complete-scope.md.
+  W-000015 remains an observation of this historical, narrower rule.
