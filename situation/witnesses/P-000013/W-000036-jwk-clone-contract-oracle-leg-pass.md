@@ -47,8 +47,9 @@ lines are verbatim. Logs are sanitized (no machine-local paths) and digested:
 - Structural citations were inspected at this head; line numbers refer to the
   files at `48761b267c479b38918e4a139ed5c8fd530f2236`.
 - Non-claims: no live-provider run; cargo-deny and the full gate are deferred
-  to PR CI. This witness observes one promise under one oracle at one head;
-  promise state transitions remain with the closure corrector.
+  to PR CI. This Witness observes one Promise under one Oracle at one head; it
+  does not change P-000013's frozen canonical `implemented` State, retained by
+  G-000032.
 
 ## Oracle legs
 
