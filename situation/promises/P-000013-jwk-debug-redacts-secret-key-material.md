@@ -32,37 +32,30 @@ situation/oracles/O-000014-judge-jwk-debug-redacts-secret-key-material.md
 
 ## State evidence
 
-State `implemented` cites the implementing commit `cdfe1ea` (branch
-`fix/prepublication-hardening`): it replaces the derived `Debug` with a manual
-implementation and adds five focused tests to `src/core/jwk/tests.rs`. The
-focused suite `cargo test --offline --lib core::jwk` passed 26 tests, 0
-failed, and `cargo check --offline` finished clean at that commit. A
-falsification run against the pre-fix derived `Debug` failed exactly the four
-new redaction tests
-(`test_core_jwk_debug_redacts_symmetric_secret`,
-`test_core_jwk_debug_redacts_ec_private_member`,
-`test_core_jwks_debug_redacts_symmetric_secret`,
-`test_core_jwk_debug_redaction_is_stable_while_partial_eq_distinguishes`),
-confirming the tests defend the contract. No Witness exists yet: witnesses
-are to be collected under `situation/witnesses/P-000013/` by the parent's
-final gate, not by this stream.
+State `implemented` cites landed implementation commit
+`5ab6d7bbe6ec46fb164a761cce2e6f7f6f80029a`, which replaces the derived
+`Debug` implementation and adds the five focused tests named by O-000014.
+The stream also reported focused results at `cdfe1ea`; that stream-worktree
+head is unresolvable, as retained by
+situation/gaps/G-000029-stream-head-shas-unresolvable-on-branch.md, so it is
+not used as a current implementation coordinate. The Promise, Oracle, and
+Witness records were attached retrospectively in
+`9c4013a9d93a93e65084b3475022c43059e64fc2`.
 
-Attached at the parent's final gate (2026-09-23, head
-`b96b920f52e0d8b392edcf0b5d752fa570c2b356`):
-situation/witnesses/P-000013/W-000016-jwk-debug-secret-redaction.md —
-Result PASS: every O-000014 leg was decided by the gate run (`cargo test
---all-features --offline`, lib suite 99 passed / 0 failed, which includes
-the `core::jwk` suite); the stream's focused battery is cited there as
-corroboration.
+situation/witnesses/P-000013/W-000016-jwk-debug-secret-redaction.md is a
+PASS observation from the parent's final gate at
+`b96b920f52e0d8b392edcf0b5d752fa570c2b356` and decides each named
+O-000014 leg. The state remains `implemented`, not `assured`: the oracle
+observes fixed canary encodings but has no structural manual leg deciding the
+universal no-disclosure clause across every possible `d`/`k` value.
 
 ## Residual
 
-Assurance is not complete: no Oracle has been applied to a Witness, so this
-promise is not `assured` and is not yet invariant behavior under the
-supersession rule. The promise does not cover `Display`, serde output (the
-intentional export path), other `Debug` sources that reach key bytes without
-`CoreJsonWebKey`'s `Debug`, signing, JWE, ES512/P-521, or ID-token claim
-validation.
+The PASS witness covers its named fixed-fixture legs but does not assure the
+universal no-disclosure wording beyond those observations. The promise does
+not cover `Display`, serde output (the intentional export path), other
+`Debug` sources that reach key bytes without `CoreJsonWebKey`'s `Debug`,
+signing, JWE, ES512/P-521, or ID-token claim validation.
 
 ## References
 
