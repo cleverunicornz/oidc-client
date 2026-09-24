@@ -1,0 +1,14 @@
+# Evidence for W-000018 — MSRV compile proof (branch fix/prepublication-hardening).
+# The retained logs contain the full verbatim output of the recorded commands; exit=N trailers record each command status.
+# Original battery — stream-worktree head e0860535f99aa50ad3d45befcea7ed1644864cc0 (unresolvable on the branch, G-000029), observed 2026-09-23:
+0a464a4b6b3e97ba3dadf99a02f4993fe40addc852c1d99fe8b562cd7ad62615  msrv-check-1.96.0.log
+b5f513436b5633339f4c1eb72ead2aedc7e5af16ed393dcc4ea67d0d70dd30e6  msrv-check-1.96.0-recheck.log
+2f2ede21addeeaaff10ea8fe34e2582709e2ae31bcca9d9aad9c175701af8f86  msrv-check-1.98.0.log
+585e3643039ade1d2cb4cadb65175bc02eefd577e031aeeef21d2becb76fa44b  msrv-check-nightly-informational.log
+562975a06ae9aa0fd6ef42c29a8bc28bb8f5472292778aca7e16f05d277e5adb  msrv-toolchain-inventory.log
+# Re-anchoring battery — reachable branch head f80568881fccd9e32ad99f593b39b6e54f9fa59a, observed 2026-09-24:
+26c1cdeaf6d92a432588ba0600ff6f60bc18c102798682165589e9463a5e91a5  msrv-check-1.96.0-at-f805688.log
+11f7e57c8888b366956c3dae0cee6c24b16f417a3ba36b037f1ef8e455eb7b7a  msrv-check-1.96.0-recheck-at-f805688.log
+cb1f5ff6f67697415d276e8725cde2369ec2569b3d8ae74dbfe5baac0a928ccb  msrv-check-1.98.0-at-f805688.log
+897ef66d0382081c52a91af94ad5260209b788f7f28d785430b99dd01030b77d  msrv-check-nightly-informational-at-f805688.log
+562975a06ae9aa0fd6ef42c29a8bc28bb8f5472292778aca7e16f05d277e5adb  msrv-toolchain-inventory-at-f805688.log

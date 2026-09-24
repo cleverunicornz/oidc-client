@@ -1,0 +1,7 @@
+$ cargo test --offline --lib --quiet -- id_token_verification_key_at_hash
+
+running 4 tests
+....
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 108 filtered out; finished in 0.14s
+
+exit=0

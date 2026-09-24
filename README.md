@@ -27,6 +27,16 @@ Canonical scope and evidence live in
 [`situation/promises/P-000002-es256-ecdsa-p-256-id-token-verification.md`](situation/promises/P-000002-es256-ecdsa-p-256-id-token-verification.md),
 and [`situation/promises/P-000003-published-on-crates-io-as-oidc-client.md`](situation/promises/P-000003-published-on-crates-io-as-oidc-client.md).
 
+## Minimum supported Rust version
+
+The minimum supported Rust version is **1.96** — the oldest toolchain verified
+by recorded compilation evidence, retained in
+[`situation/witnesses/P-000015/W-000018-msrv-1-96-compile-proof.md`](situation/witnesses/P-000015/W-000018-msrv-1-96-compile-proof.md).
+The dependency graph may resolve with older toolchains, and its true lower
+floor may sit below 1.96, but that floor is unproven and not claimed:
+supported-minimum claims come from compilation evidence, never from manifest
+metadata alone.
+
 ## Attribution
 
 This crate exists because of the work of David A. Ramos (ramosbugs) and

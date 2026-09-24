@@ -1,0 +1,48 @@
+$ rustc +1.98.0 -vV
+rustc 1.98.0 (88d9e12ae 2026-08-18)
+binary: rustc
+commit-hash: 88d9e12ae178fab0fb5cc050a94da85685d449ea
+commit-date: 2026-08-18
+host: x86_64-unknown-linux-gnu
+release: 1.98.0
+LLVM version: 22.1.8
+
+$ rm -f Cargo.lock && cargo +1.98.0 check --offline
+     Locking 296 packages to latest compatible versions
+      Adding base64 v0.21.7 (available: v0.23.1)
+      Adding ed25519-dalek v2.2.0 (available: v3.0.0)
+      Adding generic-array v0.14.7 (available: v0.14.9)
+      Adding hmac v0.12.1 (available: v0.13.0)
+      Adding itertools v0.10.5 (available: v0.15.0)
+      Adding rand v0.8.8 (available: v0.10.3)
+      Adding reqwest v0.12.28 (available: v0.13.4)
+      Adding sha2 v0.10.9 (available: v0.11.0)
+      Adding thiserror v1.0.69 (available: v2.0.20)
+    Checking futures-util v0.3.34
+    Checking futures-channel v0.3.34
+    Checking serde_json v1.0.151
+    Checking hyper v1.11.1
+    Checking tower v0.5.3
+    Checking hyper-util v0.1.20
+    Checking tower-http v0.6.11
+    Checking hyper-rustls v0.27.10
+    Checking reqwest v0.12.28
+    Checking oauth2 v5.0.0
+    Checking oidc-client v4.1.0 (/data/interactive-dev1-ovh-canary/omp-worktrees/t12b9d252d/m)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 2.35s
+exit=0
+
+$ rm -f Cargo.lock && cargo +1.98.0 check --offline --all-features
+     Locking 296 packages to latest compatible versions
+      Adding base64 v0.21.7 (available: v0.23.1)
+      Adding ed25519-dalek v2.2.0 (available: v3.0.0)
+      Adding generic-array v0.14.7 (available: v0.14.9)
+      Adding hmac v0.12.1 (available: v0.13.0)
+      Adding itertools v0.10.5 (available: v0.15.0)
+      Adding rand v0.8.8 (available: v0.10.3)
+      Adding reqwest v0.12.28 (available: v0.13.4)
+      Adding sha2 v0.10.9 (available: v0.11.0)
+      Adding thiserror v1.0.69 (available: v2.0.20)
+    Checking oidc-client v4.1.0 (/data/interactive-dev1-ovh-canary/omp-worktrees/t12b9d252d/m)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 1.15s
+exit=0

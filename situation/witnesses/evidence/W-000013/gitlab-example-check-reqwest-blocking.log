@@ -1,0 +1,5 @@
+$ cargo check --offline --example gitlab --features reqwest-blocking
+    Checking oauth2 v5.0.0
+    Checking oidc-client v4.1.0 (/data/interactive-dev1-ovh-canary/omp-worktrees/t5ead224be/m)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 1.37s
+exit=0

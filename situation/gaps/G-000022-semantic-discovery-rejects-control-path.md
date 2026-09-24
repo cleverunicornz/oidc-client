@@ -50,6 +50,65 @@ fallback.
   empty components: "control/"`. The corrector proceeded with the relayed
   docket and bounded direct reads; this additive observation does not change
   the Gap's State or Resolution.
+- Validator observation for closure run
+  `20260924T063914Z-cd10a6d6107e401ba795c255cfb2bc4df2b7e8e2` at fixed
+  reviewed head `731f85ed1be41e8b6a937bea7bcb68b6c60991ec` (2026-09-24):
+  semantic-index status discovery and a changed-work concept search both
+  returned the same unsafe-`control/`-path rejection. Validation continued
+  with the exact substantive diff, exact search, and direct reads; this
+  additive observation leaves the Gap's State and Resolution unchanged.
+
+- Closer observation for closure run
+  `20260924T094258Z-50bf95f61913526682a3550d07fa6b1d96d78935` at opening
+  checkpoint `fc107c1f60fab2b0ac2c168fefd2193a4945bc11` (2026-09-24): both
+  semantic-index status and a concept-focused semantic search returned
+  `rejected unsafe input: tree path must not contain '.', '..', or empty
+  components: "control/"`. The closer continued with the exact DELTA diff,
+  exact searches, and direct reads; this additive observation leaves the
+  Gap's State and Resolution unchanged.
+
+- Closer observation for closure run
+  `20260924T111724Z-295cb33dbeb3b837300c31b0b1a17517095f2393` at opening
+  checkpoint `c9e07d9eb28282fd56ffbcce87cc33f4093a3f9b` (2026-09-24): both
+  exposed semantic-index status and a concept-focused semantic search again
+  returned `rejected unsafe input: tree path must not contain '.', '..', or
+  empty components: "control/"`. The closer continued with the exact DELTA
+  diff, bounded exact search, and direct reads; this additive observation
+  leaves the Gap's State and Resolution unchanged.
+
+- Closer observation for closure run
+  `20260924T125359Z-021faa52ab84b38324b49b36cef7dad45c18aa38` at opening
+  checkpoint `8a328d05b7702788e84b139d0204b30c3941c413` (2026-09-24): both
+  exposed semantic-index status and a concept-focused semantic search returned
+  `rejected unsafe input: tree path must not contain '.', '..', or empty
+  components: "control/"`. The closer continued with the exact DELTA diff,
+  bounded exact search, and direct reads; this additive observation leaves the
+  Gap's State and Resolution unchanged.
+
+- Validator observation for closure run
+  `20260924T125359Z-021faa52ab84b38324b49b36cef7dad45c18aa38` at fixed
+  reviewed head `79b53c748dd4c9ae88002b993513f5f591b69fb9` (2026-09-24):
+  semantic-index status discovery and both concept-focused semantic searches
+  returned the same unsafe-`control/`-path rejection. Validation continued
+  with the exact substantive diff, exact search, and direct reads; this
+  additive observation leaves the Gap's State and Resolution unchanged.
+
+- Closer observation for closure run
+  `20260924T150525Z-6e0be04d714572b064af694546e26e90067b8f69` at opening
+  checkpoint `700369932377c566a8f908b10c719325ca0df207` (2026-09-24): both
+  exposed semantic-index status and a concept-focused semantic search returned
+  `rejected unsafe input: tree path must not contain '.', '..', or empty
+  components: "control/"`. The closer continued with the exact DELTA diff,
+  bounded exact search, and direct reads; this additive observation leaves the
+  Gap's State and Resolution unchanged.
+
+- Validator observation for closure run
+  `20260924T150525Z-6e0be04d714572b064af694546e26e90067b8f69` at fixed
+  reviewed head `58a1285f59fc3349652756f4263169a6494abf19` (2026-09-24):
+  semantic-index status discovery and a concept-focused semantic search both
+  returned the same unsafe-`control/`-path rejection. Validation continued
+  with the exact substantive diff, bounded exact search, and direct reads;
+  this additive observation leaves the Gap's State and Resolution unchanged.
 
 ## Impact
 

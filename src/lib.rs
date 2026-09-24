@@ -230,7 +230,7 @@
 //!     let actual_access_token_hash = AccessTokenHash::from_token(
 //!         token_response.access_token(),
 //!         id_token.signing_alg()?,
-//!         id_token.signing_key(&id_token_verifier)?,
+//!         &id_token.verification_key(&id_token_verifier)?,
 //!     )?;
 //!     if actual_access_token_hash != *expected_access_token_hash {
 //!         return Err(anyhow!("Invalid access token"));
@@ -246,12 +246,17 @@
 //! );
 //!
 //! // If available, we can use the user info endpoint to request additional information.
-//!
-//! // The user_info request uses the AccessToken returned in the token response. To parse custom
-//! // claims, use UserInfoClaims directly (with the desired type parameters) rather than using the
-//! // CoreUserInfoClaims type alias.
+//! //
+//! // OpenID Connect Core 5.3.2 requires the UserInfo `sub` to match the verified ID token's
+//! // `sub`, so the request below binds the verified subject; the optional `at_hash` check above
+//! // does not substitute for it. Passing `None` instead skips the subject check for callers
+//! // that have no verified ID token. To parse custom claims, use UserInfoClaims directly (with
+//! // the desired type parameters) rather than using the CoreUserInfoClaims type alias.
 //! let userinfo: CoreUserInfoClaims = client
-//!     .user_info(token_response.access_token().to_owned(), None)?
+//!     .user_info(
+//!         token_response.access_token().to_owned(),
+//!         Some(claims.subject().clone()),
+//!     )?
 //!     .request(&http_client)
 //!     .map_err(|err| anyhow!("Failed requesting user info: {}", err))?;
 //!
@@ -603,7 +608,7 @@
 //!     let actual_access_token_hash = AccessTokenHash::from_token(
 //!         token_response.access_token(),
 //!         id_token.signing_alg()?,
-//!         id_token.signing_key(&id_token_verifier)?,
+//!         &id_token.verification_key(&id_token_verifier)?,
 //!     )?;
 //!     if actual_access_token_hash != *expected_access_token_hash {
 //!         return Err(anyhow!("Invalid access token"));

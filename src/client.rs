@@ -661,6 +661,11 @@ where
             verifier
         }
     }
+
+    /// Returns the client secret configured for this client, if any.
+    pub(crate) fn client_secret(&self) -> Option<&ClientSecret> {
+        self.client_secret.as_ref()
+    }
 }
 
 /// Methods requiring an authorization endpoint.

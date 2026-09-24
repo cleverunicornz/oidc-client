@@ -8,7 +8,7 @@ license = "MIT"
 repository = "https://github.com/cleverunicornz/oidc-client"
 edition = "2021"
 readme = "README.md"
-rust-version = "1.65"
+rust-version = "1.96"
 
 [package.metadata.docs.rs]
 all-features = true

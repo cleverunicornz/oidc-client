@@ -190,7 +190,11 @@ fn main() {
     println!("GitLab returned ID token: {:?}\n", id_token_claims);
 
     let userinfo_claims: UserInfoClaims<GitLabClaims, CoreGenderClaim> = client
-        .user_info(token_response.access_token().to_owned(), None)
+        .user_info(
+            token_response.access_token().to_owned(),
+            // OIDC Core 5.3.2: the UserInfo `sub` MUST match the verified ID token's `sub`.
+            Some(id_token_claims.subject().clone()),
+        )
         .unwrap_or_else(|err| {
             handle_error(&err, "No user info endpoint");
             unreachable!();
