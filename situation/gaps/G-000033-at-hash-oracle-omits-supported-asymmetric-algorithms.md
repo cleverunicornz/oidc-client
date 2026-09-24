@@ -2,7 +2,7 @@
 
 ## State
 
-open
+closed
 
 ## Gap
 
@@ -44,6 +44,15 @@ asymmetric-algorithm clause that those legs omit.
   `20260924T094258Z-50bf95f61913526682a3550d07fa6b1d96d78935` at fixed
   reviewed head `8e61dc268952aa7f434cd164f7d0569a31113530` (2026-09-24).
 
+- Closer reconciliation for closure run
+  `20260924T111724Z-295cb33dbeb3b837300c31b0b1a17517095f2393` reviewed the
+  admitted DELTA
+  `7f1025e1b91c0f367f05528e7efb93846d437a81..295cb33dbeb3b837300c31b0b1a17517095f2393`.
+  O-000025 declares Pass and Fail legs for RS256/384/512, PS256/384/512, and
+  EdDSA; W-000035 records PASS for every one of those legs at
+  `48761b267c479b38918e4a139ed5c8fd530f2236`, with retained, checksum-verified
+  fixture evidence.
+
 ## Impact
 
 W-000028 retains evidence that every leg actually listed by O-000019 passed,
@@ -53,9 +62,17 @@ Oracle has a valid Witness. G-000032 now distinguishes this listed-leg PASS
 from sufficient complete-Promise coverage; this Gap remains open because the
 omitted paths are not yet decided.
 
+- Closer reconciliation closes the omitted-family concern: O-000025 and
+  W-000035 now decide the previously omitted supported asymmetric families.
+  P-000009's frozen canonical `implemented` State is a distinct reconciliation
+  concern retained by G-000032.
+
 ## Resolution
 
-none
+closed — O-000025 and W-000035 supply implemented-Oracle and PASS-Witness
+evidence for every previously omitted RSA, RSA-PSS, and EdDSA family at
+`48761b267c479b38918e4a139ed5c8fd530f2236`. P-000009's frozen canonical State
+remains a separate concern in G-000032.
 
 ## References
 
@@ -64,3 +81,5 @@ none
 - situation/witnesses/P-000009/W-000028-documented-at-hash-oracle-leg-pass.md
 - situation/gaps/G-000032-current-pass-evidence-outpaces-frozen-promise-states.md
 - situation/oracles/AGENTS.md
+- situation/oracles/O-000025-judge-documented-at-hash-rsa-pss-eddsa-families.md
+- situation/witnesses/P-000009/W-000035-at-hash-rsa-pss-eddsa-oracle-leg-pass.md
