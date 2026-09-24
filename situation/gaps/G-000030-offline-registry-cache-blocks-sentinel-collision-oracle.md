@@ -52,3 +52,4 @@ judgment.
 - situation/promises/P-000016-client-secret-expiration-rejects-never-expires-sentinel-collisions.md
 - situation/oracles/O-000017-judge-client-secret-expiration-sentinel-collisions.md
 - situation/witnesses/P-000016/W-000019-client-secret-expiration-sentinel-collision-oracle-blocked.md
+- situation/witnesses/P-000016/W-000034-client-secret-expiration-sentinel-collisions-pass.md
