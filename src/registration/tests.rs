@@ -713,6 +713,46 @@ fn test_client_secret_expiration_expires_at() {
     assert_eq!(deserialized.client_secret_expires_at(), Some(&expected));
 }
 
+/// Asserts each `(JSON, expected epoch second)` case deserializes as
+/// `ExpiresAt` resolved to the expected second — the shared `Timestamp`
+/// adapter's floor-to-second semantics — and round-trips through serialization
+/// back to exactly that second.
+fn assert_expires_at_cases(cases: &[(&str, i64)]) {
+    for (json, expected_second) in cases {
+        let expiration: ClientSecretExpiration = serde_json::from_str(json)
+            .unwrap_or_else(|err| panic!("failed to parse {json}: {err}"));
+        let resolved_second = match &expiration {
+            ClientSecretExpiration::ExpiresAt(expires_at) => expires_at.timestamp(),
+            other => panic!("{json} must deserialize as ExpiresAt, got {other:?}"),
+        };
+        assert_eq!(resolved_second, *expected_second, "unexpected second for {json}");
+
+        // Round trip: the expiry serializes back to exactly its epoch second.
+        let serialized = serde_json::to_string(&expiration)
+            .unwrap_or_else(|err| panic!("failed to serialize {json}: {err}"));
+        assert_eq!(serialized, expected_second.to_string(), "unexpected round trip for {json}");
+    }
+}
+
+/// The generic numeric domain: every numeric timestamp that resolves to a Unix
+/// epoch second other than `0` deserializes as `ExpiresAt` and serializes back
+/// to exactly that second. Numeric magnitudes beyond the representable UTC
+/// range do not resolve to an epoch second and are outside this domain.
+#[test]
+fn test_client_secret_expiration_expires_at_numeric_sweep() {
+    // (numeric JSON, expected epoch second after floor-to-second resolution).
+    assert_expires_at_cases(&[
+        ("-1000000000", -1000000000),   // 1938: pre-1970 negative seconds.
+        ("-1.5", -2),                   // Fractional seconds floor away from zero.
+        ("-0.5", -1),                   // (-1, 0) floors to -1, not the 0 sentinel.
+        ("1", 1),                       // Smallest non-colliding positive second.
+        ("1.5", 1),                     // Fractional seconds floor down.
+        ("1526545306.5", 1526545306),   // Fractional variant of the retained fixture second.
+        ("1700000000", 1700000000),     // A recent 10-digit timestamp.
+        ("253402300799", 253402300799), // 9999-12-31: far future within i64 seconds.
+    ]);
+}
+
 #[test]
 fn test_client_secret_expiration_absent() {
     let json_response = r#"{
@@ -850,6 +890,26 @@ fn test_client_secret_expiration_epoch_rfc3339_rejected() {
             err
         );
     }
+}
+
+/// The feature-gated RFC 3339 domain: every valid non-colliding RFC 3339 string
+/// accepted by the shared `Timestamp` adapter — with or without fractional
+/// seconds, with `Z` or a numeric UTC offset — deserializes as `ExpiresAt` and
+/// serializes back to its epoch second.
+#[cfg(feature = "accept-rfc3339-timestamps")]
+#[test]
+fn test_client_secret_expiration_expires_at_rfc3339_sweep() {
+    // (JSON string literal, expected epoch second).
+    assert_expires_at_cases(&[
+        (r#""1970-01-01T00:00:01Z""#, 1),               // Smallest non-colliding second.
+        (r#""1969-12-31T23:59:59.750Z""#, -1),          // Fractional pre-epoch, non-colliding.
+        (r#""1938-04-24T22:13:20Z""#, -1000000000),     // Pre-1970.
+        (r#""2018-05-17T08:21:46.250Z""#, 1526545306),  // Fractional seconds.
+        (r#""2023-11-14T22:13:20Z""#, 1700000000),      // Recent.
+        (r#""2023-11-15T08:13:20+10:00""#, 1700000000), // Positive UTC offset.
+        (r#""2023-11-14T13:13:20-09:00""#, 1700000000), // Negative UTC offset.
+        (r#""9999-12-31T23:59:59Z""#, 253402300799),    // Far future.
+    ]);
 }
 
 #[derive(Debug)]
@@ -990,6 +1050,49 @@ fn test_registration_async_malformed_initial_access_token_errors_before_dispatch
     assert!(
         dispatched.borrow().is_empty(),
         "no HTTP call should be dispatched"
+    );
+}
+
+/// A valid initial access token produces the same `Authorization: Bearer` header on the
+/// asynchronous registration request passed to the HTTP client: request preparation runs
+/// before the first await, so polling once with a no-op waker (no async executor in the
+/// dev-dependencies) dispatches the request and completes against the recording mock.
+#[test]
+fn test_registration_async_sends_bearer_header() {
+    use crate::core::CoreClientRegistrationRequest;
+    use crate::registration::EmptyAdditionalClientMetadata;
+    use crate::{AccessToken, ClientId, RegistrationUrl};
+    use http::header::HeaderValue;
+
+    let request = CoreClientRegistrationRequest::new(
+        vec![RedirectUrl::new("https://client.example.com/cb".to_string()).unwrap()],
+        EmptyAdditionalClientMetadata {},
+    )
+    .set_initial_access_token(Some(AccessToken::new("the_access_token".to_string())));
+    let registration_url =
+        RegistrationUrl::new("https://server.example.com/register".to_string()).unwrap();
+
+    let dispatched = std::rc::Rc::new(std::cell::RefCell::new(Vec::new()));
+    let http_client = recording_async_client(dispatched.clone());
+
+    let mut future = Box::pin(request.register_async(&registration_url, &http_client));
+    let mut cx = std::task::Context::from_waker(std::task::Waker::noop());
+    let response = match future.as_mut().poll(&mut cx) {
+        std::task::Poll::Ready(Ok(response)) => response,
+        other => panic!(
+            "expected the registration future to be ready after one poll, got: {other:?}"
+        ),
+    };
+    assert_eq!(
+        *response.client_id(),
+        ClientId::new("my_client".to_string())
+    );
+
+    let dispatched = dispatched.borrow();
+    assert_eq!(dispatched.len(), 1, "dispatch must reach the HTTP client");
+    assert_eq!(
+        dispatched[0].headers().get(http::header::AUTHORIZATION),
+        Some(&HeaderValue::from_static("Bearer the_access_token")),
     );
 }
 
