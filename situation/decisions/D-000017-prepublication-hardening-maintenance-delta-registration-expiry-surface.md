@@ -58,9 +58,10 @@ public-API break is acceptable pre-publication.
    other: `src/registration/mod.rs` (the public `ClientSecretExpiration`
    enum — `NeverExpires` / `ExpiresAt(DateTime<Utc>)` — with manual
    `Serialize`/`Deserialize` impls scoped to this type: numeric `0` →
-   `NeverExpires`, any other numeric timestamp → `ExpiresAt` through the
-   shared `Timestamp` adapter's floor-rounding, `NeverExpires` → numeric
-   `0`, `ExpiresAt` → its timestamp; the response field type becomes
+   `NeverExpires`; a timestamp that does not resolve to the epoch second →
+   `ExpiresAt` through the shared `Timestamp` adapter's floor-rounding;
+   `NeverExpires` → numeric `0`; and a colliding epoch form is rejected under
+   D-000018; the response field type becomes
    `Option<ClientSecretExpiration>`; getter and setter migrated),
    `src/registration/tests.rs` (migrated real-timestamp assertion; four
    new focused tests), and no change to `tests/rp_certification_dynamic.rs`
@@ -125,11 +126,10 @@ serialization round-trips with numeric-`0` senders. New public API:
 `ClientSecretExpiration` (variants `NeverExpires`, `ExpiresAt`).
 situation/promises/P-000014-client-secret-expiration-never-expires-semantics.md
 and situation/oracles/O-000015-judge-client-secret-expiration-semantics.md
-carry the behavior; the promise is `assured` — the oracle passed on
-witness
+carry the witnessed three-state core; P-000014 is `assured` by
 situation/witnesses/P-000014/W-000017-client-secret-expiration-semantics.md
-collected at the parent's final gate (2026-09-23, head
-`b96b920f52e0d8b392edcf0b5d752fa570c2b356`).
+at `b96b920f52e0d8b392edcf0b5d752fa570c2b356`. The complementary
+epoch-collision rule is selected by D-000018 and carried by P-000016/O-000017.
 
 ## Revisit when
 
@@ -140,5 +140,10 @@ sentinel or the field's semantics.
 ## Provenance
 
 Recorded 2026-09-23 by Stream D (RegistrationExpiry) of the
-pre-publication hardening batch, on branch `fix/prepublication-hardening`
-(code and records land in the stream's single implementing commit).
+pre-publication hardening batch: implementation landed in
+`f93c8c79055fa5caf5adb6690d9dec123974b702`, and the Promise, Oracle, and
+Witness records were attached retrospectively in
+`9c4013a9d93a93e65084b3475022c43059e64fc2`. Corrected 2026-09-24 in place
+under the open-PR correction rule to delimit the later
+`f80568881fccd9e32ad99f593b39b6e54f9fa59a` epoch-collision change; D-000018
+records that selected boundary.
