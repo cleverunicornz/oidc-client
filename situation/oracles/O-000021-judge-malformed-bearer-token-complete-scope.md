@@ -28,16 +28,16 @@ judges the previously unobserved valid-token asynchronous continuity.
   error ready on the first asynchronous poll without dispatch.
 - P5 — Malformed-token errors never include any token bytes.
 - P6 — A valid UserInfo access token produces `Authorization: Bearer <token>`
-  on a synchronous dispatched request and its response parses normally.
+  on the synchronous request passed to the HTTP client.
 - P7 — A valid registration initial access token produces
-  `Authorization: Bearer <token>` on a synchronous dispatched request and its
-  response parses normally.
+  `Authorization: Bearer <token>` on the synchronous request passed to the
+  HTTP client.
 - P8 — Registration without an initial access token dispatches no Authorization
   header.
-- P9 — A valid UserInfo access token produces the same Bearer header and
-  dispatches normally on the asynchronous path.
+- P9 — A valid UserInfo access token produces the same Bearer header on the
+  asynchronous request passed to the HTTP client.
 - P10 — A valid registration initial access token produces the same Bearer
-  header and dispatches normally on the asynchronous path.
+  header on the asynchronous request passed to the HTTP client.
 
 ## Fail
 
@@ -49,7 +49,7 @@ judges the previously unobserved valid-token asynchronous continuity.
 - F5 — A valid synchronous request has a missing or non-Bearer Authorization
   header, or tokenless registration sends one.
 - F6 — A valid asynchronous request has a missing or non-Bearer Authorization
-  header, or does not preserve the normal dispatch path.
+  header.
 
 ## Implementation
 
