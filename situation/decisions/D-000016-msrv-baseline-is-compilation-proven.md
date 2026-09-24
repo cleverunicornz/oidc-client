@@ -78,7 +78,7 @@ nor the lock survives contact with the toolchains that actually exist.
    record.
 3. README.md states the MSRV position in its authored voice (upstream
    `README.upstream.md` is untouched and keeps its own MSRV prose).
-4. The claim is assured by the promoted Promise
+4. The claim is carried by the direct Promise
    situation/promises/P-000015-fresh-resolution-compiles-at-declared-floor.md
    under situation/oracles/O-000016-judge-fresh-resolution-compiles-at-declared-floor.md,
    witnessed by
