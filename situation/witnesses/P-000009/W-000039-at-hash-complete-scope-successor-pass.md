@@ -22,9 +22,10 @@ documented flow reproduces the embedded `claims.access_token_hash()`, and
 assert a substituted access token differs from the embedded claim — closing
 the defect W-000037 recorded. W-000037 remains its own immutable INVALID
 observation at `c5260aeb4a426f7881c8261ef2101d5a30710c29` and is not composed
-into this one. P-000009's canonical State and the related open Gaps are frozen
-by the fourth closure; Promise-state transitions and Gap resolutions belong to
-the next closure's corrector and are not performed here.
+into this one. P-000009's canonical State and Oracle pointer are frozen by the
+fourth closure. This Witness records the repaired observation only; it does not
+transition that Promise or resolve a Gap. The remaining canonical-state
+reconciliation concern is retained by G-000032.
 
 ## Head
 
