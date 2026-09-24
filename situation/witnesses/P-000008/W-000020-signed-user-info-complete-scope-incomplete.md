@@ -10,11 +10,11 @@ situation/oracles/O-000018-judge-signed-user-info-verification-policy-complete-s
 
 ## Result
 
-INVALID — the fresh bounded command passed the retained ES256 and HS256
+INVALID — the fresh bounded command passed the retained direct ES256 and HS256
 representative fixtures, but it did not independently observe the successor
-oracle's ES384, HS384, HS512, Client confidential-routing, claim-preservation,
-or API-surface legs. This is an incomplete observation of the complete-scope
-rule, not a partial PASS and not assurance.
+oracle's request-builder, ES384, HS384, HS512, Client confidential-routing,
+claim-preservation, or API-surface legs. This is an incomplete observation of
+the complete-scope rule, not a partial PASS and not assurance.
 
 ## Head
 
@@ -42,10 +42,10 @@ rule, not a partial PASS and not assurance.
 
 | Leg | Evidence |
 |---|---|
-| P1 | PASS — the ES256 fixture's default-verifier assertion passed in the retained command. |
+| P1 | INVALID — the direct default-verifier assertion passed, but the request-builder default configuration was not selected. |
 | P2 | PASS — the ES256 allowed-algorithm fixture passed in the retained command. |
 | P3 | INVALID — no ES384 fixture or retained manual observation was applied to this successor rule. |
-| P4 | PASS — the HS256 confidential-verifier fixture passed in the retained command. |
+| P4 | INVALID — the direct HS256 confidential-verifier fixture passed, but the request-builder configuration was not selected. |
 | P5 | INVALID — no HS384 fixture or retained manual observation was applied to this successor rule. |
 | P6 | INVALID — no HS512 fixture or retained manual observation was applied to this successor rule. |
 | P7 | INVALID — the HS256 representative does not decide every HS* mode. |

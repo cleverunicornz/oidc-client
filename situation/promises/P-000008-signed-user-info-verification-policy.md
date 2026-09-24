@@ -44,7 +44,8 @@ supersedes O-000009 for this Promise's complete Scope. Its first successor
 observation,
 situation/witnesses/P-000008/W-000020-signed-user-info-complete-scope-incomplete.md,
 is INVALID: it preserves the absence of independent ES384, HS384, HS512,
-Client confidential-routing, claim-preservation, and API-surface evidence.
+request-builder, Client confidential-routing, claim-preservation, and
+API-surface evidence.
 The state therefore remains `implemented`, not `assured`. W-000011 remains
 the PASS observation of the historical, narrower O-000009 rule.
 
@@ -52,7 +53,8 @@ the PASS observation of the historical, narrower O-000009 rule.
 
 No assurance is claimed until O-000018 has a valid witness for every declared
 Scope clause. W-000020 makes the currently unobserved ES384, HS384, HS512,
-Client confidential-routing, claim-preservation, and API-surface legs visible;
+request-builder, Client confidential-routing, claim-preservation, and
+API-surface legs visible;
 that evidence boundary does not narrow this Promise. Algorithm allowlisting
 for ID tokens is separately governed and not covered here.
 
