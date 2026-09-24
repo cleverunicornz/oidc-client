@@ -80,9 +80,13 @@ and must not be edited, so this decision provides the classification home.
    surface as continued-crate maintenance rather than unclassified upstream
    drift. D-000004 itself remains accepted and unmodified for every other
    surface, and its append-only law is respected.
-4. The new behavior is carried by situation/promises/P-000013-jwk-debug-redacts-secret-key-material.md
-   and situation/oracles/O-000014-judge-jwk-debug-redacts-secret-key-material.md;
-   witnesses are pending the parent's final gate.
+4. The new behavior is carried by
+   situation/promises/P-000013-jwk-debug-redacts-secret-key-material.md and
+   situation/oracles/O-000014-judge-jwk-debug-redacts-secret-key-material.md.
+   W-000016 subsequently records a PASS on the named fixed-fixture legs at
+   `b96b920f52e0d8b392edcf0b5d752fa570c2b356`; P-000013 remains
+   `implemented` because that oracle does not yet decide the Promise's
+   universal no-disclosure wording.
 
 ## Why
 
