@@ -121,8 +121,9 @@ maintenance without rewriting append-only history.
 `d`/`k` bytes while `PartialEq` still distinguishes them; consumers relying on
 `Debug` to read secret bytes (none found in-repo) would break by design.
 A future upstream re-sync classifies this surface through this decision.
-P-000013 is `implemented`, not `assured`; it becomes invariant behavior only
-after O-000014 passes on witnesses collected at the parent's final gate.
+P-000013 remains `implemented`: W-000016 passes O-000014's named
+fixed-fixture legs, but that oracle does not yet decide the Promise's
+universal no-disclosure wording.
 
 ## Revisit when
 
