@@ -84,3 +84,4 @@ judgment.
 - situation/oracles/O-000017-judge-client-secret-expiration-sentinel-collisions.md
 - situation/witnesses/P-000016/W-000019-client-secret-expiration-sentinel-collision-oracle-blocked.md
 - situation/witnesses/P-000016/W-000034-client-secret-expiration-sentinel-collisions-pass.md
+- situation/witnesses/P-000009/W-000037-at-hash-complete-scope-successor-pass.md
