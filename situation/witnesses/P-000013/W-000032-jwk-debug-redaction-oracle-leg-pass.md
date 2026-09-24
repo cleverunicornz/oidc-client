@@ -1,4 +1,4 @@
-# W-000032 — JWK Debug redaction complete-scope observation passes
+# W-000032 — JWK Debug redaction Oracle-leg observation passes
 
 ## Promise
 
@@ -10,12 +10,15 @@ situation/oracles/O-000023-judge-jwk-debug-redaction-complete-scope.md
 
 ## Result
 
-PASS — every oracle leg is decided at this head. The retained `debug_redact`
-battery executes four canary fixtures, the universal `d`/`k` redaction rule
-(P1/P2/F1), which the oracle designates structurally manual, is decided by
-code inspection of the only formatter that receives those field values, and
-the P7 derived-RSA fixture — which the oracle's name filter does not select —
-is executed by an explicitly named supplementary command recorded below.
+PASS — every O-000023 leg is decided at this head. This is PASS evidence for
+O-000023's listed legs, not complete-Promise coverage: no O-000023 Pass or
+Fail leg decides P-000013's unchanged `Clone` clause. The retained
+`debug_redact` battery executes four canary fixtures, the universal `d`/`k`
+redaction rule (P1/P2/F1), which the oracle designates structurally manual, is
+decided by code inspection of the only formatter that receives those field
+values, and the P7 derived-RSA fixture — which the oracle's name filter does
+not select — is executed by an explicitly named supplementary command recorded
+below.
 
 Finding recorded honestly: the oracle's Implementation command
 (`-- debug_redact`) selects four of the five coverage-cited fixtures; the P7

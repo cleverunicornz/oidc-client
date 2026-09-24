@@ -1,4 +1,4 @@
-# W-000028 — Documented at_hash complete-scope observation passes
+# W-000028 — Documented at_hash Oracle-leg observation passes
 
 ## Promise
 
@@ -10,14 +10,15 @@ situation/oracles/O-000019-judge-documented-at-hash-flow-complete-scope.md
 
 ## Result
 
-PASS — every oracle leg is decided at this head. The retained
-`id_token_verification_key_at_hash` battery now executes three fixtures: the
-HS256/ES256 representative (including the missing-secret and
+PASS — every O-000019 leg is decided at this head. This is PASS evidence for
+the legs O-000019 lists, not complete-Promise coverage: O-000019 has no Pass
+or Fail leg for the supported RS256/384/512, PS256/384/512, or EdDSA paths.
+The retained `id_token_verification_key_at_hash` battery now executes three
+fixtures: the HS256/ES256 representative (including the missing-secret and
 substituted-token failures), an HS384/HS512 fixture, and an ES384 fixture, so
 the algorithm legs W-000021 left INVALID are fixture-executed. The
 documentation leg executes the crate-root tutorials with `reqwest-blocking`
-enabled. The `signing_key` scope leg is decided by code inspection named
-below.
+enabled. The `signing_key` scope leg is decided by code inspection named below.
 
 ## Head
 

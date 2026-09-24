@@ -8,16 +8,17 @@ open
 
 P-000013 explicitly promises that `CoreJsonWebKey`'s `Clone` behavior is
 unchanged alongside equality and serde behavior, but O-000023 has no Pass or
-Fail leg for `Clone`. W-000032 likewise supplies no Clone observation while
-calling the result complete-scope PASS.
+Fail leg for `Clone`. W-000032 therefore supplies listed-leg PASS evidence,
+rather than complete-Promise evidence, because it has no Clone observation.
 
 ## Relevance
 
-The reviewed DELTA adds W-000032 as current complete-scope evidence for
-P-000013. The Oracle contract requires every explicit in-Scope Promise clause
-to be decided; a visible `#[derive(Clone)]` on the implementation is relevant
-structural evidence but does not supply the missing predeclared Oracle leg or a
-corresponding Witness row.
+The reviewed DELTA adds W-000032 as a current listed-leg PASS observation. The
+correction removes its complete-scope representation, but neither a successor
+Oracle nor a valid Witness decides P-000013's Clone clause. The Oracle contract
+requires every explicit in-Scope Promise clause to be decided; a visible
+`#[derive(Clone)]` on the implementation is relevant structural evidence but
+does not supply the missing predeclared Oracle leg or a corresponding Witness row.
 
 ## Evidence
 
@@ -26,7 +27,7 @@ corresponding Witness row.
   and deserialization of those fields are unchanged."
 - `situation/oracles/O-000023-judge-jwk-debug-redaction-complete-scope.md` P5/F3
   judge equality and serde behavior; no Pass or Fail leg names Clone.
-- `situation/witnesses/P-000013/W-000032-jwk-debug-redaction-complete-scope-pass.md`
+- `situation/witnesses/P-000013/W-000032-jwk-debug-redaction-oracle-leg-pass.md`
   has one row for every listed O-000023 leg but contains no Clone evidence.
 - `src/core/jwk/mod.rs` still derives `Clone` for `CoreJsonWebKey`; that source
   fact shows a plausible manual decision is available, not that the current
@@ -38,9 +39,10 @@ corresponding Witness row.
 ## Impact
 
 O-000023 does not collectively decide every explicit clause of P-000013, so
-W-000032 cannot truthfully serve as complete-scope assurance evidence for that
-Promise. G-000032's blanket characterization of all eight new Witnesses as
-complete-scope evidence is also false for this lineage.
+W-000032 cannot truthfully serve as complete-Promise assurance evidence for
+that Promise. P-000013 remains `implemented` and unassured until a successor
+Oracle has a valid Witness; G-000032 now distinguishes this listed-leg PASS
+from sufficient complete-Promise coverage.
 
 ## Resolution
 
@@ -50,6 +52,6 @@ none
 
 - situation/promises/P-000013-jwk-debug-redacts-secret-key-material.md
 - situation/oracles/O-000023-judge-jwk-debug-redaction-complete-scope.md
-- situation/witnesses/P-000013/W-000032-jwk-debug-redaction-complete-scope-pass.md
-- situation/gaps/G-000032-complete-scope-pass-witnesses-outpace-frozen-promise-states.md
+- situation/witnesses/P-000013/W-000032-jwk-debug-redaction-oracle-leg-pass.md
+- situation/gaps/G-000032-current-pass-evidence-outpaces-frozen-promise-states.md
 - situation/oracles/AGENTS.md
