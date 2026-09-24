@@ -95,6 +95,17 @@ claim these Promises as assured from the new Witnesses alone.
   `State` and `Oracle` sections remain as recorded; this addendum neither
   changes this Gap's State or Resolution nor selects a canonical-state
   reconciliation mechanism.
+- Validator observation for closure run
+  `20260924T125359Z-021faa52ab84b38324b49b36cef7dad45c18aa38` at fixed
+  reviewed head `79b53c748dd4c9ae88002b993513f5f591b69fb9` (2026-09-24):
+  independent comparison of W-000037 against O-000025 found that the ES256
+  and ES384 fixture payloads at `src/verification/tests.rs:1892-1893` and
+  `src/verification/tests.rs:2377-2378` contain no `at_hash` claim. W-000037
+  acknowledges that absence in its P4 and P5 rows, but substitutes a
+  separately computed expected value. That evidence does not decide
+  O-000025 P4/P5/P14/F3 against the token's `at_hash`, so W-000037 cannot
+  supply a complete-scope PASS at this head. This observation does not
+  dispute W-000038's independently complete O-000026 coverage.
 
 ## Impact
 
@@ -118,6 +129,12 @@ unresolved.
   is the frozen Promise-state and forward-link reconciliation mechanism, not
   the prior absence of successor-Witness coverage. This addendum leaves the
   Gap's State and Resolution unchanged.
+- Validator impact addendum (2026-09-24): W-000038 retains complete-scope
+  successor coverage for P-000013, but W-000037 does not yet retain adequate
+  complete-scope evidence for P-000009. P-000009 therefore remains unassured
+  on both evidence sufficiency and frozen-state grounds; P-000013 remains
+  unassured on the frozen-state reconciliation ground recorded here. This
+  additive observation leaves the Gap's State and Resolution unchanged.
 
 ## Resolution
 

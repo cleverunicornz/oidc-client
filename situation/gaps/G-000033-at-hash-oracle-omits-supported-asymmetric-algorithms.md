@@ -58,6 +58,17 @@ rules and heads, into complete-Promise evidence.
   one row for each P1–P16 and F1–F5, and its retained evidence manifest
   verifies with `sha256sum -c SHA256SUMS` from its evidence directory. This
   observation is not composed with W-000028 or W-000035.
+- Validator observation for closure run
+  `20260924T125359Z-021faa52ab84b38324b49b36cef7dad45c18aa38` at fixed
+  reviewed head `79b53c748dd4c9ae88002b993513f5f591b69fb9` (2026-09-24):
+  W-000037's P4 and P5 rows expressly say that the hand-signed ES256 and
+  ES384 payloads carry no embedded `at_hash`. The cited fixtures confirm that
+  omission at `src/verification/tests.rs:1892-1893` and
+  `src/verification/tests.rs:2377-2378`; they compare computed hashes only
+  with a separately computed expected value. They therefore do not decide
+  O-000025 P4/P5 or the every-family P14/F3 clauses against the token's
+  `at_hash`. A PASS Witness that omits those legs is INVALID rather than a
+  complete-scope PASS.
 
 ## Impact
 
@@ -74,6 +85,11 @@ supplemental fixture result is not that evidence.
   `implemented` Promise State remain recorded; this additive observation leaves
   this Gap's State and Resolution unchanged while
   G-000032 retains the state-reconciliation concern.
+- Validator impact addendum (2026-09-24): the original absence of adequate
+  complete-scope successor evidence remains for P-000009 at the fixed
+  reviewed head. W-000037 cannot settle it while its ES256/ES384 fixtures
+  omit the claim named by O-000025 P4/P5/P14/F3. This additive observation
+  leaves the Gap's State and Resolution unchanged.
 
 ## Resolution
 
