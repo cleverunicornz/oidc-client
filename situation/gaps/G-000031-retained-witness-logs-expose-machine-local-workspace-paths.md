@@ -37,6 +37,16 @@ Observed 2026-09-24 during the bounded validator review:
   `situation/witnesses/evidence/W-000019/cargo-test-client-secret-expiration.log`
   uses the stable marker `[repository root]` for the package path.
 
+Corrector addendum (2026-09-24, closure run
+`20260924T063914Z-cd10a6d6107e401ba795c255cfb2bc4df2b7e8e2`):
+
+- Initial non-quiet Cargo output for the bounded signed-UserInfo and
+  feature-gated registration-expiry observations likewise included an absolute
+  verification-worktree coordinate in its package-status line. The corrector
+  did not retain those raw lines: W-000020 and W-000026 retain `--quiet`
+  command output with digests instead, so their committed evidence contains no
+  machine-local workspace path.
+
 ## Impact
 
 The retained paths disclose otherwise irrelevant verification-host and
@@ -54,4 +64,6 @@ none
 - situation/witnesses/P-000010/W-000013-user-info-subject-binding.md
 - situation/witnesses/P-000015/W-000018-msrv-1-96-compile-proof.md
 - situation/witnesses/P-000016/W-000019-client-secret-expiration-sentinel-collision-oracle-blocked.md
+- situation/witnesses/P-000008/W-000020-signed-user-info-complete-scope-incomplete.md
+- situation/witnesses/P-000014/W-000026-client-secret-expiry-complete-scope-incomplete.md
 - situation/AGENTS.md (Reference discipline)
