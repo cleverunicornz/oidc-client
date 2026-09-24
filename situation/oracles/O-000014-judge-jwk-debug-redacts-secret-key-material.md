@@ -42,12 +42,12 @@ differing only in `d`/`k`. Evidence is produced by the focused command
 
 ## Fail
 
-Any of: a representation of `d`/`k` bytes (decimal list, printable text, or
-base64url export form) appears in `Debug` output; a presence marker is
-missing; `Debug` output differs between keys differing only in `d`/`k` bytes;
-keys differing only in `d`/`k` compare equal; a serde round trip loses `d`
-or `k`; the RSA derivation path renders `d: Some`; or any pre-existing
-`core::jwk` verification test fails.
+- F1: Any of: a representation of `d`/`k` bytes (decimal list, printable
+  text, or base64url export form) appears in `Debug` output; a presence marker
+  is missing; `Debug` output differs between keys differing only in `d`/`k`
+  bytes; keys differing only in `d`/`k` compare equal; a serde round trip loses
+  `d` or `k`; the RSA derivation path renders `d: Some`; or any pre-existing
+  `core::jwk` verification test fails.
 
 ## Implementation
 
@@ -65,6 +65,7 @@ verification tests in `src/core/jwk/tests.rs`, run by
 | P4 | Identical `Debug` for differing secrets; unequal keys; round trip preserves `d`/`k` | `src/core/jwk/tests.rs::test_core_jwk_debug_redaction_is_stable_while_partial_eq_distinguishes`; the `d` round-trip assertions of `test_core_jwk_debug_redacts_ec_private_member` |
 | P5 | Pre-existing verification tests pass unchanged | `test_ecdsa_verification`, `test_rsa_pkcs1_verification`, `test_rsa_pss_verification`, `test_hmac_sha256_verification`, `test_eddsa_verification` in `src/core/jwk/tests.rs` |
 | P6 | RSA derivation path renders `d: None`, `k: None` | `src/core/jwk/tests.rs::test_core_jwk_rsa_verification_key_debug_has_no_private_material` |
+| F1 | Any listed no-disclosure or non-regression failure is detected. | the P1–P6 coverage rows above |
 
 ## Rules note
 
