@@ -1,4 +1,4 @@
-# W-000036 — JWK Clone contract Oracle-leg observation passes
+# W-000036 — JWK complete-scope successor observation is invalid
 
 ## Promise
 
@@ -10,19 +10,15 @@ situation/oracles/O-000026-judge-jwk-clone-contract.md
 
 ## Result
 
-PASS — every O-000026 leg is decided at this head. The fixture clones a
-symmetric key carrying the debug canary secret and an EC key carrying private
-member `d`, then asserts equality preservation, unchanged serde export of the
-secret material, byte-identical `Debug` rendering in compact and pretty form,
-canary-absence on the symmetric compact and EC pretty renderings, and
-retained HS256 verification capability on the cloned symmetric key. The
-remaining format/key renderings (symmetric pretty, EC compact) are
-byte-identical mirrors of the originals' renderings and inherit the
-universal redaction rule O-000023 decides structurally in
-`CoreJsonWebKey::fmt`, retained by W-000032. Together with W-000032 (the
-observation of O-000023's listed legs), this supplies recorded PASS coverage
-for P-000013's named clauses. P-000013's frozen canonical State remains
-`implemented`, as retained by G-000032; this Witness does not change it.
+INVALID — the retained run at this head meaningfully decides the supplemental
+Clone fixture legs, but O-000026 is now the self-contained complete-scope
+successor of O-000023. This run did not decide the successor's direct and
+container redaction, equality distinction, serde round trip, presence-marker,
+non-secret-field, or derived-RSA-key legs. A PASS witness that omits an Oracle
+leg is INVALID, not partial PASS. The table identifies every unobserved
+successor leg without composing this observation with W-000032 or an
+observation at another head. P-000013 remains `implemented` and unassured;
+G-000034 and G-000032 remain open.
 
 ## Head
 
@@ -38,28 +34,39 @@ All commands ran offline (cargo/rustc 1.98.0, Linux) at the head above; result
 lines are verbatim. Logs are sanitized (no machine-local paths) and digested:
 
 - `situation/witnesses/evidence/W-000036/cargo-test-core-jwk-clone-contract-fixture.log`
-  retains `cargo test --offline --lib --quiet -- test_core_jwk_clone_preserves_secret_fields_and_redaction`
-  (`exit=0`): `test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured;
-  111 filtered out; finished in 0.00s`. SHA-256
+  retains `cargo test --offline --lib --quiet --
+  test_core_jwk_clone_preserves_secret_fields_and_redaction` (`exit=0`): `test
+  result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 111 filtered out;
+  finished in 0.00s`. SHA-256
   `a55fec9d0ae3c2bf5901d94fe623f023bee9366bce1fb27ce44fc63624a2e5d3`.
 - Digests are recorded in the adjacent `SHA256SUMS` and were re-verified with
   `sha256sum -c` after writing.
 - Structural citations were inspected at this head; line numbers refer to the
   files at `48761b267c479b38918e4a139ed5c8fd530f2236`.
 - Non-claims: no live-provider run; cargo-deny and the full gate are deferred
-  to PR CI. This Witness observes one Promise under one Oracle at one head; it
-  does not change P-000013's frozen canonical `implemented` State, retained by
-  G-000032.
+  to PR CI. This retained observation neither supplies a complete-scope PASS
+  nor changes P-000013's frozen canonical `implemented` State.
 
 ## Oracle legs
 
 | Leg | Evidence |
 |---|---|
-| P1 | PASS — `symmetric.clone()` and `ec.clone()` (`src/core/jwk/tests.rs` lines 342-343) both `assert_eq!` their originals (lines 346-347), so the secret-carrying `k`/`d` fields are carried over exactly. |
-| P2 | PASS — `serde_json::to_string` of each clone equals the original's export string (`src/core/jwk/tests.rs` lines 350-359), and both export strings `contains` the base64url `k` canary and the base64url `d` canary (lines 360-361), so the intentional export path survives Clone. |
-| P3 | PASS (negative executed and structural) — executed: compact and pretty `Debug` of each clone is byte-identical to the original's (`src/core/jwk/tests.rs` lines 365-368); the symmetric compact rendering shows `k: Some([redacted])` (line 371) with the printable canary, base64url form, and decimal byte runs `222/173/190/239` asserted absent (lines 372-376), and the EC pretty rendering shows `[redacted]` (line 377) with the `170, 170, 170, 170` decimal run and base64url `d` form asserted absent (lines 378-379); structural: the symmetric pretty and EC compact renderings are byte-identical mirrors of the originals' renderings (lines 365-368), and `CoreJsonWebKey::fmt` — the only formatter receiving `d`/`k` values (`src/core/jwk/mod.rs` lines 77-99) — replaces both with the `[redacted]` marker (lines 83-84; marker text lines 71-75) before any field reaches the formatter, the universal rule O-000023 decides and W-000032 retains, so no clone rendering can contain the secret bytes. |
-| P4 | PASS — the cloned symmetric key verifies an HS256 signature over its secret (`verify_signature(...).expect(...)`, `src/core/jwk/tests.rs` lines 383-393) and rejects the tampered message with `SignatureVerificationError::CryptoError` (lines 394-404). |
-| F1 | PASS (negative executed) — P1's `assert_eq!`s (`src/core/jwk/tests.rs` lines 346-347) fail any clone that loses or alters a secret-carrying field; the fixture passes. |
-| F2 | PASS (negative executed) — P2's export-equality and canary-presence assertions (`src/core/jwk/tests.rs` lines 350-361) fail any divergent or secret-dropping clone export; the fixture passes. |
-| F3 | PASS (negative executed and structural) — executed: P3's byte-identity and canary-absence assertions (`src/core/jwk/tests.rs` lines 365-379) fail any clone whose checked renderings leak `d`/`k` bytes, lose the `[redacted]` markers, or differ from the original; structural: the unchecked format/key renderings are byte-identical mirrors of originals whose redaction is the universal formatter rule (`src/core/jwk/mod.rs` lines 77-99; O-000023, retained by W-000032), so a leak there also fails the byte-identity assertions. |
-| F4 | PASS (negative executed) — P4's verification and tamper assertions (`src/core/jwk/tests.rs` lines 383-404) fail a cloned key that cannot verify or accepts a tampered message; the fixture passes. |
+| P1 | Not observed — the retained Clone fixture does not inspect the universal `d` formatter transformation. |
+| P2 | Not observed — the retained Clone fixture does not inspect the universal `k` formatter transformation. |
+| P3 | Not observed — the retained Clone fixture does not render a `JsonWebKeySet<CoreJsonWebKey>` container. |
+| P4 | Not observed — the retained Clone fixture does not apply the successor's direct compact-and-pretty canary decision. |
+| P5 | Not observed — the retained Clone fixture does not compare keys differing only in `d`/`k` or retain the successor's serde round-trip decision. |
+| P6 | Not observed — the retained Clone fixture does not decide direct presence/absence markers and non-secret fields for the successor rule. |
+| P7 | Not observed — the retained Clone fixture does not derive and render an RSA verification key. |
+| P8 | Observed — `symmetric.clone()` and `ec.clone()` each compare equal to their original (`src/core/jwk/tests.rs` lines 342-347). |
+| P9 | Observed — clone serde exports equal the originals and retain the base64url `k`/`d` canaries (lines 350-361). |
+| P10 | Observed — compact and pretty clone output is byte-identical to the originals; the fixture checks redaction markers and canary absence on its checked renderings (lines 363-379). |
+| P11 | Observed — the cloned symmetric key verifies HS256 and rejects a tampered message with `CryptoError` (lines 381-404). |
+| F1 | Not observed — the retained Clone fixture does not apply the universal formatter failure decision. |
+| F2 | Not observed — the retained Clone fixture does not apply the direct or delegated canary-leak failure decision. |
+| F3 | Not observed — the retained Clone fixture does not apply the keys-differing-only-in-`d`/`k` equality-and-serde failure decision. |
+| F4 | Not observed — the retained Clone fixture does not apply the presence-marker, non-secret-field, or derived-RSA failure decision. |
+| F5 | Observed — P8's equality assertions fail a clone that loses or alters a secret-carrying field (lines 342-347). |
+| F6 | Observed — P9's export equality and canary-presence assertions fail divergent or secret-dropping clone export (lines 350-361). |
+| F7 | Observed — P10's byte-identity, marker, and canary-absence assertions fail a checked clone rendering that leaks, loses a marker, or diverges (lines 363-379). |
+| F8 | Observed — P11's verification and tamper assertions fail a clone that cannot verify or accepts tampering (lines 381-404). |

@@ -2,23 +2,26 @@
 
 ## State
 
-closed
+open
 
 ## Gap
 
 P-000013 explicitly promises that `CoreJsonWebKey`'s `Clone` behavior is
 unchanged alongside equality and serde behavior, but O-000023 has no Pass or
 Fail leg for `Clone`. W-000032 therefore supplies listed-leg PASS evidence,
-rather than complete-Promise evidence, because it has no Clone observation.
+rather than complete-Promise evidence, because it has no Clone observation. A
+complete-scope successor now states every Promise clause, but no valid retained
+PASS Witness decides that successor at one head.
 
 ## Relevance
 
-The reviewed DELTA adds W-000032 as a current listed-leg PASS observation. The
-correction removes its complete-scope representation, but neither a successor
-Oracle nor a valid Witness decides P-000013's Clone clause. The Oracle contract
-requires every explicit in-Scope Promise clause to be decided; a visible
-`#[derive(Clone)]` on the implementation is relevant structural evidence but
-does not supply the missing predeclared Oracle leg or a corresponding Witness row.
+The reviewed DELTA adds W-000032 as a current listed-leg PASS observation.
+O-000026 was initially written as a supplemental, non-superseding rule for
+the omitted Clone clause. This correction makes O-000026 the complete-scope
+successor of O-000023, but W-000036 remains only a retained Clone fixture
+observation and is INVALID for the corrected successor. The repository must
+not compose W-000032 and W-000036, which observe different rules and heads,
+into complete-Promise evidence.
 
 ## Evidence
 
@@ -29,59 +32,35 @@ does not supply the missing predeclared Oracle leg or a corresponding Witness ro
   judge equality and serde behavior; no Pass or Fail leg names Clone.
 - `situation/witnesses/P-000013/W-000032-jwk-debug-redaction-oracle-leg-pass.md`
   has one row for every listed O-000023 leg but contains no Clone evidence.
-- `src/core/jwk/mod.rs` still derives `Clone` for `CoreJsonWebKey`; that source
-  fact shows a plausible manual decision is available, not that the current
-  Oracle declared or W-000032 applied it.
-- Validator observation for closure run
-  `20260924T094258Z-50bf95f61913526682a3550d07fa6b1d96d78935` at fixed
-  reviewed head `8e61dc268952aa7f434cd164f7d0569a31113530` (2026-09-24).
-
-- Closer reconciliation for closure run
-  `20260924T111724Z-295cb33dbeb3b837300c31b0b1a17517095f2393` reviewed the
-  admitted DELTA
-  `7f1025e1b91c0f367f05528e7efb93846d437a81..295cb33dbeb3b837300c31b0b1a17517095f2393`.
-  O-000026 declares Pass and Fail legs for the unchanged `Clone` clause, and
-  W-000036 records PASS for every one of those legs at
-  `48761b267c479b38918e4a139ed5c8fd530f2236`, with retained,
-  checksum-verified fixture evidence.
-
-- Validator observation for closure run
-  `20260924T111724Z-295cb33dbeb3b837300c31b0b1a17517095f2393` at fixed
-  reviewed head `bbd8b169c9010aeb7d9f2288b19b670a405b526c` (2026-09-24):
-  O-000026 says that it judges only the `Clone` clause omitted by O-000023 and
-  that neither Oracle supersedes the other. The Oracle contract requires an
-  Oracle to collectively decide every explicit clause of its Promise inside
-  the declared Scope; it defines no composition of two individually
-  incomplete Oracles as a complete judgment rule. W-000036 is PASS evidence
-  for every leg O-000026 lists, but O-000026 does not itself decide
-  P-000013's direct and container redaction, equality, serde, presence, or
-  non-secret-field clauses. This additive observation leaves the Gap's
-  recorded State and Resolution unchanged.
+- `src/core/jwk/mod.rs` derives `Clone` for `CoreJsonWebKey`; that source fact
+  shows a plausible manual decision is available, not that the earlier Oracle
+  declared or W-000032 applied it.
+- At reviewed head `bbd8b169c9010aeb7d9f2288b19b670a405b526c`, O-000026
+  expressly judged only the omitted Clone clause and did not supersede
+  O-000023. Its retained W-000036 fixture run passed those listed supplemental
+  legs at `48761b267c479b38918e4a139ed5c8fd530f2236`.
+- The validator docket for closure run
+  `20260924T111724Z-295cb33dbeb3b837300c31b0b1a17517095f2393` identifies that
+  partial, non-superseding record as an Oracle-contract failure:
+  https://github.com/cleverunicornz/oidc-client/pull/4#issuecomment-5813485966.
+- This forward correction makes O-000026 a self-contained complete-scope
+  successor and classifies W-000036 as INVALID because it omits the
+  successor's direct and container redaction, equality/serde, presence,
+  non-secret-field, and derived-RSA legs. No retained witness presently
+  decides every successor leg at one head.
 
 ## Impact
 
-O-000023 does not collectively decide every explicit clause of P-000013, so
-W-000032 cannot truthfully serve as complete-Promise assurance evidence for
-that Promise. P-000013 remains `implemented` and unassured until a successor
-Oracle has a valid Witness; G-000032 now distinguishes this listed-leg PASS
-from sufficient complete-Promise coverage.
-
-- Closer reconciliation closes the omitted-Clone concern: O-000026 and
-  W-000036 now decide the previously absent `Clone` clause. P-000013's frozen
-  canonical `implemented` State is a distinct reconciliation concern retained
-  by G-000032.
-
-- Validator observation: because O-000026 is expressly partial and
-  non-superseding, its listed-leg PASS Witness does not settle the
-  complete-Promise Oracle-sufficiency absence recorded here. The validation
-  docket reports that failed obligation separately from this observation.
+O-000023 is insufficient to judge P-000013's complete declared Scope.
+O-000026 now supplies a valid complete-scope judgment rule, but W-000036 is
+not adequate PASS evidence for it. P-000013 remains `implemented` and
+unassured while G-000032 is unresolved. This Gap remains open until a valid
+complete-scope successor Witness supplies adequate PASS evidence; the retained
+Clone fixture result is not that evidence.
 
 ## Resolution
 
-closed — O-000026 and W-000036 supply implemented-Oracle and PASS-Witness
-evidence for P-000013's previously omitted `Clone` clause at
-`48761b267c479b38918e4a139ed5c8fd530f2236`. P-000013's frozen canonical State
-remains a separate concern in G-000032.
+none
 
 ## References
 
