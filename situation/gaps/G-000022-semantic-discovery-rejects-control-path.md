@@ -58,6 +58,15 @@ fallback.
   with the exact substantive diff, exact search, and direct reads; this
   additive observation leaves the Gap's State and Resolution unchanged.
 
+- Closer observation for closure run
+  `20260924T094258Z-50bf95f61913526682a3550d07fa6b1d96d78935` at opening
+  checkpoint `fc107c1f60fab2b0ac2c168fefd2193a4945bc11` (2026-09-24): both
+  semantic-index status and a concept-focused semantic search returned
+  `rejected unsafe input: tree path must not contain '.', '..', or empty
+  components: "control/"`. The closer continued with the exact DELTA diff,
+  exact searches, and direct reads; this additive observation leaves the
+  Gap's State and Resolution unchanged.
+
 ## Impact
 
 Targeted semantic discovery cannot narrow correction reads in this workspace.
