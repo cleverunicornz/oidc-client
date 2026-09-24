@@ -49,6 +49,16 @@ rules and heads, into complete-Promise evidence.
   successor's shared-secret, ES256/ES384, `signing_key`, and tutorial legs.
   No retained witness presently decides every successor leg at one head.
 
+- Closer reconciliation observation for closure run
+  `20260924T125359Z-021faa52ab84b38324b49b36cef7dad45c18aa38` at reviewed
+  head `8a328d05b7702788e84b139d0204b30c3941c413` (2026-09-24):
+  `situation/witnesses/P-000009/W-000037-at-hash-complete-scope-successor-pass.md`
+  records a self-contained PASS under O-000025 at reachable head
+  `c5260aeb4a426f7881c8261ef2101d5a30710c29`. Its Oracle-legs table supplies
+  one row for each P1–P16 and F1–F5, and its retained evidence manifest
+  verifies with `sha256sum -c SHA256SUMS` from its evidence directory. This
+  observation is not composed with W-000028 or W-000035.
+
 ## Impact
 
 O-000019 is insufficient to judge P-000009's complete declared Scope.
@@ -57,6 +67,13 @@ not adequate PASS evidence for it. P-000009 remains `implemented` and
 unassured while G-000032 is unresolved. This Gap remains open until a valid
 complete-scope successor Witness supplies adequate PASS evidence; the retained
 supplemental fixture result is not that evidence.
+
+- Closer impact addendum (2026-09-24): the absence of a valid retained
+  complete-scope successor PASS Witness no longer describes the available
+  evidence. O-000019's historical omission and the frozen canonical
+  `implemented` Promise State remain recorded; this additive observation leaves
+  this Gap's State and Resolution unchanged while
+  G-000032 retains the state-reconciliation concern.
 
 ## Resolution
 
@@ -71,3 +88,4 @@ none
 - situation/oracles/AGENTS.md
 - situation/oracles/O-000025-judge-documented-at-hash-rsa-pss-eddsa-families.md
 - situation/witnesses/P-000009/W-000035-at-hash-rsa-pss-eddsa-oracle-leg-pass.md
+- situation/witnesses/P-000009/W-000037-at-hash-complete-scope-successor-pass.md
