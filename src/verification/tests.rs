@@ -1,8 +1,8 @@
 use crate::core::{
-    CoreHmacKey, CoreIdToken, CoreIdTokenClaims, CoreIdTokenVerifier, CoreJsonWebKey,
-    CoreJsonWebKeySet, CoreJsonWebKeyType, CoreJsonWebKeyUse, CoreJweContentEncryptionAlgorithm,
-    CoreJwsSigningAlgorithm, CoreRsaPrivateSigningKey, CoreUserInfoClaims,
-    CoreUserInfoJsonWebToken, CoreUserInfoVerifier,
+    CoreEdDsaPrivateSigningKey, CoreHmacKey, CoreIdToken, CoreIdTokenClaims, CoreIdTokenVerifier,
+    CoreJsonWebKey, CoreJsonWebKeySet, CoreJsonWebKeyType, CoreJsonWebKeyUse,
+    CoreJweContentEncryptionAlgorithm, CoreJwsSigningAlgorithm, CoreRsaPrivateSigningKey,
+    CoreUserInfoClaims, CoreUserInfoJsonWebToken, CoreUserInfoVerifier,
 };
 use crate::helpers::{Base64UrlEncodedBytes, Timestamp};
 use crate::jwt::tests::{TEST_RSA_PRIV_KEY, TEST_RSA_PUB_KEY};
@@ -2375,4 +2375,168 @@ fn test_id_token_verification_key_at_hash_es384() {
     .unwrap();
     let es384_expected = AccessTokenHash::new(b64.encode(&from_fixture[0..from_fixture.len() / 2]));
     assert_eq!(es384_at_hash, es384_expected);
+}
+
+/// The documented `at_hash` flow resolves the matching provider JWK for the remaining asymmetric
+/// signature families: RSA PKCS#1 v1.5 (`RS256`/`RS384`/`RS512`), RSA-PSS (`PS256`/`PS384`/
+/// `PS512`), and EdDSA (Ed25519) ID tokens verify through a public verifier against the provider
+/// JWKS, `IdToken::verification_key` resolves that JWK, and `AccessTokenHash::from_token` over
+/// the resolved key reproduces the embedded at_hash.
+#[test]
+fn test_id_token_verification_key_at_hash_rsa_pss_eddsa() {
+    // Test-only Ed25519 signing key, mirroring TEST_ED25519_KEY in src/core/jwk/tests.rs (that
+    // constant is private to the JWK test module). The matching public key is published as an
+    // OKP JWK by `CoreEdDsaPrivateSigningKey::as_verification_key`.
+    const TEST_ED25519_KEY: &str = "\
+        -----BEGIN PRIVATE KEY-----\n\
+        MC4CAQAwBQYDK2VwBCIEICWeYPLxoZKHZlQ6rkBi11E9JwchynXtljATLqym/XS9\n\
+        -----END PRIVATE KEY-----\
+        ";
+
+    // Test-fixture plumbing that names every input explicitly for the seven
+    // algorithm-family legs; a parameter struct would obscure the table rows.
+    #[allow(clippy::too_many_arguments)]
+    fn assert_jwks_resolved_at_hash<S>(
+        signing_key: &S,
+        alg: CoreJwsSigningAlgorithm,
+        verification_key: CoreJsonWebKey,
+        id_claims: &CoreIdTokenClaims,
+        access_token: &AccessToken,
+        nonce: &Nonce,
+        client_id: &ClientId,
+        issuer: &IssuerUrl,
+        mock_current_time: &AtomicUsize,
+    ) where
+        S: PrivateSigningKey,
+        S::VerificationKey: JsonWebKey<SigningAlgorithm = CoreJwsSigningAlgorithm>,
+    {
+        let time_fn = || {
+            Timestamp::Seconds(mock_current_time.load(Ordering::Relaxed).into())
+                .to_utc()
+                .unwrap()
+        };
+
+        // The provider signs the ID token with this family's private key;
+        // `CoreIdToken::new` embeds the at_hash over the access token for the same algorithm.
+        let id_token = CoreIdToken::new(
+            id_claims.clone(),
+            signing_key,
+            alg.clone(),
+            Some(access_token),
+            None,
+        )
+        .expect("ID token signing should succeed");
+
+        let verifier = CoreIdTokenVerifier::new_public_client(
+            client_id.clone(),
+            issuer.clone(),
+            CoreJsonWebKeySet::new(vec![verification_key.clone()]),
+        )
+        .set_allowed_algs(vec![alg.clone()])
+        .set_time_fn(time_fn);
+        let claims = id_token
+            .claims(&verifier, nonce)
+            .expect("verification should succeed");
+        let expected_access_token_hash = claims.access_token_hash().unwrap().clone();
+
+        // The documented flow resolves the matching provider JWK from the JWKS.
+        let resolved_key = id_token
+            .verification_key(&verifier)
+            .expect("verification key should resolve from the JWKS");
+
+        // The resolved key is the provider's JWK for this family: it hashes exactly like the
+        // fixture key.
+        let from_resolved = resolved_key
+            .hash_bytes(access_token.secret().as_bytes(), &alg)
+            .unwrap();
+        let from_fixture = verification_key
+            .hash_bytes(access_token.secret().as_bytes(), &alg)
+            .unwrap();
+        assert_eq!(from_resolved, from_fixture);
+
+        let actual_access_token_hash = AccessTokenHash::from_token(
+            access_token,
+            id_token.signing_alg().unwrap(),
+            &resolved_key,
+        )
+        .unwrap();
+        assert_eq!(actual_access_token_hash, expected_access_token_hash);
+
+        // A substituted access token fails the comparison.
+        let substituted_hash = AccessTokenHash::from_token(
+            &AccessToken::new("substituted_access_token".to_string()),
+            id_token.signing_alg().unwrap(),
+            &resolved_key,
+        )
+        .unwrap();
+        assert_ne!(substituted_hash, expected_access_token_hash);
+    }
+
+    let client_id = ClientId::new("my_client".to_string());
+    let issuer = IssuerUrl::new("https://example.com".to_string()).unwrap();
+    let nonce = Nonce::new("the_nonce".to_string());
+    let access_token = AccessToken::new("the_access_token".to_string());
+
+    let mock_current_time = AtomicUsize::new(1544932148);
+
+    let id_claims = CoreIdTokenClaims::new(
+        issuer.clone(),
+        vec![Audience::new((*client_id).clone())],
+        Utc.timestamp_opt(1544932149, 0)
+            .single()
+            .expect("valid timestamp"),
+        Utc.timestamp_opt(1544928549, 0)
+            .single()
+            .expect("valid timestamp"),
+        StandardClaims::new(SubjectIdentifier::new("subject".to_string())),
+        Default::default(),
+    )
+    .set_nonce(Some(nonce.clone()));
+
+    // One RSA fixture key signs every RSA family (PKCS#1 v1.5 and PSS); its public JWK (n, e)
+    // is published in the verifier's JWKS.
+    let rsa_priv_key = CoreRsaPrivateSigningKey::from_pem(
+        TEST_RSA_PRIV_KEY,
+        Some(JsonWebKeyId::new("test-rsa-key".to_string())),
+    )
+    .expect("key parsing failed");
+    let rsa_verification_key = rsa_priv_key.as_verification_key();
+    for alg in [
+        CoreJwsSigningAlgorithm::RsaSsaPkcs1V15Sha256,
+        CoreJwsSigningAlgorithm::RsaSsaPkcs1V15Sha384,
+        CoreJwsSigningAlgorithm::RsaSsaPkcs1V15Sha512,
+        CoreJwsSigningAlgorithm::RsaSsaPssSha256,
+        CoreJwsSigningAlgorithm::RsaSsaPssSha384,
+        CoreJwsSigningAlgorithm::RsaSsaPssSha512,
+    ] {
+        assert_jwks_resolved_at_hash(
+            &rsa_priv_key,
+            alg,
+            rsa_verification_key.clone(),
+            &id_claims,
+            &access_token,
+            &nonce,
+            &client_id,
+            &issuer,
+            &mock_current_time,
+        );
+    }
+
+    // EdDSA (Ed25519) through the crate's Ed25519 private signing key.
+    let eddsa_priv_key = CoreEdDsaPrivateSigningKey::from_ed25519_pem(
+        TEST_ED25519_KEY,
+        Some(JsonWebKeyId::new("test-eddsa-key".to_string())),
+    )
+    .expect("key parsing failed");
+    assert_jwks_resolved_at_hash(
+        &eddsa_priv_key,
+        CoreJwsSigningAlgorithm::EdDsa,
+        eddsa_priv_key.as_verification_key(),
+        &id_claims,
+        &access_token,
+        &nonce,
+        &client_id,
+        &issuer,
+        &mock_current_time,
+    );
 }

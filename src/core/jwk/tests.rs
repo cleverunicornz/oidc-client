@@ -318,6 +318,92 @@ fn test_core_jwk_rsa_verification_key_debug_has_no_private_material() {
     assert!(!debug.contains("d: Some"));
 }
 
+/// Cloning a `CoreJsonWebKey` preserves the secret-carrying fields exactly: equality and serde
+/// serialization (the intentional export path for `d` and `k`) are unchanged, `Debug` output
+/// keeps redacting the secret bytes, and a cloned symmetric key still verifies signatures.
+#[test]
+fn test_core_jwk_clone_preserves_secret_fields_and_redaction() {
+    let symmetric = CoreJsonWebKey::new_symmetric(DEBUG_CANARY_SECRET.to_vec());
+    let d = [0xaa_u8; 32];
+    let ec_json = format!(
+        "{{\
+            \"kty\": \"EC\",\
+            \"crv\": \"P-256\",\
+            \"x\": \"{}\",\
+            \"y\": \"{}\",\
+            \"d\": \"{}\"\
+        }}",
+        BASE64_URL_SAFE_NO_PAD.encode([0x11_u8; 32]),
+        BASE64_URL_SAFE_NO_PAD.encode([0x22_u8; 32]),
+        BASE64_URL_SAFE_NO_PAD.encode(d),
+    );
+    let ec: CoreJsonWebKey = serde_json::from_str(&ec_json).expect("deserialization failed");
+
+    let symmetric_clone = symmetric.clone();
+    let ec_clone = ec.clone();
+
+    // Clone preserves equality, so every secret field (`k`/`d`) is carried over exactly.
+    assert_eq!(symmetric_clone, symmetric);
+    assert_eq!(ec_clone, ec);
+
+    // Serialization remains the intentional export path and still carries the secret fields.
+    let symmetric_export = serde_json::to_string(&symmetric).expect("serialization failed");
+    let ec_export = serde_json::to_string(&ec).expect("serialization failed");
+    assert_eq!(
+        serde_json::to_string(&symmetric_clone).expect("serialization failed"),
+        symmetric_export
+    );
+    assert_eq!(
+        serde_json::to_string(&ec_clone).expect("serialization failed"),
+        ec_export
+    );
+    assert!(symmetric_export.contains(&BASE64_URL_SAFE_NO_PAD.encode(DEBUG_CANARY_SECRET)));
+    assert!(ec_export.contains(&BASE64_URL_SAFE_NO_PAD.encode(d)));
+
+    // Clone preserves the redacted `Debug` contract byte for byte, so the clones' output shows
+    // the presence of `k`/`d` but never their bytes.
+    for (original, clone) in [(&symmetric, &symmetric_clone), (&ec, &ec_clone)] {
+        assert_eq!(format!("{:?}", clone), format!("{:?}", original));
+        assert_eq!(format!("{:#?}", clone), format!("{:#?}", original));
+    }
+    let symmetric_debug = format!("{:?}", symmetric_clone);
+    let ec_debug_pretty = format!("{:#?}", ec_clone);
+    assert!(symmetric_debug.contains("k: Some([redacted])"));
+    assert!(!symmetric_debug.contains(DEBUG_CANARY_PRINTABLE));
+    assert!(!symmetric_debug.contains(&BASE64_URL_SAFE_NO_PAD.encode(DEBUG_CANARY_SECRET)));
+    for byte in [222, 173, 190, 239] {
+        assert!(!symmetric_debug.contains(&byte.to_string()));
+    }
+    assert!(ec_debug_pretty.contains("[redacted]"));
+    assert!(!ec_debug_pretty.contains("170, 170, 170, 170"));
+    assert!(!ec_debug_pretty.contains(&BASE64_URL_SAFE_NO_PAD.encode(d)));
+
+    // Clone does not degrade the key: the cloned symmetric key still verifies an HS256
+    // signature over its secret and rejects a tampered message.
+    let message = "hello HMAC";
+    let signature = CoreHmacKey::new(DEBUG_CANARY_SECRET.to_vec())
+        .sign(&CoreJwsSigningAlgorithm::HmacSha256, message.as_bytes())
+        .unwrap();
+    symmetric_clone
+        .verify_signature(
+            &CoreJwsSigningAlgorithm::HmacSha256,
+            message.as_bytes(),
+            &signature,
+        )
+        .expect("cloned key should verify HS256 signatures");
+    match symmetric_clone
+        .verify_signature(
+            &CoreJwsSigningAlgorithm::HmacSha256,
+            b"hello HMAC tampered",
+            &signature,
+        )
+        .expect_err("tampered message should fail HS256 verification")
+    {
+        SignatureVerificationError::CryptoError(_) => {}
+        other => panic!("unexpected error: {:?}", other),
+    }
+}
+
 fn verify_signature(
     key: &CoreJsonWebKey,
     alg: &CoreJwsSigningAlgorithm,
