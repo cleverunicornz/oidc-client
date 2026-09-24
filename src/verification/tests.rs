@@ -2077,9 +2077,9 @@ fn assert_hs_user_info_signed_response_policy(alg: CoreJwsSigningAlgorithm) {
     let signature = hmac_key
         .sign(&alg, signing_input.as_bytes())
         .expect("HS signing should succeed");
-    let user_info_jwt: CoreUserInfoJsonWebToken = serde_json::from_value(serde_json::Value::String(
-        format!("{}.{}", signing_input, b64.encode(signature)),
-    ))
+    let user_info_jwt: CoreUserInfoJsonWebToken = serde_json::from_value(
+        serde_json::Value::String(format!("{}.{}", signing_input, b64.encode(signature))),
+    )
     .expect("failed to deserialize");
 
     // Accepted via the confidential verifier with the matching secret (empty JWKS: the
@@ -2115,13 +2115,9 @@ fn assert_hs_user_info_signed_response_policy(alg: CoreJwsSigningAlgorithm) {
 
     // Shared-secret algorithms additionally require a confidential verifier: a public verifier
     // rejects the response even when the algorithm is explicitly allowed.
-    let public_verifier = CoreUserInfoVerifier::new(
-        client_id,
-        issuer,
-        CoreJsonWebKeySet::new(vec![]),
-        Some(sub),
-    )
-    .set_allowed_algs(vec![alg.clone()]);
+    let public_verifier =
+        CoreUserInfoVerifier::new(client_id, issuer, CoreJsonWebKeySet::new(vec![]), Some(sub))
+            .set_allowed_algs(vec![alg.clone()]);
     match user_info_jwt.claims(&public_verifier) {
         Err(ClaimsVerificationError::SignatureVerification(
             SignatureVerificationError::DisallowedAlg(_),
@@ -2177,12 +2173,10 @@ fn test_user_info_subject_binding_none_mode() {
         CoreJsonWebKeySet::new(vec![rsa_key.clone()]),
         None,
     );
-    let claims = CoreUserInfoClaims::new(
-        StandardClaims::new(other_sub.clone()),
-        Default::default(),
-    )
-    .set_issuer(Some(issuer.clone()))
-    .set_audiences(Some(vec![Audience::new((*client_id).clone())]));
+    let claims =
+        CoreUserInfoClaims::new(StandardClaims::new(other_sub.clone()), Default::default())
+            .set_issuer(Some(issuer.clone()))
+            .set_audiences(Some(vec![Audience::new((*client_id).clone())]));
     let rsa_priv_key = CoreRsaPrivateSigningKey::from_pem(TEST_RSA_PRIV_KEY, None).unwrap();
     let jwt_claims: CoreUserInfoJsonWebToken = CoreUserInfoJsonWebToken::new(
         claims,
@@ -2243,7 +2237,10 @@ fn test_id_token_verification_key_at_hash_hs384_hs512() {
     .set_nonce(Some(nonce.clone()));
 
     let hmac_key = CoreHmacKey::new(secret);
-    for alg in [CoreJwsSigningAlgorithm::HmacSha384, CoreJwsSigningAlgorithm::HmacSha512] {
+    for alg in [
+        CoreJwsSigningAlgorithm::HmacSha384,
+        CoreJwsSigningAlgorithm::HmacSha512,
+    ] {
         // Shared-secret ID token with an at_hash computed over the access token.
         let id_token = CoreIdToken::new(
             id_claims.clone(),

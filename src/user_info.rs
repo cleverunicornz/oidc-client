@@ -767,7 +767,10 @@ mod tests {
         // The builder route carries the client secret for the remaining shared-secret
         // algorithms as well: HS384 and HS512 verify once the algorithm is explicitly allowed
         // and the client secret is present, and stay rejected otherwise.
-        for alg in [CoreJwsSigningAlgorithm::HmacSha384, CoreJwsSigningAlgorithm::HmacSha512] {
+        for alg in [
+            CoreJwsSigningAlgorithm::HmacSha384,
+            CoreJwsSigningAlgorithm::HmacSha512,
+        ] {
             let token = sign_hs(&alg, "the_client_secret");
             let new_secret = || ClientSecret::new("the_client_secret".to_string());
 
@@ -1096,9 +1099,7 @@ mod tests {
     /// client (no secret) rejects the same response even when the algorithm is allowed.
     #[test]
     fn test_user_info_request_confidential_client_routes_secret() {
-        use crate::core::{
-            CoreClient, CoreHmacKey, CoreJsonWebKeySet, CoreJwsSigningAlgorithm,
-        };
+        use crate::core::{CoreClient, CoreHmacKey, CoreJsonWebKeySet, CoreJwsSigningAlgorithm};
         use crate::{
             AccessToken, ClaimsVerificationError, ClientId, ClientSecret, EmptyAdditionalClaims,
             IssuerUrl, PrivateSigningKey, SignatureVerificationError, SubjectIdentifier,
@@ -1149,7 +1150,10 @@ mod tests {
         .set_client_secret(ClientSecret::new("the_client_secret".to_string()))
         .set_user_info_url(url.clone());
         let claims = confidential_client
-            .user_info(AccessToken::new("the_access_token".to_string()), Some(sub.clone()))
+            .user_info(
+                AccessToken::new("the_access_token".to_string()),
+                Some(sub.clone()),
+            )
             .set_allowed_algs(vec![CoreJwsSigningAlgorithm::HmacSha256])
             .request::<EmptyAdditionalClaims, CoreGenderClaim, _>(&http_client)
             .expect("confidential routing should carry the client secret");

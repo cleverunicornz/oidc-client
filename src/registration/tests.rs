@@ -725,12 +725,19 @@ fn assert_expires_at_cases(cases: &[(&str, i64)]) {
             ClientSecretExpiration::ExpiresAt(expires_at) => expires_at.timestamp(),
             other => panic!("{json} must deserialize as ExpiresAt, got {other:?}"),
         };
-        assert_eq!(resolved_second, *expected_second, "unexpected second for {json}");
+        assert_eq!(
+            resolved_second, *expected_second,
+            "unexpected second for {json}"
+        );
 
         // Round trip: the expiry serializes back to exactly its epoch second.
         let serialized = serde_json::to_string(&expiration)
             .unwrap_or_else(|err| panic!("failed to serialize {json}: {err}"));
-        assert_eq!(serialized, expected_second.to_string(), "unexpected round trip for {json}");
+        assert_eq!(
+            serialized,
+            expected_second.to_string(),
+            "unexpected round trip for {json}"
+        );
     }
 }
 
@@ -901,14 +908,14 @@ fn test_client_secret_expiration_epoch_rfc3339_rejected() {
 fn test_client_secret_expiration_expires_at_rfc3339_sweep() {
     // (JSON string literal, expected epoch second).
     assert_expires_at_cases(&[
-        (r#""1970-01-01T00:00:01Z""#, 1),               // Smallest non-colliding second.
-        (r#""1969-12-31T23:59:59.750Z""#, -1),          // Fractional pre-epoch, non-colliding.
-        (r#""1938-04-24T22:13:20Z""#, -1000000000),     // Pre-1970.
-        (r#""2018-05-17T08:21:46.250Z""#, 1526545306),  // Fractional seconds.
-        (r#""2023-11-14T22:13:20Z""#, 1700000000),      // Recent.
+        (r#""1970-01-01T00:00:01Z""#, 1), // Smallest non-colliding second.
+        (r#""1969-12-31T23:59:59.750Z""#, -1), // Fractional pre-epoch, non-colliding.
+        (r#""1938-04-24T22:13:20Z""#, -1000000000), // Pre-1970.
+        (r#""2018-05-17T08:21:46.250Z""#, 1526545306), // Fractional seconds.
+        (r#""2023-11-14T22:13:20Z""#, 1700000000), // Recent.
         (r#""2023-11-15T08:13:20+10:00""#, 1700000000), // Positive UTC offset.
         (r#""2023-11-14T13:13:20-09:00""#, 1700000000), // Negative UTC offset.
-        (r#""9999-12-31T23:59:59Z""#, 253402300799),    // Far future.
+        (r#""9999-12-31T23:59:59Z""#, 253402300799), // Far future.
     ]);
 }
 
@@ -1079,9 +1086,9 @@ fn test_registration_async_sends_bearer_header() {
     let mut cx = std::task::Context::from_waker(std::task::Waker::noop());
     let response = match future.as_mut().poll(&mut cx) {
         std::task::Poll::Ready(Ok(response)) => response,
-        other => panic!(
-            "expected the registration future to be ready after one poll, got: {other:?}"
-        ),
+        other => {
+            panic!("expected the registration future to be ready after one poll, got: {other:?}")
+        }
     };
     assert_eq!(
         *response.client_id(),
