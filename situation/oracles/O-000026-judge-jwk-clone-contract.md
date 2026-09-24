@@ -76,9 +76,9 @@ fixture's byte-identity assertions.
   decide the Promise's Scope — the redaction, equality/serde-distinction, and
   rendering-shape legs by O-000023, the unchanged-`Clone` clause by this
   oracle. Neither supersedes the other.
-- situation/gaps/G-000034-jwk-redaction-oracle-omits-clone-contract.md — this
-  oracle and its witness supply the evidence that settles the gap's omitted
-  Clone clause; State and Resolution transitions remain with the closure
-  corrector.
+- situation/gaps/G-000034-jwk-redaction-oracle-omits-clone-contract.md —
+  closed by this Oracle and W-000036, which decide its omitted `Clone` clause.
+  P-000013's frozen canonical State remains an independent reconciliation
+  concern in G-000032.
 - situation/witnesses/P-000013/W-000032-jwk-debug-redaction-oracle-leg-pass.md
   remains the observation of O-000023's listed legs.
