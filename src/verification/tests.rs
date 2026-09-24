@@ -1888,9 +1888,22 @@ fn test_id_token_verification_key_at_hash() {
     }))
     .expect("deserialization failed");
 
+    // The provider embeds the `at_hash` over the real access token, exactly as
+    // `CoreIdToken::new(..., Some(&access_token), ...)` does for the families it signs itself.
+    let fixture_hash = es256_key
+        .hash_bytes(
+            access_token.secret().as_bytes(),
+            &CoreJwsSigningAlgorithm::EcdsaP256Sha256,
+        )
+        .unwrap();
+    let es256_expected = AccessTokenHash::new(b64.encode(&fixture_hash[0..fixture_hash.len() / 2]));
     let header = "{\"alg\":\"ES256\",\"typ\":\"JWT\",\"kid\":\"test-es256-key\"}";
-    let payload = "{\"iss\":\"https://example.com\",\"aud\":[\"my_client\"],\
-\"sub\":\"subject\",\"exp\":1544932149,\"iat\":1544928549,\"nonce\":\"the_nonce\"}";
+    let payload = format!(
+        "{{\"iss\":\"https://example.com\",\"aud\":[\"my_client\"],\
+\"sub\":\"subject\",\"exp\":1544932149,\"iat\":1544928549,\"nonce\":\"the_nonce\",\
+\"at_hash\":\"{}\"}}",
+        es256_expected.as_str()
+    );
     let signing_input = format!(
         "{}.{}",
         b64.encode(header.as_bytes()),
@@ -1909,9 +1922,11 @@ fn test_id_token_verification_key_at_hash() {
     )
     .set_allowed_algs(vec![CoreJwsSigningAlgorithm::EcdsaP256Sha256])
     .set_time_fn(time_fn);
-    id_token_es256
+    let es256_claims = id_token_es256
         .claims(&es256_verifier, &nonce)
         .expect("verification should succeed");
+    // The documented call reproduces the token's EMBEDDED `at_hash` claim.
+    let embedded_at_hash = es256_claims.access_token_hash().unwrap().clone();
     let es256_verification_key = id_token_es256
         .verification_key(&es256_verifier)
         .expect("verification key should resolve from the JWKS");
@@ -1922,30 +1937,25 @@ fn test_id_token_verification_key_at_hash() {
             &CoreJwsSigningAlgorithm::EcdsaP256Sha256,
         )
         .unwrap();
-    let from_fixture = es256_key
-        .hash_bytes(
-            access_token.secret().as_bytes(),
-            &CoreJwsSigningAlgorithm::EcdsaP256Sha256,
-        )
-        .unwrap();
-    assert_eq!(from_resolved, from_fixture);
+    assert_eq!(from_resolved, fixture_hash);
     let es256_at_hash = AccessTokenHash::from_token(
         &access_token,
         id_token_es256.signing_alg().unwrap(),
         &es256_verification_key,
     )
     .unwrap();
-    let es256_expected = AccessTokenHash::new(b64.encode(&from_fixture[0..from_fixture.len() / 2]));
-    assert_eq!(es256_at_hash, es256_expected);
+    assert_eq!(es256_at_hash, embedded_at_hash);
+    // Cross-check: the embedded claim is the fixture key's independently computed at_hash.
+    assert_eq!(embedded_at_hash, es256_expected);
 
-    // A substituted access token fails the comparison for the ES256 flow too.
+    // A substituted access token fails the comparison with the embedded claim.
     let es256_substituted_hash = AccessTokenHash::from_token(
         &AccessToken::new("substituted_access_token".to_string()),
         id_token_es256.signing_alg().unwrap(),
         &es256_verification_key,
     )
     .unwrap();
-    assert_ne!(es256_substituted_hash, es256_expected);
+    assert_ne!(es256_substituted_hash, embedded_at_hash);
 
     // A JWKS holding only a nonmatching P-256 key rejects the documented flow: claims
     // verification and key resolution fail with `NoMatchingKey` rather than resolving the wrong
@@ -2373,9 +2383,22 @@ fn test_id_token_verification_key_at_hash_es384() {
     }))
     .expect("deserialization failed");
 
+    // The provider embeds the `at_hash` over the real access token, exactly as
+    // `CoreIdToken::new(..., Some(&access_token), ...)` does for the families it signs itself.
+    let fixture_hash = es384_key
+        .hash_bytes(
+            access_token.secret().as_bytes(),
+            &CoreJwsSigningAlgorithm::EcdsaP384Sha384,
+        )
+        .unwrap();
+    let es384_expected = AccessTokenHash::new(b64.encode(&fixture_hash[0..fixture_hash.len() / 2]));
     let header = "{\"alg\":\"ES384\",\"typ\":\"JWT\",\"kid\":\"test-es384-key\"}";
-    let payload = "{\"iss\":\"https://example.com\",\"aud\":[\"my_client\"],\
-\"sub\":\"subject\",\"exp\":1544932149,\"iat\":1544928549,\"nonce\":\"the_nonce\"}";
+    let payload = format!(
+        "{{\"iss\":\"https://example.com\",\"aud\":[\"my_client\"],\
+\"sub\":\"subject\",\"exp\":1544932149,\"iat\":1544928549,\"nonce\":\"the_nonce\",\
+\"at_hash\":\"{}\"}}",
+        es384_expected.as_str()
+    );
     let signing_input = format!(
         "{}.{}",
         b64.encode(header.as_bytes()),
@@ -2394,9 +2417,11 @@ fn test_id_token_verification_key_at_hash_es384() {
     )
     .set_allowed_algs(vec![CoreJwsSigningAlgorithm::EcdsaP384Sha384])
     .set_time_fn(time_fn);
-    id_token_es384
+    let es384_claims = id_token_es384
         .claims(&es384_verifier, &nonce)
         .expect("verification should succeed");
+    // The documented call reproduces the token's EMBEDDED `at_hash` claim.
+    let embedded_at_hash = es384_claims.access_token_hash().unwrap().clone();
     let es384_verification_key = id_token_es384
         .verification_key(&es384_verifier)
         .expect("verification key should resolve from the JWKS");
@@ -2407,30 +2432,25 @@ fn test_id_token_verification_key_at_hash_es384() {
             &CoreJwsSigningAlgorithm::EcdsaP384Sha384,
         )
         .unwrap();
-    let from_fixture = es384_key
-        .hash_bytes(
-            access_token.secret().as_bytes(),
-            &CoreJwsSigningAlgorithm::EcdsaP384Sha384,
-        )
-        .unwrap();
-    assert_eq!(from_resolved, from_fixture);
+    assert_eq!(from_resolved, fixture_hash);
     let es384_at_hash = AccessTokenHash::from_token(
         &access_token,
         id_token_es384.signing_alg().unwrap(),
         &es384_verification_key,
     )
     .unwrap();
-    let es384_expected = AccessTokenHash::new(b64.encode(&from_fixture[0..from_fixture.len() / 2]));
-    assert_eq!(es384_at_hash, es384_expected);
+    assert_eq!(es384_at_hash, embedded_at_hash);
+    // Cross-check: the embedded claim is the fixture key's independently computed at_hash.
+    assert_eq!(embedded_at_hash, es384_expected);
 
-    // A substituted access token fails the comparison.
+    // A substituted access token fails the comparison with the embedded claim.
     let substituted_hash = AccessTokenHash::from_token(
         &AccessToken::new("substituted_access_token".to_string()),
         id_token_es384.signing_alg().unwrap(),
         &es384_verification_key,
     )
     .unwrap();
-    assert_ne!(substituted_hash, es384_expected);
+    assert_ne!(substituted_hash, embedded_at_hash);
 
     // A JWKS holding only a nonmatching P-384 key rejects the documented flow: claims
     // verification and key resolution fail with `NoMatchingKey` rather than resolving the wrong
