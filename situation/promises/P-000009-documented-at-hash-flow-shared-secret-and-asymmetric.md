@@ -30,7 +30,7 @@ sign with algorithms the verifier has not allowed.
 
 ## Oracle
 
-situation/oracles/O-000010-judge-documented-at-hash-flow.md
+situation/oracles/O-000019-judge-documented-at-hash-flow-complete-scope.md
 
 ## State evidence
 
@@ -40,19 +40,22 @@ State `implemented` cites implementation commit
 test named by O-000010. The Promise, Oracle, and Witness records were
 attached retrospectively in `9c4013a9d93a93e65084b3475022c43059e64fc2`.
 
-situation/witnesses/P-000009/W-000012-documented-at-hash-flow.md is a PASS
-observation from the parent's final gate at
-`b96b920f52e0d8b392edcf0b5d752fa570c2b356` and decides every named
-O-000010 leg. The state remains `implemented`, not `assured`: the named
-fixtures cover HS256 and ES256, while HS384, HS512, and ES384 lack
-independently recorded coverage. Those limits remain in Residual.
+situation/oracles/O-000019-judge-documented-at-hash-flow-complete-scope.md
+supersedes O-000010 for this Promise's complete Scope. Its first successor
+observation,
+situation/witnesses/P-000009/W-000021-documented-at-hash-complete-scope-incomplete.md,
+is INVALID: it preserves the absence of independent HS384, HS512, ES384,
+`signing_key` scope, and documentation-leg evidence. The state therefore
+remains `implemented`, not `assured`. W-000012 remains the PASS observation
+of the historical, narrower O-000010 rule.
 
 ## Residual
 
-`HS384`/`HS512` and `ES384` follow the same dispatch as the tested `HS256` and
-`ES256` but are not exercised by a named test. JWE-encrypted ID tokens remain
-unsupported crate-wide. The end-to-end network flow with a live provider is not
-exercised.
+No assurance is claimed until O-000019 has a valid witness for every declared
+Scope clause. W-000021 makes the currently unobserved HS384, HS512, ES384,
+`signing_key` scope, and documentation legs visible; that evidence boundary
+does not narrow this Promise. JWE-encrypted ID tokens remain unsupported
+crate-wide, and a live-provider end-to-end flow is outside Scope.
 
 ## References
 

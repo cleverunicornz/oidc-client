@@ -49,3 +49,9 @@ execute the documentation leg.
 | P3 | Tutorials compile against the documented call. | `cargo test --offline --doc --features reqwest-blocking` |
 | F1 | Substituted access token fails the comparison. | `src/verification/tests.rs::test_id_token_verification_key_at_hash` |
 | F2 | Shared-secret resolution without a client secret errors instead of panicking. | `src/verification/tests.rs::test_id_token_verification_key_at_hash` |
+
+## References
+
+- Superseded for P-000009's complete declared Scope by
+  situation/oracles/O-000019-judge-documented-at-hash-flow-complete-scope.md.
+  W-000012 remains an observation of this historical, narrower rule.
