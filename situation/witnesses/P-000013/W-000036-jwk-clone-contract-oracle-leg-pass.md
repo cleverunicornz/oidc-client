@@ -20,9 +20,9 @@ remaining format/key renderings (symmetric pretty, EC compact) are
 byte-identical mirrors of the originals' renderings and inherit the
 universal redaction rule O-000023 decides structurally in
 `CoreJsonWebKey::fmt`, retained by W-000032. Together with W-000032 (the
-observation of O-000023's listed legs), O-000023 plus O-000026 now have
-passing observations covering P-000013's Scope at this head; promise state
-transitions remain with the closure corrector.
+observation of O-000023's listed legs), this supplies recorded PASS coverage
+for P-000013's named clauses. P-000013's frozen canonical State remains
+`implemented`, as retained by G-000032; this Witness does not change it.
 
 ## Head
 
