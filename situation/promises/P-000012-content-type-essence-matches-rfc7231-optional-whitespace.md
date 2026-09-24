@@ -29,20 +29,18 @@ situation/oracles/O-000013-judge-content-type-essence-matching.md
 
 ## State evidence
 
-State `implemented` cites the Stream B pre-publication-hardening commit on branch
-`fix/prepublication-hardening` that carries this record together with the implementation and
-the focused tests named by the oracle
-(situation/decisions/D-000015-prepublication-hardening-maintenance-deltas-http-header-surface.md
-authorizes the deltas). Witnesses have not been collected yet; the parent's final gate
-attaches them under `situation/witnesses/P-000012/` and applies the oracle to decide the
-disposition.
+State `implemented` cites implementation commit
+`60c11639afc4d0b7504d7338c1a810f8c38eee30`, which changes the shared
+essence comparison and adds the focused consumer-path tests named by
+O-000013. The Promise, Oracle, and Witness records were attached
+retrospectively in `9c4013a9d93a93e65084b3475022c43059e64fc2`.
 
-Attached at the parent's final gate (2026-09-23, head
-`b96b920f52e0d8b392edcf0b5d752fa570c2b356`):
 situation/witnesses/P-000012/W-000015-content-type-essence-optional-whitespace.md
-— Result PASS: every O-000013 leg is executable and was decided by the gate
-run (`cargo test --all-features --offline`, lib suite 99 passed / 0
-failed).
+is a PASS observation from the parent's final gate at
+`b96b920f52e0d8b392edcf0b5d752fa570c2b356` and decides each named
+O-000013 leg. The state remains `implemented`, not `assured`: the named
+fixtures cover the listed case and OWS forms, not every legal-but-unusual
+field-value padding retained in Residual.
 
 ## Residual
 
