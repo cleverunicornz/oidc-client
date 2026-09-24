@@ -60,6 +60,17 @@ claim these Promises as assured from the new Witnesses alone.
   `situation/AGENTS.md` states both that a Promise state records disposition
   and that post-checkpoint records are immutable.
 
+- Closer observation for closure run
+  `20260924T111724Z-295cb33dbeb3b837300c31b0b1a17517095f2393` at opening
+  checkpoint `c9e07d9eb28282fd56ffbcce87cc33f4093a3f9b` (2026-09-24): the
+  admitted DELTA adds O-000025/W-000035 for P-000009's formerly omitted
+  RSA, RSA-PSS, and EdDSA families, and O-000026/W-000036 for P-000013's
+  formerly omitted `Clone` clause. Each new implemented Oracle has coverage
+  for every listed Pass and Fail leg; each corresponding Witness is PASS at
+  `48761b267c479b38918e4a139ed5c8fd530f2236` with one Oracle-legs row per
+  listed leg. The retained evidence manifests for W-000035 and W-000036
+  verified during this reconciliation.
+
 ## Impact
 
 For the six lineages whose Oracles are sufficient, complete-Promise PASS
@@ -70,6 +81,12 @@ boundary. In no lineage can a consumer treat the Promise as assured while its
 canonical State remains `implemented`; rewriting that State would violate the
 record-immutability boundary. The appropriate reconciliation mechanism remains
 unresolved.
+
+- The new records settle the specific omitted-clause concerns in G-000033 and
+  G-000034, so P-000009 and P-000013 now have supplemental recorded
+  Oracle/Witness evidence beyond W-000028 and W-000032. Their frozen canonical
+  Promise States still say `implemented`; this Gap's unresolved state-record
+  mechanism remains, and no consumer may treat either Promise as assured.
 
 ## Resolution
 
@@ -88,3 +105,9 @@ none
 - situation/witnesses/P-000013/W-000032-jwk-debug-redaction-oracle-leg-pass.md
 - situation/witnesses/P-000014/W-000033-client-secret-expiry-complete-scope-pass.md
 - situation/witnesses/P-000016/W-000034-client-secret-expiration-sentinel-collisions-pass.md
+- situation/oracles/O-000025-judge-documented-at-hash-rsa-pss-eddsa-families.md
+- situation/witnesses/P-000009/W-000035-at-hash-rsa-pss-eddsa-oracle-leg-pass.md
+- situation/oracles/O-000026-judge-jwk-clone-contract.md
+- situation/witnesses/P-000013/W-000036-jwk-clone-contract-oracle-leg-pass.md
+- situation/gaps/G-000033-at-hash-oracle-omits-supported-asymmetric-algorithms.md
+- situation/gaps/G-000034-jwk-redaction-oracle-omits-clone-contract.md
