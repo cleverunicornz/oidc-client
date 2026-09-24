@@ -28,7 +28,7 @@ generic JWT layer, ID-token verification policy, or signature production.
 
 ## Oracle
 
-situation/oracles/O-000009-judge-signed-user-info-verification-policy.md
+situation/oracles/O-000018-judge-signed-user-info-verification-policy-complete-scope.md
 
 ## State evidence
 
@@ -39,21 +39,22 @@ Witness records were attached retrospectively in
 `9c4013a9d93a93e65084b3475022c43059e64fc2`; that is consistent with an
 implementation record created after the behavior landed.
 
-situation/witnesses/P-000008/W-000011-signed-user-info-verification-policy.md
-is a PASS observation from the parent's final gate at
-`b96b920f52e0d8b392edcf0b5d752fa570c2b356` and decides each named
-O-000009 leg. The state remains `implemented`, not `assured`: the named
-executions cover ES256 and HS256 representatives, while ES384, HS384,
-HS512, and `Client::user_info` confidential routing lack independently
-recorded coverage. Those limits remain in Residual.
+situation/oracles/O-000018-judge-signed-user-info-verification-policy-complete-scope.md
+supersedes O-000009 for this Promise's complete Scope. Its first successor
+observation,
+situation/witnesses/P-000008/W-000020-signed-user-info-complete-scope-incomplete.md,
+is INVALID: it preserves the absence of independent ES384, HS384, HS512,
+Client confidential-routing, claim-preservation, and API-surface evidence.
+The state therefore remains `implemented`, not `assured`. W-000011 remains
+the PASS observation of the historical, narrower O-000009 rule.
 
 ## Residual
 
-`ES384`, `HS384`, and `HS512` follow the same dispatch as the tested `ES256`
-and `HS256` but are not exercised by a named test. Asynchronous request
-submission is not distinguished from the synchronous path (both funnel through
-the same `user_info_response` verification). Algorithm allowlisting for ID
-tokens is separately governed and not covered here.
+No assurance is claimed until O-000018 has a valid witness for every declared
+Scope clause. W-000020 makes the currently unobserved ES384, HS384, HS512,
+Client confidential-routing, claim-preservation, and API-surface legs visible;
+that evidence boundary does not narrow this Promise. Algorithm allowlisting
+for ID tokens is separately governed and not covered here.
 
 ## References
 

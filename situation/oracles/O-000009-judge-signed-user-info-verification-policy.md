@@ -60,3 +60,9 @@ through the request builder in `src/user_info.rs`'s test module.
 | F4 | ES256 signature by wrong key rejected. | `src/verification/tests.rs::test_user_info_signed_response_es256` |
 | F5 | Public verifier rejects allowed HS256 (no secret). | `src/verification/tests.rs::test_user_info_signed_response_hs256` |
 | F6 | No allow-any method on the UserInfo surface. | manual (API surface inspection of `src/verification/mod.rs`, `src/user_info.rs`) |
+
+## References
+
+- Superseded for P-000008's complete declared Scope by
+  situation/oracles/O-000018-judge-signed-user-info-verification-policy-complete-scope.md.
+  W-000011 remains an observation of this historical, narrower rule.
