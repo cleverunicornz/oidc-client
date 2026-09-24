@@ -62,6 +62,19 @@ Observed 2026-09-24 at head
   `c5260aeb4a426f7881c8261ef2101d5a30710c29` or this Gap's State and
   Resolution.
 
+- Validator observation for closure run
+  `20260924T150525Z-6e0be04d714572b064af694546e26e90067b8f69` at fixed
+  reviewed head `58a1285f59fc3349652756f4263169a6494abf19` (2026-09-24): the
+  exact O-000025 battery command, `cargo test --offline --lib --quiet --
+  id_token_verification_key_at_hash`, initially exited `101` before
+  compilation because the offline crates.io index had no `base64` entry. A
+  bounded retry without `--offline` passed all four focused fixtures; the
+  exact offline battery then passed all four fixtures, and the offline
+  `reqwest-blocking` doc-test command passed seven tests with two ignored.
+  The observed sequence is consistent with the online retry populating the
+  missing cache entry. It does not alter W-000039's retained successful
+  observation or this Gap's State and Resolution.
+
 ## Impact
 
 No O-000017 Pass or Fail leg was decided. P-000016 remains `implemented` and

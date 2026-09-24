@@ -102,6 +102,14 @@ fallback.
   bounded exact search, and direct reads; this additive observation leaves the
   Gap's State and Resolution unchanged.
 
+- Validator observation for closure run
+  `20260924T150525Z-6e0be04d714572b064af694546e26e90067b8f69` at fixed
+  reviewed head `58a1285f59fc3349652756f4263169a6494abf19` (2026-09-24):
+  semantic-index status discovery and a concept-focused semantic search both
+  returned the same unsafe-`control/`-path rejection. Validation continued
+  with the exact substantive diff, bounded exact search, and direct reads;
+  this additive observation leaves the Gap's State and Resolution unchanged.
+
 ## Impact
 
 Targeted semantic discovery cannot narrow correction reads in this workspace.
