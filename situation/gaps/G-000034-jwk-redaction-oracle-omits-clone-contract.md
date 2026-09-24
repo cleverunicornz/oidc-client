@@ -45,6 +45,19 @@ does not supply the missing predeclared Oracle leg or a corresponding Witness ro
   `48761b267c479b38918e4a139ed5c8fd530f2236`, with retained,
   checksum-verified fixture evidence.
 
+- Validator observation for closure run
+  `20260924T111724Z-295cb33dbeb3b837300c31b0b1a17517095f2393` at fixed
+  reviewed head `bbd8b169c9010aeb7d9f2288b19b670a405b526c` (2026-09-24):
+  O-000026 says that it judges only the `Clone` clause omitted by O-000023 and
+  that neither Oracle supersedes the other. The Oracle contract requires an
+  Oracle to collectively decide every explicit clause of its Promise inside
+  the declared Scope; it defines no composition of two individually
+  incomplete Oracles as a complete judgment rule. W-000036 is PASS evidence
+  for every leg O-000026 lists, but O-000026 does not itself decide
+  P-000013's direct and container redaction, equality, serde, presence, or
+  non-secret-field clauses. This additive observation leaves the Gap's
+  recorded State and Resolution unchanged.
+
 ## Impact
 
 O-000023 does not collectively decide every explicit clause of P-000013, so
@@ -57,6 +70,11 @@ from sufficient complete-Promise coverage.
   W-000036 now decide the previously absent `Clone` clause. P-000013's frozen
   canonical `implemented` State is a distinct reconciliation concern retained
   by G-000032.
+
+- Validator observation: because O-000026 is expressly partial and
+  non-superseding, its listed-leg PASS Witness does not settle the
+  complete-Promise Oracle-sufficiency absence recorded here. The validation
+  docket reports that failed obligation separately from this observation.
 
 ## Resolution
 

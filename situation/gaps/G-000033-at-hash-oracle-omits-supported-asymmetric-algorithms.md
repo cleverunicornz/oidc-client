@@ -53,6 +53,19 @@ asymmetric-algorithm clause that those legs omit.
   `48761b267c479b38918e4a139ed5c8fd530f2236`, with retained, checksum-verified
   fixture evidence.
 
+- Validator observation for closure run
+  `20260924T111724Z-295cb33dbeb3b837300c31b0b1a17517095f2393` at fixed
+  reviewed head `bbd8b169c9010aeb7d9f2288b19b670a405b526c` (2026-09-24):
+  O-000025 says that it judges only the asymmetric families omitted by
+  O-000019 and that neither Oracle supersedes the other. The Oracle contract
+  requires an Oracle to collectively decide every explicit clause of its
+  Promise inside the declared Scope; it defines no composition of two
+  individually incomplete Oracles as a complete judgment rule. W-000035 is
+  PASS evidence for every leg O-000025 lists, but O-000025 does not itself
+  decide P-000009's shared-secret, ES256/ES384, `signing_key`, or
+  documentation clauses. This additive observation leaves the Gap's recorded
+  State and Resolution unchanged.
+
 ## Impact
 
 W-000028 retains evidence that every leg actually listed by O-000019 passed,
@@ -66,6 +79,11 @@ omitted paths are not yet decided.
   W-000035 now decide the previously omitted supported asymmetric families.
   P-000009's frozen canonical `implemented` State is a distinct reconciliation
   concern retained by G-000032.
+
+- Validator observation: because O-000025 is expressly partial and
+  non-superseding, its listed-leg PASS Witness does not settle the
+  complete-Promise Oracle-sufficiency absence recorded here. The validation
+  docket reports that failed obligation separately from this observation.
 
 ## Resolution
 
