@@ -51,6 +51,17 @@ Observed 2026-09-24 at head
   O-000025's corrected complete-scope rule, or this Gap's recorded State and
   Resolution.
 
+- Closer observation for closure run
+  `20260924T125359Z-021faa52ab84b38324b49b36cef7dad45c18aa38` at head
+  `7ced060b6409c51ef0a445e3cae32d55522f0ab0` (2026-09-24): the focused
+  O-000025 battery command, `cargo test --offline --lib --quiet --
+  id_token_verification_key_at_hash`, exited `101` before compilation because
+  the offline crates.io index has no `base64` package entry. This later
+  environment-specific recurrence decides no O-000025 leg and does not alter
+  W-000037's retained successful observation at
+  `c5260aeb4a426f7881c8261ef2101d5a30710c29` or this Gap's State and
+  Resolution.
+
 ## Impact
 
 No O-000017 Pass or Fail leg was decided. P-000016 remains `implemented` and
