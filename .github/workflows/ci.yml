@@ -20,7 +20,9 @@ jobs:
       github.repository == 'cleverunicornz/oidc-client' &&
       (github.event_name == 'workflow_dispatch' ||
        github.event.pull_request.head.repo.full_name == github.repository)
-    runs-on: cvu-test-runner-x64
+    runs-on:
+      group: ci
+      labels: [automation-test-s]
     timeout-minutes: 60
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
