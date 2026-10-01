@@ -66,6 +66,12 @@ O-000006 by witness
 situation/witnesses/P-000005/W-000004-configured-ci-fleet-run.md, whose
 dispatched run (https://github.com/cleverunicornz/oidc-client/actions/runs/35743515109)
 executed `cargo deny check` on the configured fleet runner.
+P-000017 supersedes P-000005 (D-000020): the same gate now runs on runner
+group `ci`, label `automation-test-s`, cancels a superseded pull-request run,
+and skips documentation-only pull requests; witness
+situation/witnesses/P-000017/W-000040-ci-route-supersedes-pull-request-runs.md
+executed `cargo deny check` in
+https://github.com/cleverunicornz/oidc-client/actions/runs/36865956045.
 
 ## Closure state
 
