@@ -10,10 +10,10 @@ open
   drop `synchronize` or add a heavy job without the model's shape, and no check would fail. The checker lives in a
   private repository whose files another repository's `GITHUB_TOKEN` cannot fetch; it is not vendored here.
 - The merge gate is a procedure (infra-v2 G-000260): GitHub does not require it.
-- [P-000005](situation/promises/P-000005-configured-ci-gate-route.md) (assured) still describes the job's runner as
-  `cvu-test-runner-x64` and its routes as `[opened, reopened, ready_for_review]` in its Scope; the runner was already
-  renamed before this change, and the routes now include `synchronize`. P-000005's Promise sentence ("its declared
-  pull-request routes") still holds; its Scope wording is stale.
+- [P-000005](situation/promises/P-000005-configured-ci-gate-route.md) is superseded by
+  [P-000017](situation/promises/P-000017-ci-route-supersedes-pull-request-runs.md) (P-000017 says so; commit
+  `593979e`), but its State still reads `assured` and its Scope still names the runner `cvu-test-runner-x64` and the
+  routes `[opened, reopened, ready_for_review]`. Observed while superseding P-000017 here; not changed by this work.
 
 ## Relevance
 
