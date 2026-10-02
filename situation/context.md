@@ -72,6 +72,11 @@ and skips documentation-only pull requests; witness
 situation/witnesses/P-000017/W-000040-ci-route-supersedes-pull-request-runs.md
 executed `cargo deny check` in
 https://github.com/cleverunicornz/oidc-client/actions/runs/36865956045.
+P-000018 supersedes P-000017 (D-000021): CI is the build trigger model's light
+check and also runs on every pull-request push; witness
+situation/witnesses/P-000018/W-000041-ci-runs-on-every-push.md observed the
+run https://github.com/cleverunicornz/oidc-client/actions/runs/36955196628,
+whose job succeeded, `cargo deny check` included.
 
 ## Closure state
 

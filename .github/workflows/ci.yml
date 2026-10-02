@@ -2,7 +2,7 @@ name: CI
 
 on:
   pull_request:
-    types: [opened, reopened, ready_for_review]
+    types: [opened, reopened, ready_for_review, synchronize]
     paths-ignore:
       - '**.md'
       - 'docs/**'
@@ -10,8 +10,9 @@ on:
       - 'LICENSE*'
   workflow_dispatch:
 
-# A newer run of the same pull request cancels the older one; every other
-# event gets its own group (run_id) and is never cancelled.
+# A light check (build trigger model, D-000021): it runs on every push to a
+# pull request. A newer run of the same pull request cancels the older one;
+# every other event gets its own group (run_id) and is never cancelled.
 concurrency:
   group: ${{ github.workflow }}-${{ github.event_name == 'pull_request' && github.event.pull_request.number || github.run_id }}
   cancel-in-progress: ${{ github.event_name == 'pull_request' }}
