@@ -11,7 +11,7 @@ open
   - The label time is rounded: GitHub's issue timeline of pull request #10 records the `build` label at
     **02:41:47Z**, not 02:42Z.
   - "45 s" is the length of the wait loop that preceded the read, and that loop began after all three repositories'
-    label calls (the command was sent at 02:41:56.982Z by the harness's clock). It is not the interval from this label to the read.
+    label calls (the command was sent at 02:41:56.982Z, per the receipt below). It is not the interval from this label to the read.
   - The read itself happened after the poda-public gate run whose trailer reads 02:42:50Z, and before this repository's gate run, whose trailer (`date -u`, written
     after the gate returned) reads **02:42:56Z**.
 - The witness is merged and immutable; this Gap retains the exact times.
@@ -26,9 +26,9 @@ rollout.
 - Observation: `gh api repos/cleverunicornz/oidc-client/issues/10/timeline` → `labeled` `build` at 02:41:47Z.
 - Observation: the retained gate output `trigger-rollout-evidence/oidc-client-gate-S1-head.txt` (orchestration handoff, not in this
   repository) ends with the trailer 02:42:56Z.
-- Observation: `trigger-rollout-evidence/light-repos-S2-label-wait-receipt.txt` (orchestration handoff, not in this repository) holds the command and its output, extracted verbatim from this implementer session's
-  harness transcript (tool call `toolu_015x4LNbHJzoERPNQSkgxPhe`; harness timestamps: call sent 02:41:56.982Z, result
-  returned 02:43:03.099Z). Its output gives the order: `date -u` 02:42:43 after the 45 s loop, then for each repository the
+- Observation: operator-side receipt retained by the console orchestrator (light-repos-S2-label-wait-receipt.txt,
+  sha256 3036ac312a244db478b1cb64de8399a446b3858df5294181a882f26a138463db). It shows the command sent at 02:41:56.982Z
+  and its output returned at 02:43:03.099Z: `date -u` 02:42:43 after the 45 s loop, then for each repository the
   run-count read and its gate run with the trailers 02:42:50Z, 02:42:56Z and 02:43:03Z.
 - Observation: a witness-time audit of 2026-10-02 (orchestration handoff, not in this repository) found the rounding.
 - Interpretation: the read came later after the label than "45 s" says. A later read with still exactly one run is
