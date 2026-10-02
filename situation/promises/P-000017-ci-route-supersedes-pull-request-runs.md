@@ -2,7 +2,7 @@
 
 ## State
 
-assured
+superseded
 
 ## Promise
 
@@ -39,6 +39,9 @@ situation/oracles/O-000027-judge-ci-route-supersedes-pull-request-runs.md
 
 ## State evidence
 
+- **Superseded** by [P-000018](situation/promises/P-000018-ci-runs-on-every-push.md) under
+  [D-000021](situation/decisions/D-000021-ci-runs-on-every-push.md) (2026-10-02): CI also runs on every push (`synchronize`), as the build trigger
+  model's light check. The earlier evidence below remains historical.
 - Implementation: commit `1d0fa93ec5473f9bb41e6afe70283344499cd762`
   (pull request https://github.com/cleverunicornz/oidc-client/pull/9).
 - Decision:
